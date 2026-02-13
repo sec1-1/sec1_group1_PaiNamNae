@@ -251,6 +251,23 @@ const updateRoute = asyncHandler(async (req, res) => {
   });
 });
 
+  const completeRoute = asyncHandler(async (req, res) => {
+  const driverId = req.user.sub;
+  const { id } = req.params;
+
+  const route = await routeService.getRouteById(id);
+  if (!route) throw new ApiError(404, "Route not found");
+  if (route.driverId !== driverId) throw new ApiError(403, "Forbidden");
+
+  if (route.status !== 'IN_TRANSIT') {
+    throw new ApiError(400, "สามารถจบทริปได้เฉพาะสถานะ IN_TRANSIT เท่านั้น");
+  }
+
+  const updated = await routeService.updateRouteStatus(id, 'COMPLETED');
+
+  res.json(updated);
+});
+
 const deleteRoute = asyncHandler(async (req, res) => {
   const driverId = req.user.sub;
   const { id } = req.params;
@@ -490,4 +507,5 @@ module.exports = {
   adminDeleteRoute,
   adminGetRoutesByDriver,
   cancelRoute,
+  completeRoute,
 };
