@@ -1,115 +1,78 @@
-const prisma = require("../utils/prisma");
+const prisma = require("../utils/prisma")
+const STRIKE_BLACKLIST = 3
 
-const PASSENGER_CANCEL_LIMIT = 3; // ≥ 3 ครั้งใน 30 วัน
-const DRIVER_CANCEL_LIMIT = 2;
-const WINDOW_DAYS = 30;
-const SUSPEND_DAYS = 7;
+const applyPenaltyAfterApproval = async (reportId) => {
+  return await prisma.$transaction(async (tx) => {
+    const report = await tx.report.findUnique({
+      where: { id: reportId },
+      select: {
+        status: true,
+        reportedUserId: true,
+        penaltyApplied: true
+      }
+    })
+    // เช็คว่ามีreportจริงๆไหม
+    if (!report) {
+      return { message: "Report not found" }
+    }
+    // เช็คว่าreportถูกแอดมินapproveยัง
+    if (report.status !== "APPROVED") {
+      return { message: "Report is not approved" }
+    }
+    // ห้ามapprove reportเก่าซ้ำ
+    if (report.penaltyApplied) {
+      return { message: "Penalty already applied" }
+    }
 
-function addDays(date, days) {
-  return new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
-}
+    const userId = report.reportedUserId
 
-async function checkAndApplyPassengerSuspension(passengerId, opts = {}) {
-  const since = new Date(Date.now() - WINDOW_DAYS * 24 * 60 * 60 * 1000);
+    await tx.report.update({
+      where: { id: reportId },
+      data: { penaltyApplied: true }
+    })
 
-  let cancelCount;
-
-  if (opts.confirmedOnly) {
-    //นับเฉพาะ "การยกเลิกหลังจากเคย CONFIRMED"
-    // อ้างอิงจาก Notification ที่บันทึกไว้ตอน cancel
-    cancelCount = await prisma.notification.count({
-      where: {
-        userId: passengerId,
-        type: "SYSTEM",
-        createdAt: { gte: since },
-        // Prisma JSON filter (PostgreSQL): ต้องใช้ Prisma 5 ขึ้นไป
-        metadata: {
-          // path -> ค่าในคีย์ JSON
-          path: ["kind"],
-          equals: "PASSENGER_CONFIRMED_CANCEL",
-        },
+    const updatedUser = await tx.user.update({
+      where: { id: userId },
+      data: {
+        strikeCount: { increment: 1 }
       },
-    });
-  } else {
-    // พฤติกรรมเดิม (ไม่ใช้ใน flow ใหม่ แต่เก็บไว้เผื่อที่อื่นเรียก)
-    cancelCount = await prisma.booking.count({
-      where: {
-        passengerId,
-        status: "CANCELLED",
-        cancelledBy: "PASSENGER",
-        cancelledAt: { gte: since },
-      },
-    });
-  }
+      select: { strikeCount: true }
+    })
 
-  if (cancelCount >= PASSENGER_CANCEL_LIMIT) {
-    const until = addDays(new Date(), SUSPEND_DAYS);
-    await prisma.user.update({
-      where: { id: passengerId },
-      data: { passengerSuspendedUntil: until },
-    });
+    const currentStrike = updatedUser.strikeCount
 
-    try {
-      await prisma.notification.create({
-        data: {
-          userId: passengerId,
-          type: "SYSTEM",
-          title: "ระงับสิทธิ์การจองชั่วคราว",
-          body: `คุณถูกระงับสิทธิ์การจอง ${SUSPEND_DAYS} วัน เนื่องจากยกเลิกการจองที่อนุมัติแล้ว ${PASSENGER_CANCEL_LIMIT} ครั้ง ภายใน ${WINDOW_DAYS} วัน`,
-          metadata: {
-            kind: "PASSENGER_SUSPENSION",
-            windowDays: WINDOW_DAYS,
-            suspendDays: SUSPEND_DAYS,
-          },
-        },
-      });
-    } catch (_) { }
-  }
+    if (currentStrike < STRIKE_BLACKLIST) {
+      return {
+        message: `User warned (${currentStrike}/${STRIKE_BLACKLIST})`
+      }
+    }
+
+    const existing = await tx.blacklist.findFirst({
+      where: { userId }
+    })
+
+    if (existing) {
+      return { message: "User already blacklisted" }
+    }
+
+    await tx.blacklist.create({
+      data: {
+        userId,
+        reason: "Reached 3 approved reports",
+        createdBy: "SYSTEM"
+      }
+    })
+
+    await tx.user.update({
+      where: { id: userId },
+      data: { isActive: false }
+    })
+
+    return { message: "User moved to blacklist" }
+  })
 }
 
-async function checkAndApplyDriverSuspension(driverId, opts = {}) {
-  const { confirmedOnly = false } = opts;
-  const since = new Date(Date.now() - WINDOW_DAYS * 24 * 60 * 60 * 1000);
-
-  // นับจำนวนเส้นทางที่ถูกยกเลิกโดยไดรเวอร์ในช่วงเวลา
-  const cancelCount = await prisma.route.count({
-    where: {
-      driverId,
-      status: "CANCELLED",
-      cancelledBy: "DRIVER",
-      cancelledAt: { gte: since },
-    },
-  });
-
-  // ใช้เกณฑ์พื้นฐานเดียวกับค่าคงที่เดิม (คุณตั้งไว้ที่ไฟล์นี้)
-  // ถ้าต้องการเข้มงวดขึ้นเมื่อเป็น confirmedOnly ให้ปรับเกณฑ์ที่ service ผู้เรียกก็ได้
-  if (cancelCount >= DRIVER_CANCEL_LIMIT) {
-    const until = addDays(new Date(), SUSPEND_DAYS);
-    await prisma.user.update({
-      where: { id: driverId },
-      data: { driverSuspendedUntil: until },
-    });
-
-    try {
-      await prisma.notification.create({
-        data: {
-          userId: driverId,
-          type: "SYSTEM",
-          title: "ระงับสิทธิ์ผู้ขับขี่ชั่วคราว",
-          body: `บัญชีผู้ขับขี่ของคุณถูกระงับ ${SUSPEND_DAYS} วัน เนื่องจากยกเลิกเส้นทาง ${DRIVER_CANCEL_LIMIT} ครั้ง ภายใน ${WINDOW_DAYS} วัน`,
-          metadata: {
-            kind: "DRIVER_SUSPENSION",
-            windowDays: WINDOW_DAYS,
-            suspendDays: SUSPEND_DAYS,
-            confirmedOnly,
-          },
-        },
-      });
-    } catch (_) { }
-  }
-}
 
 module.exports = {
-  checkAndApplyPassengerSuspension,
-  checkAndApplyDriverSuspension
-};
+  applyPenaltyAfterApproval
+}
