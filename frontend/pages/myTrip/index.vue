@@ -181,17 +181,14 @@
                                         </button>
                                     </template>
 
-                                   <template v-else-if="trip.routeStatus === 'completed'">
-  <span class="px-4 py-2 text-sm text-green-600">
-    ✔ จบทริปเรียบร้อยแล้ว
-  </span>
-
-   <button
+<template v-if="trip.routeStatus === 'completed'">
+  <button
     @click.stop="openReviewModal(trip)"
-    class="px-4 py-2 text-sm text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700">
+    class="px-4 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700">
     รีวิวผู้ขับ
   </button>
 </template>
+
 
                                     
 
@@ -258,61 +255,109 @@
 
         <!-- Review Modal -->
 <div v-if="showReviewModal"
-     class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
-     @click.self="showReviewModal = false">
+     class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
 
-  <div class="w-full max-w-md p-6 bg-white rounded-xl shadow-xl">
+  <div class="w-full max-w-md p-6 bg-white rounded-lg">
 
-    <h3 class="text-lg font-semibold text-gray-900">
+    <h2 class="mb-4 text-lg font-semibold">
       รีวิวผู้ขับ
-    </h3>
+    </h2>
 
-    <p class="mt-1 text-sm text-gray-600">
-      {{ selectedTripForReview?.driver.name }}
-    </p>
+    <!-- ⭐ Rating -->
+    <div class="mb-4">
+      <label class="block mb-2 text-sm text-gray-600">
+        ให้คะแนน
+      </label>
 
-    <!-- Rating Stars -->
-    <div class="flex mt-4 space-x-1">
-      <button
-        v-for="star in 5"
-        :key="star"
-        @click="rating = star"
-        class="text-2xl transition"
-        :class="star <= rating ? 'text-yellow-400' : 'text-gray-300'"
-      >
-        ★
-      </button>
+      <div class="flex gap-1">
+        <button
+          v-for="star in 5"
+          :key="star"
+          @click="rating = star"
+          type="button"
+          class="text-2xl"
+        >
+          <span :class="star <= rating ? 'text-yellow-400' : 'text-gray-300'">
+            ★
+          </span>
+        </button>
+      </div>
     </div>
 
-    <!-- Comment -->
-    <div class="mt-4">
+    <!-- 📝 Comment -->
+    <div class="mb-4">
+      <label class="block mb-2 text-sm text-gray-600">
+        ความคิดเห็น
+      </label>
+
       <textarea
         v-model="comment"
         rows="3"
-        placeholder="เขียนความคิดเห็นเพิ่มเติม..."
-        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+        class="w-full p-2 border rounded-md focus:ring focus:ring-blue-200"
+        placeholder="เขียนรีวิวของคุณ..."
       ></textarea>
+    </div>
+
+    <!-- 🖼 Upload Images -->
+    <div class="mb-4">
+      <label class="block mb-1 text-sm text-gray-600">
+        เพิ่มรูปภาพ (ไม่บังคับ)
+      </label>
+
+      <input
+        type="file"
+        multiple
+        accept="image/*"
+        @change="handleImages"
+        class="w-full text-sm"
+      />
+
+      <!-- Preview -->
+      <div v-if="imagePreviews.length"
+           class="flex flex-wrap gap-2 mt-3">
+
+        <div
+          v-for="(img, index) in imagePreviews"
+          :key="index"
+          class="relative"
+        >
+          <img
+            :src="img"
+            class="object-cover w-20 h-20 rounded-md"
+          />
+
+          <button
+            @click="removeImage(index)"
+            type="button"
+            class="absolute top-0 right-0 px-1 text-xs text-white bg-red-500 rounded-full"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- Buttons -->
     <div class="flex justify-end gap-2 mt-6">
       <button
         @click="showReviewModal = false"
-        class="px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-      >
+        type="button"
+        class="px-4 py-2 text-sm bg-gray-300 rounded-md">
         ยกเลิก
       </button>
 
       <button
         @click="submitReview"
-        class="px-4 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700"
-      >
+        type="button"
+        class="px-4 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700">
         ส่งรีวิว
       </button>
     </div>
 
   </div>
 </div>
+
+
 
 
         <ConfirmModal :show="isModalVisible" :title="modalContent.title" :message="modalContent.message"
@@ -333,6 +378,8 @@ import { useToast } from '~/composables/useToast'
 dayjs.locale('th')
 dayjs.extend(buddhistEra)
 
+const selectedImages = ref([])
+const imagePreviews = ref([])
 const { $api } = useNuxtApp()
 const { toast } = useToast()
 const rating = ref(0)
@@ -411,36 +458,91 @@ function openReviewModal(trip) {
   showReviewModal.value = true
 }
 
+
+const handleImages = (e) => {
+  const files = Array.from(e.target.files)
+
+  selectedImages.value.push(...files)
+
+  files.forEach(file => {
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      imagePreviews.value.push(event.target.result)
+    }
+    reader.readAsDataURL(file)
+  })
+}
+
+const removeImage = (index) => {
+  selectedImages.value.splice(index, 1)
+  imagePreviews.value.splice(index, 1)
+}
+
+const uploadImages = async () => {
+  const urls = []
+
+  for (const file of selectedImages.value) {
+    const formData = new FormData()
+    formData.append("file", file)
+    formData.append("upload_preset", "painamnae_G1_sec11")
+
+    const { secure_url } = await $fetch(
+      "https://api.cloudinary.com/v1_1/dawfywcw9/image/upload",
+      {
+        method: "POST",
+        body: formData
+      }
+    )
+
+    urls.push(secure_url)
+  }
+
+  return urls
+}
+
+
+
 const submitReview = async () => {
   if (!rating.value) {
-    toast.error('กรุณาให้คะแนนก่อน')
+    toast.error("กรุณาให้คะแนนก่อน")
     return
   }
 
   try {
-    await $api(`/reviews`, {
-  method: 'POST',
-  body: {
-    bookingId: selectedTripForReview.value.id,
-    rating: rating.value,
-    comment: comment.value
-  }
-})
+    const imageUrls = await uploadImages()
 
+    await $api('/reviews', {
+      method: 'POST',
+      body: {
+        bookingId: selectedTripForReview.value.id,
+        rating: rating.value,
+        comment: comment.value,
+        images: imageUrls
+      }
+    })
 
-    toast.success('รีวิวสำเร็จ 🎉')
+    toast.success("รีวิวสำเร็จ 🎉")
 
+    // reset
     showReviewModal.value = false
     rating.value = 0
-    comment.value = ''
+    comment.value = ""
+    selectedImages.value = []
+    imagePreviews.value = []
 
     await fetchMyTrips()
 
-  } catch (err) {
-    console.error(err)
-    toast.error(err?.data?.message || 'ไม่สามารถรีวิวได้')
-  }
+  } catch (error) {
+  const message =
+    error?.response?.data?.message ||
+    error?.message ||
+    "Something went wrong"
+
+  toast.error(message)
 }
+
+}
+
 
 
 
