@@ -13,6 +13,7 @@ const ApiError = require('./src/utils/ApiError')
 const { metricsMiddleware } = require('./src/middlewares/metrics');
 const ensureAdmin = require('./src/bootstrap/ensureAdmin');
 
+
 const app = express();
 promClient.collectDefaultMetrics();
 
@@ -71,6 +72,9 @@ app.use((req, res, next) => {
     next(new ApiError(404, `Cannot ${req.method} ${req.originalUrl}`));
 });
 
+app.use("/api/reviews", require("./src/routes/review"))
+
+
 // --- Error Handling Middleware ---
 app.use(errorHandler);
 
@@ -93,3 +97,4 @@ process.on('unhandledRejection', (err) => {
     console.error(err);
     process.exit(1);
 });
+

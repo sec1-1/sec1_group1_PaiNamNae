@@ -181,10 +181,16 @@
                                         </button>
                                     </template>
 
-                                   <template v-else-if="trip.status === 'completed'">
+                                   <template v-else-if="trip.routeStatus === 'completed'">
   <span class="px-4 py-2 text-sm text-green-600">
     ✔ จบทริปเรียบร้อยแล้ว
   </span>
+
+   <button
+    @click.stop="openReviewModal(trip)"
+    class="px-4 py-2 text-sm text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700">
+    รีวิวผู้ขับ
+  </button>
 </template>
 
                                     
@@ -250,6 +256,65 @@
             </div>
         </div>
 
+        <!-- Review Modal -->
+<div v-if="showReviewModal"
+     class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+     @click.self="showReviewModal = false">
+
+  <div class="w-full max-w-md p-6 bg-white rounded-xl shadow-xl">
+
+    <h3 class="text-lg font-semibold text-gray-900">
+      รีวิวผู้ขับ
+    </h3>
+
+    <p class="mt-1 text-sm text-gray-600">
+      {{ selectedTripForReview?.driver.name }}
+    </p>
+
+    <!-- Rating Stars -->
+    <div class="flex mt-4 space-x-1">
+      <button
+        v-for="star in 5"
+        :key="star"
+        @click="rating = star"
+        class="text-2xl transition"
+        :class="star <= rating ? 'text-yellow-400' : 'text-gray-300'"
+      >
+        ★
+      </button>
+    </div>
+
+    <!-- Comment -->
+    <div class="mt-4">
+      <textarea
+        v-model="comment"
+        rows="3"
+        placeholder="เขียนความคิดเห็นเพิ่มเติม..."
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+      ></textarea>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-end gap-2 mt-6">
+      <button
+        @click="showReviewModal = false"
+        class="px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+      >
+        ยกเลิก
+      </button>
+
+      <button
+        @click="submitReview"
+        class="px-4 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700"
+      >
+        ส่งรีวิว
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
         <ConfirmModal :show="isModalVisible" :title="modalContent.title" :message="modalContent.message"
             :confirmText="modalContent.confirmText" :variant="modalContent.variant" @confirm="handleConfirmAction"
             @cancel="closeConfirmModal" />
@@ -270,6 +335,8 @@ dayjs.extend(buddhistEra)
 
 const { $api } = useNuxtApp()
 const { toast } = useToast()
+const rating = ref(0)
+const comment = ref('')
 
 // --- State Management ---
 const activeTab = ref('pending')
@@ -321,6 +388,10 @@ const selectedCancelReason = ref('')
 const cancelReasonError = ref('')
 const tripToCancel = ref(null)
 
+const showReviewModal = ref(false)
+const selectedTripForReview = ref(null)
+
+
 // --- Computed Properties ---
 const filteredTrips = computed(() => {
     if (activeTab.value === 'all') return allTrips.value
@@ -334,6 +405,43 @@ const filteredTrips = computed(() => {
         return trip.status === activeTab.value
     })
 })
+
+function openReviewModal(trip) {
+  selectedTripForReview.value = trip
+  showReviewModal.value = true
+}
+
+const submitReview = async () => {
+  if (!rating.value) {
+    toast.error('กรุณาให้คะแนนก่อน')
+    return
+  }
+
+  try {
+    await $api(`/reviews`, {
+  method: 'POST',
+  body: {
+    bookingId: selectedTripForReview.value.id,
+    rating: rating.value,
+    comment: comment.value
+  }
+})
+
+
+    toast.success('รีวิวสำเร็จ 🎉')
+
+    showReviewModal.value = false
+    rating.value = 0
+    comment.value = ''
+
+    await fetchMyTrips()
+
+  } catch (err) {
+    console.error(err)
+    toast.error(err?.data?.message || 'ไม่สามารถรีวิวได้')
+  }
+}
+
 
 
 const selectedTrip = computed(() => {
@@ -407,6 +515,7 @@ async function fetchMyTrips() {
             return {
                 id: b.id,
                 status: String(b.status || '').toLowerCase(),
+                status: b.status.toLowerCase(),
                 routeStatus: String(b.route.status || '').toLowerCase(),
                 origin: start?.name || `(${Number(start.lat).toFixed(2)}, ${Number(start.lng).toFixed(2)})`,
                 destination: end?.name || `(${Number(end.lat).toFixed(2)}, ${Number(end.lng).toFixed(2)})`,

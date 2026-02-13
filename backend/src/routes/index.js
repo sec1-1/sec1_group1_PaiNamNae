@@ -8,6 +8,8 @@ const bookingRoutes = require('./booking.routes');
 const notificationRoutes = require('./notification.routes')
 const mapRoutes = require('./maps.routes')
 
+const reviewRoutes = require('./review') 
+
 const router = express.Router();
 
 router.use('/auth', authRoutes);
@@ -18,5 +20,7 @@ router.use('/driver-verifications', driverVerifRoutes);
 router.use('/bookings', bookingRoutes);
 router.use('/notifications', notificationRoutes);
 router.use('/api/maps', mapRoutes);
+
+router.use('/reviews', reviewRoutes) 
 
 module.exports = router;
