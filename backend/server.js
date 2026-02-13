@@ -12,7 +12,7 @@ const { errorHandler } = require('./src/middlewares/errorHandler');
 const ApiError = require('./src/utils/ApiError')
 const { metricsMiddleware } = require('./src/middlewares/metrics');
 const ensureAdmin = require('./src/bootstrap/ensureAdmin');
-
+const driverRoutes = require("./src/routes/driver.routes")
 
 const app = express();
 promClient.collectDefaultMetrics();
@@ -67,12 +67,13 @@ app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Main API Routes
 app.use('/api', routes);
+app.use("/api/reviews", require("./src/routes/review"))
+app.use("/api/drivers", driverRoutes)
 
 app.use((req, res, next) => {
     next(new ApiError(404, `Cannot ${req.method} ${req.originalUrl}`));
 });
 
-app.use("/api/reviews", require("./src/routes/review"))
 
 
 // --- Error Handling Middleware ---

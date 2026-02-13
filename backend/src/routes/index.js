@@ -22,5 +22,6 @@ router.use('/notifications', notificationRoutes);
 router.use('/api/maps', mapRoutes);
 
 router.use('/reviews', reviewRoutes) 
+router.use('/drivers', require('./driver.routes'))
 
 module.exports = router;

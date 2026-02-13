@@ -305,16 +305,91 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="flex items-center">
-                                        <div class="flex text-sm text-yellow-400">
-                                            <span v-for="star in 5" :key="star">{{ star <= bookingRoute.driver.rating
-                                                ? '★' : '☆' }}</span>
-                                        </div>
-                                        <span class="ml-2 text-sm text-gray-600">{{ bookingRoute.driver.rating }} ({{
-                                            bookingRoute.driver.reviews }} รีวิว)</span>
-                                    </div>
+                                    <div v-if="driverReviewSummary" class="mt-3">
+  <!-- Summary -->
+  <div class="flex items-center justify-between mb-3">
+    <div class="flex items-center space-x-2">
+      <div class="text-2xl font-bold text-yellow-500">
+        {{ driverReviewSummary.average }}
+      </div>
+
+      <!-- Stars -->
+      <div class="flex">
+        <svg
+          v-for="i in 5"
+          :key="i"
+          class="w-4 h-4"
+          :class="i <= Math.round(driverReviewSummary.average) ? 'text-yellow-400' : 'text-gray-300'"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path
+            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.963a1
+            1 0 00.95.69h4.162c.969 0 1.371 1.24.588
+            1.81l-3.37 2.448a1 1 0 00-.364
+            1.118l1.287 3.963c.3.921-.755
+            1.688-1.538 1.118l-3.37-2.448a1
+            1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.287-3.963a1
+            1 0 00-.364-1.118L2.05 9.39c-.783-.57-.38-1.81.588-1.81h4.162a1
+            1 0 00.95-.69l1.286-3.963z"
+          />
+        </svg>
+      </div>
+    </div>
+
+    <div class="text-sm text-gray-500">
+      {{ driverReviewSummary.totalReviews }} รีวิว
+    </div>
+  </div>
+
+  <!-- Latest Reviews -->
+  <div class="space-y-3">
+    <div
+      v-for="review in driverReviewSummary.latestReviews"
+      :key="review.createdAt"
+      class="p-3 bg-white border border-gray-100 rounded-lg shadow-sm"
+    >
+      <div class="flex items-center justify-between mb-1">
+        <div class="flex items-center space-x-2">
+          <img
+            :src="review.reviewer.profilePicture || 'https://ui-avatars.com/api/?name=' + review.reviewer.firstName"
+            class="w-7 h-7 rounded-full object-cover"
+          />
+          <span class="text-sm font-medium text-gray-800">
+            {{ review.reviewer.firstName }}
+          </span>
+        </div>
+
+        <div class="flex text-yellow-400 text-sm">
+          ⭐ {{ review.rating }}
+        </div>
+      </div>
+
+      <p class="text-sm text-gray-600 leading-relaxed">
+        {{ review.comment }}
+      </p>
+<div
+  v-if="parsedImages(review).length"
+  class="grid grid-cols-3 gap-2 mt-2"
+>
+  <img
+    v-for="(img, index) in parsedImages(review)"
+    :key="index"
+    :src="img"
+    class="object-cover w-full h-24 rounded-lg cursor-pointer hover:opacity-80"
+    @click="openPreview(img)"
+  />
+</div>
+
+    </div>
+  </div>
+</div>
+
+
+
                                 </div>
                             </div>
+                            
                         </div>
                         <div class="grid grid-cols-1 gap-6 mb-6 md:grid-cols-2">
                             <div>
@@ -544,6 +619,8 @@ const RADIUS_METERS = 500
 const routes = ref([])
 const selectedRoute = ref(null)
 const isLoading = ref(false)
+const driverReviewSummary = ref(null)
+
 
 const mapContainer = ref(null)
 let gmap = null               // แผนที่ของ Google
@@ -677,6 +754,7 @@ async function handleSearch() {
                 originAddress: route.startLocation?.address ? cleanAddr(route.startLocation.address) : null,
                 destinationAddress: route.endLocation?.address ? cleanAddr(route.endLocation.address) : null,
                 driver: {
+                    id: route.driver?.id,
                     name: `${route.driver?.firstName || ''} ${route.driver?.lastName || ''}`.trim() || 'ไม่ระบุชื่อ',
                     image: route.driver?.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(route.driver?.firstName || 'U')}&background=random&size=64`,
                     rating: 4.5,
@@ -934,22 +1012,77 @@ async function formatPrettyAddress(geocodeResult) {
 }
 
 function openModal(route) {
-    if (!token.value) {
-        return navigateTo('/login');
-    }
-    if (route && route.availableSeats > 0) {
-        bookingRoute.value = route
-        bookingSeats.value = 1
-        pickupPoint.value = ''
-        dropoffPoint.value = ''
-        pickupData.value = { lat: null, lng: null, placeId: null, address: null, name: null }
-        dropoffData.value = { lat: null, lng: null, placeId: null, address: null, name: null }
-        bookingPickingTarget.value = null
-        showModal.value = true
+    console.log("OPEN CLICKED")
 
-        nextTick(() => initBookingAutocomplete())
+    if (!token.value) {
+        console.log("NO TOKEN")
+        return navigateTo('/login')
     }
+
+    if (!route) {
+        console.log("NO ROUTE")
+        return
+    }
+
+    console.log("Seats:", route.availableSeats)
+
+    if (Number(route.availableSeats) <= 0) {
+        console.log("NO SEATS")
+        return
+    }
+
+    bookingRoute.value = route
+    bookingSeats.value = 1
+    pickupPoint.value = ''
+    dropoffPoint.value = ''
+
+    showModal.value = true
+
+    // ⭐⭐⭐ เพิ่มตรงนี้
+    if (route.driver?.id) {
+        console.log("CALL FETCH", route.driver.id)
+        fetchReviewSummary(route.driver.id)
+    } else {
+        console.log("NO DRIVER ID")
+        console.log("ROUTE OBJECT:", route)
+    }
+
+    nextTick(() => initBookingAutocomplete())
 }
+
+
+
+
+const fetchReviewSummary = async (driverId) => {
+  try {
+    const data = await $api(`/drivers/${driverId}/review-summary`)
+
+    data.latestReviews = data.latestReviews.map(r => ({
+      ...r,
+      images: Array.isArray(r.images) ? r.images : []
+    }))
+
+    driverReviewSummary.value = data
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+
+const parsedImages = (review) => {
+  if (!review.images) return []
+
+  if (Array.isArray(review.images)) {
+    return review.images
+  }
+
+  try {
+    return JSON.parse(review.images)
+  } catch (e) {
+    return []
+  }
+}
+
 
 function closeModal() {
     showModal.value = false
@@ -1366,6 +1499,11 @@ function formatDuration(input) {
     const m = Math.round(minutes % 60)
     return h ? (m ? `${h} ชม. ${m} นาที` : `${h} ชม.`) : `${m} นาที`
 }
+
+const reviewSummary = ref(null)
+const loadingReviewSummary = ref(false)
+
+
 
 onMounted(() => {
     // โหลดเสร็จแล้วในหน้านี้อยู่แล้ว
