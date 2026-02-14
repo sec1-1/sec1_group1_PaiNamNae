@@ -1143,7 +1143,12 @@ const REVIEW_TAGS = [
   'POLITE_DRIVER',
   'ON_TIME',
   'SAFE_DRIVING',
-  'FRIENDLY_SERVICE'
+  'FRIENDLY_SERVICE',
+  'DIRTY',
+    'RUDE_DRIVER',
+    'LATE',
+    'UNSAFE_DRIVING',
+    'UNFRIENDLY_SERVICE'
 ]
 
 const TAG_LABELS = {
@@ -1151,7 +1156,12 @@ const TAG_LABELS = {
   ON_TIME: "ตรงเวลา",
   POLITE_DRIVER: "คนขับมารยาทดี",
   SAFE_DRIVING: "ขับปลอดภัย",
-  FRIENDLY_SERVICE: "บริการเป็นกันเอง"
+  FRIENDLY_SERVICE: "บริการเป็นกันเอง",
+  DIRTY: "รถไม่สะอาด",
+  RUDE_DRIVER: "คนขับพูดจาไม่สุภาพ",
+  LATE: "มาสาย",
+  UNSAFE_DRIVING: "ขับรถอันตราย",
+  UNFRIENDLY_SERVICE: "บริการไม่เป็นมิตร"
 }
 
 const allTags = computed(() => {

@@ -285,10 +285,15 @@
     </div>
 
     <!-- ✅ Review Categories -->
-    <div class="mb-4">
-      <label class="block mb-2 text-sm text-gray-600">
-        หมวดหมู่รีวิว (เลือกได้หลายข้อ)
-      </label>
+    <div v-if="rating > 0" class="mb-4">
+
+  <label class="block mb-2 text-sm"
+    :class="rating <= 2 ? 'text-red-500' : 'text-green-600'"
+  >
+    {{ rating <= 2
+        ? 'อะไรที่ควรปรับปรุง?'
+        : 'อะไรที่ประทับใจ?' }}
+  </label>
 
       <div class="grid grid-cols-2 gap-2 text-sm">
         <label
@@ -368,11 +373,12 @@
     <!-- Buttons -->
     <div class="flex justify-end gap-2 mt-6">
       <button
-        @click="showReviewModal = false"
-        type="button"
-        class="px-4 py-2 text-sm bg-gray-300 rounded-md">
-        ยกเลิก
-      </button>
+  @click="closeModal"
+  type="button"
+  class="px-4 py-2 text-sm bg-gray-300 rounded-md">
+  ยกเลิก
+</button>
+
 
       <button
         @click="submitReview"
@@ -530,7 +536,20 @@ const uploadImages = async () => {
   return urls
 }
 
-const reviewCategories = [
+// ⭐ เปลี่ยนหมวดตาม rating
+const reviewCategories = computed(() => {
+  if (rating.value === 0) return []
+  if (rating.value <= 2) return negativeCategories
+  return positiveCategories
+})
+
+
+// 🔥 รีเซ็ต tag ทุกครั้งที่ rating เปลี่ยน
+watch(rating, () => {
+  selectedCategories.value = []
+})
+
+const positiveCategories = [
   { label: 'สะอาด', value: 'CLEAN' },
   { label: 'คนขับมารยาทดี', value: 'POLITE_DRIVER' },
   { label: 'ตรงเวลา', value: 'ON_TIME' },
@@ -538,6 +557,26 @@ const reviewCategories = [
   { label: 'บริการเป็นกันเอง', value: 'FRIENDLY_SERVICE' }
 ]
 
+const negativeCategories = [
+  { label: 'รถไม่สะอาด', value: 'DIRTY' },
+  { label: 'คนขับพูดจาไม่สุภาพ', value: 'RUDE_DRIVER' },
+  { label: 'มาสาย', value: 'LATE' },
+  { label: 'ขับรถอันตราย', value: 'UNSAFE_DRIVING' },
+  { label: 'บริการไม่เป็นมิตร', value: 'UNFRIENDLY_SERVICE' }
+]
+
+const resetForm = () => {
+  rating.value = 0
+  selectedCategories.value = []
+  comment.value = ''
+  images.value = []
+  imagePreviews.value = []
+}
+
+const closeModal = () => {
+  showReviewModal.value = false
+  resetForm()
+}
 
 const submitReview = async () => {
   if (!rating.value) {

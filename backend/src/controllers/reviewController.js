@@ -1,5 +1,21 @@
 const prisma = require("../../prisma")
 
+const allowedPositiveTags = [
+  'CLEAN',
+  'POLITE_DRIVER',
+  'ON_TIME',
+  'SAFE_DRIVING',
+  'FRIENDLY_SERVICE'
+]
+
+const allowedNegativeTags = [
+  'DIRTY',
+  'RUDE_DRIVER',
+  'LATE',
+  'UNSAFE_DRIVING',
+  'UNFRIENDLY_SERVICE'
+]
+
 exports.createReview = async (req, res) => {
   try {
     const userId = req.user.sub
@@ -15,6 +31,22 @@ exports.createReview = async (req, res) => {
 
     if (!booking)
       return res.status(404).json({ message: "Booking not found" })
+
+        //  ป้องกัน tag ผิดประเภท
+    if (tags && tags.length > 0) {
+  if (rating <= 2) {
+    const invalid = tags.some(tag => !allowedNegativeTags.includes(tag))
+    if (invalid) {
+      return res.status(400).json({ message: 'Invalid tags for low rating' })
+    }
+  } else {
+    const invalid = tags.some(tag => !allowedPositiveTags.includes(tag))
+    if (invalid) {
+      return res.status(400).json({ message: 'Invalid tags for high rating' })
+    }
+  }
+}
+
 
     // เช็คว่าเป็นเจ้าของ booking
     if (booking.passengerId !== userId)
