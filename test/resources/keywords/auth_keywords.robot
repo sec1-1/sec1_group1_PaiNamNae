@@ -1,7 +1,11 @@
 *** Variable ***
 ${URL}    http://localhost:3001/
-${VALID_USER}    Takumi
-${VALID_PASS}    123456789
+${VALID_USER}           Takumi
+${VALID_FIRST_NAME}     Takumi
+${VALID_PASS}           123456789
+${ADMIN_USER}           admin123
+${ADMIN_FIRST_NAME}     System
+${ADMIN_PASS}           123456789
 
 *** Keywords ***
 Login With Valid User
@@ -15,12 +19,24 @@ Login With Valid User
 
 Admin Login
     Open Browser    ${URL}    chrome
-    Input Text      id=username    ${ADMIN_USER}
+    Click Element    xpath=//a[@href='/login']
+    Wait Until Location Contains    /login    10s
+    Location Should Contain    /login
+    Input Text      id=identifier    ${ADMIN_USER}
     Input Text      id=password    ${ADMIN_PASS}
-    Click Button    id=login-btn
-    Page Should Contain    Dashboard
+    Click Button    xpath=//button[@type='submit']
+
+Go To User Management Page
+    Mouse Over                          xpath=//span[normalize-space()='${ADMIN_FIRST_NAME}']
+    Wait Until Element Is Visible       xpath=//a[@href='/admin/users']    10s
+    Click Element                       xpath=//a[@href='/admin/users']
+    Page Should Contain                 User Management   
 
 Dashboard Should Be Visible
-    Wait Until Element Is Visible    xpath=//span[normalize-space()='${VALID_USER}']    10s
-    Element Should Be Visible    xpath=//span[normalize-space()='${VALID_USER}']
+    Wait Until Element Is Visible       xpath=//span[normalize-space()='${VALID_FIRST_NAME}']    10s
+    Element Should Be Visible           xpath=//span[normalize-space()='${VALID_FIRST_NAME}']
+
+Dashboard Admin Should Be Visible
+    Wait Until Element Is Visible    xpath=//span[normalize-space()='${ADMIN_FIRST_NAME}']    10s
+    Element Should Be Visible    xpath=//span[normalize-space()='${ADMIN_FIRST_NAME}']
 
