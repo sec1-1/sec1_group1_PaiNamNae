@@ -14,6 +14,7 @@ router.get("/:driverId/review-summary", async (req, res) => {
         comment: true,
         createdAt: true,
         images: true,
+        tags: true,
         reviewer: {
           select: {
             firstName: true,

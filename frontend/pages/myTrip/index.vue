@@ -284,6 +284,34 @@
       </div>
     </div>
 
+    <!-- ✅ Review Categories -->
+    <div class="mb-4">
+      <label class="block mb-2 text-sm text-gray-600">
+        หมวดหมู่รีวิว (เลือกได้หลายข้อ)
+      </label>
+
+      <div class="grid grid-cols-2 gap-2 text-sm">
+        <label
+          v-for="category in reviewCategories"
+          :key="category.value"
+          class="flex items-center gap-2 cursor-pointer"
+        >
+          <input
+            type="checkbox"
+            :value="category.value"
+            v-model="selectedCategories"
+            class="w-4 h-4 text-blue-600 border-gray-300 rounded"
+          />
+          <span>{{ category.label }}</span>
+        </label>
+      </div>
+
+      <p v-if="selectedCategories.length === 0"
+         class="mt-1 text-xs text-gray-400">
+        ไม่ระบุหมวดหมู่
+      </p>
+    </div>
+
     <!-- 📝 Comment -->
     <div class="mb-4">
       <label class="block mb-2 text-sm text-gray-600">
@@ -437,6 +465,8 @@ const tripToCancel = ref(null)
 
 const showReviewModal = ref(false)
 const selectedTripForReview = ref(null)
+const selectedCategories = ref([])
+
 
 
 // --- Computed Properties ---
@@ -500,6 +530,13 @@ const uploadImages = async () => {
   return urls
 }
 
+const reviewCategories = [
+  { label: 'สะอาด', value: 'CLEAN' },
+  { label: 'คนขับมารยาทดี', value: 'POLITE_DRIVER' },
+  { label: 'ตรงเวลา', value: 'ON_TIME' },
+  { label: 'ขับปลอดภัย', value: 'SAFE_DRIVING' },
+  { label: 'บริการเป็นกันเอง', value: 'FRIENDLY_SERVICE' }
+]
 
 
 const submitReview = async () => {
@@ -508,7 +545,13 @@ const submitReview = async () => {
     return
   }
 
+  if (!selectedTripForReview.value?.id) {
+    toast.error("ไม่พบข้อมูลการจอง")
+    return
+  }
+
   try {
+    // Upload รูปก่อน
     const imageUrls = await uploadImages()
 
     await $api('/reviews', {
@@ -516,31 +559,36 @@ const submitReview = async () => {
       body: {
         bookingId: selectedTripForReview.value.id,
         rating: rating.value,
-        comment: comment.value,
-        images: imageUrls
+        comment: comment.value?.trim() || null,
+        tags: selectedCategories.value || [],
+        images: imageUrls || []
       }
     })
 
     toast.success("รีวิวสำเร็จ 🎉")
 
-    // reset
-    showReviewModal.value = false
-    rating.value = 0
-    comment.value = ""
-    selectedImages.value = []
-    imagePreviews.value = []
+    resetReviewForm()
 
     await fetchMyTrips()
 
   } catch (error) {
-  const message =
-    error?.response?.data?.message ||
-    error?.message ||
-    "Something went wrong"
+    const message =
+      error?.data?.message ||   // สำคัญใน Nuxt 3
+      error?.response?.data?.message ||
+      error?.message ||
+      "Something went wrong"
 
-  toast.error(message)
+    toast.error(message)
+  }
 }
 
+const resetReviewForm = () => {
+  showReviewModal.value = false
+  rating.value = 0
+  comment.value = ""
+  selectedCategories.value = []
+  selectedImages.value = []
+  imagePreviews.value = []
 }
 
 

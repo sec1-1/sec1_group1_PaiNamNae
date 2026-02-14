@@ -3,7 +3,7 @@ const prisma = require("../../prisma")
 exports.createReview = async (req, res) => {
   try {
     const userId = req.user.sub
-    const { bookingId, rating, comment, images } = req.body
+    const { bookingId, rating, comment, tags, images } = req.body
 
     // หา booking
     const booking = await prisma.booking.findUnique({
@@ -34,22 +34,25 @@ exports.createReview = async (req, res) => {
 
     // สร้าง review
     const review = await prisma.review.create({
-      data: {
+    data: {
         bookingId,
         routeId: booking.routeId,
         reviewerId: userId,
         revieweeId: booking.route.driverId,
-        rating,
-        comment,
-        images
-      }
-    })
+        rating: Number(rating),
+        comment: comment || null,
+        tags: tags || [],
+        images: images || []
+    }
+})
 
     res.json(review)
 
-  } catch (err) {
-    console.error(err)
-    res.status(500).json({ message: "Server error" })
+  } catch (error) {
+   console.error(error)
+   res.status(500).json({
+     message: error.message
+   })
   }
 }
 

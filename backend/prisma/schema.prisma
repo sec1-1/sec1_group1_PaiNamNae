@@ -36,6 +36,15 @@ enum BookingStatus {
   CANCELLED
 }
 
+enum ReviewTag {
+  CLEAN
+  POLITE_DRIVER
+  ON_TIME
+  SAFE_DRIVING
+  FRIENDLY_SERVICE
+}
+
+
 enum CancelReason {
   CHANGE_OF_PLAN               // เปลี่ยนแผน/มีธุระกะทันหัน
   FOUND_ALTERNATIVE            // พบวิธีเดินทางอื่นแล้ว
@@ -242,6 +251,8 @@ model Review {
   rating      Int
   comment     String?
   images      Json?    @db.Json
+
+  tags        ReviewTag[]
 
   createdAt   DateTime @default(now())
 

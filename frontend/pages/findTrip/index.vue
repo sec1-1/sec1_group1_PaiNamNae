@@ -305,34 +305,35 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div v-if="driverReviewSummary" class="mt-3">
-  <!-- Summary -->
-  <div class="flex items-center justify-between mb-3">
+                                    <div class="mt-4">
+
+  <!-- Loading -->
+<div v-if="loadingReviewSummary" class="text-gray-400">
+  กำลังโหลดรีวิว...
+</div>
+
+<!-- Has Reviews -->
+<div v-else-if="driverReviewSummary && driverReviewSummary.totalReviews > 0">
+
+  <!-- ⭐ Summary -->
+  <div class="flex items-center justify-between mb-4">
     <div class="flex items-center space-x-2">
-      <div class="text-2xl font-bold text-yellow-500">
+      <div class="text-3xl font-bold text-yellow-500">
         {{ driverReviewSummary.average }}
       </div>
 
-      <!-- Stars -->
       <div class="flex">
         <svg
           v-for="i in 5"
           :key="i"
           class="w-4 h-4"
-          :class="i <= Math.round(driverReviewSummary.average) ? 'text-yellow-400' : 'text-gray-300'"
+          :class="i <= Math.round(Number(driverReviewSummary.average))
+            ? 'text-yellow-400'
+            : 'text-gray-300'"
           fill="currentColor"
           viewBox="0 0 20 20"
         >
-          <path
-            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.963a1
-            1 0 00.95.69h4.162c.969 0 1.371 1.24.588
-            1.81l-3.37 2.448a1 1 0 00-.364
-            1.118l1.287 3.963c.3.921-.755
-            1.688-1.538 1.118l-3.37-2.448a1
-            1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.287-3.963a1
-            1 0 00-.364-1.118L2.05 9.39c-.783-.57-.38-1.81.588-1.81h4.162a1
-            1 0 00.95-.69l1.286-3.963z"
-          />
+          <path d="M9.049 2.927..." />
         </svg>
       </div>
     </div>
@@ -342,48 +343,135 @@
     </div>
   </div>
 
-  <!-- Latest Reviews -->
-  <div class="space-y-3">
-    <div
-      v-for="review in driverReviewSummary.latestReviews"
-      :key="review.createdAt"
-      class="p-3 bg-white border border-gray-100 rounded-lg shadow-sm"
+  <!-- 🏷 Filter Section -->
+<div class="mb-5">
+
+  <div class="flex items-center justify-between mb-3">
+    <h3 class="text-sm font-semibold text-gray-800">
+      กรองรีวิว
+    </h3>
+
+    <button
+      v-if="selectedTag"
+      @click="selectedTag = null"
+      class="text-xs text-green-600 font-medium hover:underline"
     >
-      <div class="flex items-center justify-between mb-1">
+      ล้างตัวกรอง
+    </button>
+  </div>
+
+  <div class="flex flex-wrap gap-2">
+
+    <!-- ทั้งหมด -->
+    <button
+      @click="selectedTag = null"
+      :class="[
+        'px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200',
+        !selectedTag
+          ? 'bg-green-600 text-white border-green-600 shadow'
+          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+      ]"
+    >
+      ทั้งหมด
+    </button>
+
+    <!-- Enum Tags -->
+    <button
+      v-for="tag in REVIEW_TAGS"
+      :key="tag"
+      @click="selectedTag = tag"
+      :class="[
+        'px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200',
+        selectedTag === tag
+          ? 'bg-green-600 text-white border-green-600 shadow'
+          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+      ]"
+    >
+      {{ TAG_LABELS[tag] }}
+    </button>
+
+  </div>
+
+</div>
+
+
+
+  <!-- 📝 Reviews List -->
+  <div v-if="filteredReviews.length" class="space-y-4">
+
+    <div
+      v-for="review in filteredReviews"
+      :key="review.id"
+      class="p-4 bg-white border rounded-2xl shadow-sm space-y-3"
+    >
+      <!-- Header -->
+      <div class="flex items-center justify-between">
         <div class="flex items-center space-x-2">
           <img
-            :src="review.reviewer.profilePicture || 'https://ui-avatars.com/api/?name=' + review.reviewer.firstName"
-            class="w-7 h-7 rounded-full object-cover"
+            :src="review.reviewer?.profilePicture 
+              || 'https://ui-avatars.com/api/?name=' + (review.reviewer?.firstName || 'U')"
+            class="w-9 h-9 rounded-full object-cover"
           />
-          <span class="text-sm font-medium text-gray-800">
-            {{ review.reviewer.firstName }}
-          </span>
+          <div>
+            <div class="text-sm font-semibold text-gray-800">
+              {{ review.reviewer?.firstName || 'ผู้ใช้' }}
+            </div>
+            <div class="text-xs text-gray-400">
+              {{ new Date(review.createdAt).toLocaleDateString() }}
+            </div>
+          </div>
         </div>
 
-        <div class="flex text-yellow-400 text-sm">
+        <div class="text-yellow-500 font-semibold text-sm">
           ⭐ {{ review.rating }}
         </div>
       </div>
 
-      <p class="text-sm text-gray-600 leading-relaxed">
-        {{ review.comment }}
-      </p>
-<div
-  v-if="parsedImages(review).length"
-  class="grid grid-cols-3 gap-2 mt-2"
->
-  <img
-    v-for="(img, index) in parsedImages(review)"
-    :key="index"
-    :src="img"
-    class="object-cover w-full h-24 rounded-lg cursor-pointer hover:opacity-80"
-    @click="openPreview(img)"
-  />
-</div>
+      <!-- Comment -->
+      <div class="text-sm text-gray-700 leading-relaxed">
+        {{ review.comment || 'ไม่มีข้อความ' }}
+      </div>
+
+      <!-- Tags -->
+      <div v-if="review.tags?.length" class="flex flex-wrap gap-1">
+        <span
+          v-for="tag in review.tags"
+          :key="tag"
+          class="px-2 py-1 text-xs bg-green-50 text-green-600 rounded-full"
+        >
+          {{ TAG_LABELS[tag] || tag }}
+        </span>
+      </div>
+
+      <!-- Images -->
+      <div
+        v-if="parsedImages(review).length"
+        class="grid grid-cols-3 gap-2"
+      >
+        <img
+          v-for="(img, index) in parsedImages(review)"
+          :key="index"
+          :src="img"
+          class="object-cover w-full h-24 rounded-xl"
+        />
+      </div>
 
     </div>
   </div>
+
+  <!-- ไม่มีรีวิวตาม tag -->
+  <div v-else class="text-gray-400 text-sm">
+    ไม่มีรีวิวในหมวดนี้
+  </div>
+
 </div>
+
+<!-- No Reviews -->
+<div v-else class="text-gray-400">
+  ยังไม่มีรีวิว
+</div>
+</div>
+
 
 
 
@@ -1050,6 +1138,44 @@ function openModal(route) {
     nextTick(() => initBookingAutocomplete())
 }
 
+const REVIEW_TAGS = [
+  'CLEAN',
+  'POLITE_DRIVER',
+  'ON_TIME',
+  'SAFE_DRIVING',
+  'FRIENDLY_SERVICE'
+]
+
+const TAG_LABELS = {
+  CLEAN: "สะอาด",
+  ON_TIME: "ตรงเวลา",
+  POLITE_DRIVER: "คนขับมารยาทดี",
+  SAFE_DRIVING: "ขับปลอดภัย",
+  FRIENDLY_SERVICE: "บริการเป็นกันเอง"
+}
+
+const allTags = computed(() => {
+  if (!reviewSummary.value?.latestReviews) return []
+
+  const tags = reviewSummary.value.latestReviews.flatMap(r => r.tags || [])
+  return [...new Set(tags)]
+})
+
+const selectedTag = ref(null)
+
+const filteredReviews = computed(() => {
+  if (!driverReviewSummary.value?.latestReviews) return []
+
+  if (!selectedTag.value) {
+    return driverReviewSummary.value.latestReviews
+  }
+
+  return driverReviewSummary.value.latestReviews.filter(review =>
+    (review.tags || []).includes(selectedTag.value)
+  )
+})
+
+
 
 
 
@@ -1082,6 +1208,7 @@ const parsedImages = (review) => {
     return []
   }
 }
+
 
 
 function closeModal() {
