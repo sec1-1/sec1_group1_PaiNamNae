@@ -165,20 +165,25 @@
                                 <!-- ปุ่มขวาล่าง -->
                                 <div class="flex justify-end" :class="{ 'mt-4': selectedTripId !== route.id }">
                                     <NuxtLink
-    v-if="route.status !== 'completed'"
-    :to="`/myRoute/${route.id}/edit`"
-    class="px-4 py-2 text-sm text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700"
-    @click.stop>
-    แก้ไขเส้นทาง
-</NuxtLink>
-
+                                        v-if="route.status !== 'completed'"
+                                        :to="`/myRoute/${route.id}/edit`"
+                                        class="px-4 py-2 text-sm text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700"
+                                        @click.stop>
+                                        แก้ไขเส้นทาง
+                                    </NuxtLink>
 
                                     <button
-  v-if="route.status === 'in_transit'"
-  @click.stop="openCompleteModal(route)"
-  class="px-4 py-2 ml-2 text-sm text-white bg-green-600 rounded-md hover:bg-green-700">
-  จบทริป
-</button>
+                                        v-if="route.status === 'available'"
+                                        @click.stop="startTrip(route)"
+                                        class="px-4 py-2 ml-2 text-sm text-white bg-orange-500 rounded-md hover:bg-orange-600">
+                                        เริ่มทริป
+                                    </button>
+                                    <button
+                                        v-if="route.status === 'in_transit'"
+                                        @click.stop="openCompleteModal(route)"
+                                        class="px-4 py-2 ml-2 text-sm text-white bg-green-600 rounded-md hover:bg-green-700">
+                                        จบทริป
+                                    </button>
 
                                 </div>
                             </div>
@@ -967,6 +972,21 @@ watch(activeTab, () => {
         if (filteredTrips.value.length > 0) updateMap(filteredTrips.value[0])
     }
 })
+
+const startTrip = async (route) => {
+  try {
+    await $api(`/routes/${route.id}/start`, {
+      method: 'PATCH'
+    })
+
+    toast.success("เริ่มทริปแล้ว")
+
+    await fetchMyRoutes()
+  } catch (err) {
+    toast.error(err?.data?.message || "เริ่มทริปไม่สำเร็จ")
+  }
+}
+
 </script>
 
 <style scoped>

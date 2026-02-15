@@ -204,6 +204,9 @@ model Route {
   waypoints       Json?        @db.Json
   landmarks       Json?       @db.Json
   steps           Json?       @db.Json
+  actualStartTime DateTime? //time to start trip
+  actualEndTime   DateTime? //time to end trip
+  optimizeWaypoints Boolean? @default(false) //for แก้ไขเส้นทางจุดแวะ
   createdAt       DateTime    @default(now())
   updatedAt     DateTime @updatedAt
 

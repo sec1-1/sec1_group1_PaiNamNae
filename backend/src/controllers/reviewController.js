@@ -90,7 +90,7 @@ exports.createReview = async (req, res) => {
 
 exports.getDriverReviews = async (req, res) => {
   try {
-    const driverId = parseInt(req.params.id)
+    const driverId = req.params.id   // แก้: ไม่ต้อง parseInt เพราะ id เป็น String (cuid)
 
     const reviews = await prisma.review.findMany({
       where: {
@@ -100,8 +100,9 @@ exports.getDriverReviews = async (req, res) => {
         reviewer: {
           select: {
             id: true,
-            name: true,
-            profileImage: true
+            firstName: true,       // แก้: จาก name → firstName
+            lastName: true,        // เพิ่มตาม schema
+            profilePicture: true   // แก้: จาก profileImage → profilePicture
           }
         }
       },

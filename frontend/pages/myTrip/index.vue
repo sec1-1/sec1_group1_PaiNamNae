@@ -161,11 +161,11 @@
                                 <div class="flex justify-end space-x-3" :class="{ 'mt-4': selectedTripId !== trip.id }">
                                     <!-- PENDING: ยกเลิกได้ -->
                                     <button 
-  v-if="trip.status === 'pending' && trip.routeStatus !== 'completed'" 
-  @click.stop="openCancelModal(trip)"
-  class="px-4 py-2 text-sm text-red-600 border border-red-300 rounded-md hover:bg-red-50">
-  ยกเลิกการจอง
-</button>
+                                        v-if="trip.status === 'pending' && trip.routeStatus !== 'completed'" 
+                                        @click.stop="openCancelModal(trip)"
+                                        class="px-4 py-2 text-sm text-red-600 border border-red-300 rounded-md hover:bg-red-50">
+                                        ยกเลิกการจอง
+                                    </button>
 
 
                                     <!-- CONFIRMED: เพิ่มปุ่มยกเลิก + คงปุ่มแชท -->
@@ -254,28 +254,33 @@
         </div>
 
         <!-- Review Modal -->
-<div v-if="showReviewModal"
-     class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+<div
+  v-if="showReviewModal"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+  @click.self="closeModal"
+>
+  <div class="w-full max-w-xl bg-white rounded-lg shadow-xl overflow-hidden">
 
-  <div class="w-full max-w-md p-6 bg-white rounded-lg">
+  <div class="p-6 max-h-[80vh] overflow-y-auto">
 
-    <h2 class="mb-4 text-lg font-semibold">
+    <!-- HEADER -->
+    <h2 class="mb-6 text-2xl font-semibold text-gray-800">
       รีวิวผู้ขับ
     </h2>
 
     <!-- ⭐ Rating -->
-    <div class="mb-4">
-      <label class="block mb-2 text-sm text-gray-600">
+    <div class="mb-6">
+      <label class="block mb-2 text-sm font-medium text-gray-700">
         ให้คะแนน
       </label>
 
-      <div class="flex gap-1">
+      <div class="flex gap-2">
         <button
           v-for="star in 5"
           :key="star"
           @click="rating = star"
           type="button"
-          class="text-2xl"
+          class="text-3xl transition hover:scale-110"
         >
           <span :class="star <= rating ? 'text-yellow-400' : 'text-gray-300'">
             ★
@@ -285,17 +290,18 @@
     </div>
 
     <!-- ✅ Review Categories -->
-    <div v-if="rating > 0" class="mb-4">
+    <div v-if="rating > 0" class="mb-6">
 
-  <label class="block mb-2 text-sm"
-    :class="rating <= 2 ? 'text-red-500' : 'text-green-600'"
-  >
-    {{ rating <= 2
-        ? 'อะไรที่ควรปรับปรุง?'
-        : 'อะไรที่ประทับใจ?' }}
-  </label>
+      <label
+        class="block mb-3 text-sm font-medium"
+        :class="rating <= 2 ? 'text-red-500' : 'text-green-600'"
+      >
+        {{ rating <= 2
+            ? 'อะไรที่ควรปรับปรุง?'
+            : 'อะไรที่ประทับใจ?' }}
+      </label>
 
-      <div class="grid grid-cols-2 gap-2 text-sm">
+      <div class="grid grid-cols-2 gap-3 p-4 border rounded-lg bg-gray-50">
         <label
           v-for="category in reviewCategories"
           :key="category.value"
@@ -307,33 +313,33 @@
             v-model="selectedCategories"
             class="w-4 h-4 text-blue-600 border-gray-300 rounded"
           />
-          <span>{{ category.label }}</span>
+          <span class="text-sm text-gray-700">{{ category.label }}</span>
         </label>
       </div>
 
       <p v-if="selectedCategories.length === 0"
-         class="mt-1 text-xs text-gray-400">
+         class="mt-2 text-xs text-gray-400">
         ไม่ระบุหมวดหมู่
       </p>
     </div>
 
     <!-- 📝 Comment -->
-    <div class="mb-4">
-      <label class="block mb-2 text-sm text-gray-600">
+    <div class="mb-6">
+      <label class="block mb-2 text-sm font-medium text-gray-700">
         ความคิดเห็น
       </label>
 
       <textarea
         v-model="comment"
-        rows="3"
-        class="w-full p-2 border rounded-md focus:ring focus:ring-blue-200"
+        rows="4"
         placeholder="เขียนรีวิวของคุณ..."
+        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
       ></textarea>
     </div>
 
     <!-- 🖼 Upload Images -->
-    <div class="mb-4">
-      <label class="block mb-1 text-sm text-gray-600">
+    <div class="mb-6">
+      <label class="block mb-2 text-sm font-medium text-gray-700">
         เพิ่มรูปภาพ (ไม่บังคับ)
       </label>
 
@@ -347,7 +353,7 @@
 
       <!-- Preview -->
       <div v-if="imagePreviews.length"
-           class="flex flex-wrap gap-2 mt-3">
+           class="flex flex-wrap gap-3 mt-4">
 
         <div
           v-for="(img, index) in imagePreviews"
@@ -356,13 +362,13 @@
         >
           <img
             :src="img"
-            class="object-cover w-20 h-20 rounded-md"
+            class="object-cover w-24 h-24 rounded-lg shadow"
           />
 
           <button
             @click="removeImage(index)"
             type="button"
-            class="absolute top-0 right-0 px-1 text-xs text-white bg-red-500 rounded-full"
+            class="absolute -top-2 -right-2 px-2 text-xs text-white bg-red-500 rounded-full shadow"
           >
             ✕
           </button>
@@ -370,23 +376,25 @@
       </div>
     </div>
 
-    <!-- Buttons -->
-    <div class="flex justify-end gap-2 mt-6">
+    <!-- BUTTONS -->
+    <div class="flex justify-end gap-3 pt-5 border-t">
       <button
-  @click="closeModal"
-  type="button"
-  class="px-4 py-2 text-sm bg-gray-300 rounded-md">
-  ยกเลิก
-</button>
-
+        @click="closeModal"
+        type="button"
+        class="px-5 py-2 text-sm bg-gray-200 rounded-lg hover:bg-gray-300"
+      >
+        ยกเลิก
+      </button>
 
       <button
         @click="submitReview"
         type="button"
-        class="px-4 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700">
+        class="px-5 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+      >
         ส่งรีวิว
       </button>
     </div>
+     </div>
 
   </div>
 </div>
@@ -629,9 +637,6 @@ const resetReviewForm = () => {
   selectedImages.value = []
   imagePreviews.value = []
 }
-
-
-
 
 const selectedTrip = computed(() => {
     return allTrips.value.find((trip) => trip.id === selectedTripId.value) || null
