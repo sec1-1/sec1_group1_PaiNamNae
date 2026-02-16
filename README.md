@@ -1,4 +1,4 @@
-<<<,<<<< HEAD
+
 # Pai Nam Nae - A Safe Ride Sharing App
 
 <!-- A safe ride-sharing application with a **Nuxt.js** frontend and **Express.js** backend, powered by **Prisma** ORM and **PostgreSQL**. -->
@@ -206,6 +206,8 @@ Visit [**http://localhost:3000/documentation**](http://localhost:3000/documentat
 - `POST /api/routes` – Create a new route (Driver only).
 - `PUT /api/routes/:id` – Update your route (Driver only).
 - `DELETE /api/routes/:id` – Delete your route (Driver only).
+- `PATCH /api/routes/:id/start` - start a route (Driver only).
+- `PATCH /api/routes/:id/complete` - complete a route (Driver only).
 - `GET /api/routes/admin` - List all routes in the system (Admin only).
 - `GET /api/routes/admin/driver/:driverId` - Get all routes for a specific driver (Admin only).
 - `POST /api/routes/admin` - Create a route for a driver (Admin only).
@@ -250,6 +252,11 @@ Visit [**http://localhost:3000/documentation**](http://localhost:3000/documentat
 - `GET /health` – Check application & database health.
 - `GET /metrics` – Expose Prometheus-compatible metrics.
 - `GET /documentation` - Access the Swagger UI API documentation page.
+
+### reviews
+- `POST /api/reviews` – Create a new review (Authenticated user only).
+- `GET /api/reviews/driver/:id` – Get all reviews for a specific driver (Public).
+- `GET /api/drivers/:driverId/review-summary`  – Get review summary for a specific driver (Public).
 
 ## License
 
