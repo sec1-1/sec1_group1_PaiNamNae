@@ -24,4 +24,12 @@ router.post(
     adminController.blacklistUser
 )
 
+router.post(
+  '/users/:userId/unblacklist',
+  protect,
+  requireAdmin,
+  adminController.unblacklistUser
+)
+
+
 module.exports = router
