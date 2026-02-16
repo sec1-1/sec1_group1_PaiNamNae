@@ -6,6 +6,9 @@ ${VALID_PASS}           123456789
 ${ADMIN_USER}           admin123
 ${ADMIN_FIRST_NAME}     System
 ${ADMIN_PASS}           123456789
+&{BLACKLIST_USER}       
+@{BLACKLIST_PASSWORD}   
+
 
 *** Keywords ***
 Open Web Page
