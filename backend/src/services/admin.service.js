@@ -31,6 +31,44 @@ const approveReport = async (reportId, adminId) => {
   }
 }
 
+const blacklistUserDirectly  = async (userId , adminId , reason) => {
+  return await prisma.$transaction(async (tx) => {
+    // user check
+    const user = await tx.user.findUnique({
+      where: { id: userId } , 
+      select: { id: true , isActive: true }
+    })
+
+    if(!user) {
+      return { message: "User not found" }
+    }
+
+    const existing = await tx.blacklist.findFist({
+      where: { userId }
+    })
+
+    if(existing) {
+      return { message: "User already blacklisted" }
+    }
+
+    await tx.blacklist.create({
+      data: {
+        userId , 
+        reason: reason || "Blacklisted by admin",
+        createdBy: adminId
+      }
+    })
+
+    await tx.user.update({
+      where: { userId } , 
+      data: { isActive: false }
+    })
+
+    return { message: "User blacklisted by admin" }
+  })
+}
+
 module.exports = {
-  approveReport
+  approveReport , 
+  blacklistUserDirectly
 }
