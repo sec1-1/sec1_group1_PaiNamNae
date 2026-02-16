@@ -40,14 +40,31 @@
                                             <h4 class="text-lg font-semibold text-gray-900">
                                                 {{ trip.origin }} → {{ trip.destination }}
                                             </h4>
-                                            <span v-if="trip.status === 'pending'"
-                                                class="status-badge status-pending">รอดำเนินการ</span>
-                                            <span v-else-if="trip.status === 'confirmed'"
-                                                class="status-badge status-confirmed">ยืนยันแล้ว</span>
-                                            <span v-else-if="trip.status === 'rejected'"
-                                                class="status-badge status-rejected">ปฏิเสธ</span>
-                                            <span v-else-if="trip.status === 'cancelled'"
-                                                class="status-badge status-cancelled">ยกเลิก</span>
+                                            <span v-if="trip.routeStatus === 'completed'"
+    class="status-badge status-completed">
+    จบทริปแล้ว
+</span>
+
+<span v-else-if="trip.status === 'pending'"
+    class="status-badge status-pending">
+    รอดำเนินการ
+</span>
+
+<span v-else-if="trip.status === 'confirmed'"
+    class="status-badge status-confirmed">
+    ยืนยันแล้ว
+</span>
+
+<span v-else-if="trip.status === 'rejected'"
+    class="status-badge status-rejected">
+    ปฏิเสธ
+</span>
+
+<span v-else-if="trip.status === 'cancelled'"
+    class="status-badge status-cancelled">
+    ยกเลิก
+</span>
+
                                         </div>
                                         <p class="mt-1 text-sm text-gray-600">จุดนัดพบ: {{ trip.pickupPoint }}</p>
                                         <p class="text-sm text-gray-600">
@@ -143,13 +160,17 @@
 
                                 <div class="flex justify-end space-x-3" :class="{ 'mt-4': selectedTripId !== trip.id }">
                                     <!-- PENDING: ยกเลิกได้ -->
-                                    <button v-if="trip.status === 'pending'" @click.stop="openCancelModal(trip)"
-                                        class="px-4 py-2 text-sm text-red-600 transition duration-200 border border-red-300 rounded-md hover:bg-red-50">
+                                    <button 
+                                        v-if="trip.status === 'pending' && trip.routeStatus !== 'completed'" 
+                                        @click.stop="openCancelModal(trip)"
+                                        class="px-4 py-2 text-sm text-red-600 border border-red-300 rounded-md hover:bg-red-50">
                                         ยกเลิกการจอง
                                     </button>
 
+
                                     <!-- CONFIRMED: เพิ่มปุ่มยกเลิก + คงปุ่มแชท -->
-                                    <template v-else-if="trip.status === 'confirmed'">
+                                    <template v-else-if="trip.status === 'confirmed' && trip.routeStatus !== 'completed'">
+
                                         <button @click.stop="openCancelModal(trip)"
                                             class="px-4 py-2 text-sm text-red-600 transition duration-200 border border-red-300 rounded-md hover:bg-red-50">
                                             ยกเลิกการจอง
@@ -160,8 +181,24 @@
                                         </button>
                                     </template>
 
+<template v-if="trip.routeStatus === 'completed'">
+  <button
+    @click.stop="openReviewModal(trip)"
+    class="px-4 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700">
+    รีวิวผู้ขับ
+  </button>
+</template>
+
+
+                                    
+
+                                    
+                                    
+
                                     <!-- REJECTED / CANCELLED: ลบได้ -->
-                                    <button v-else-if="['rejected', 'cancelled'].includes(trip.status)"
+                                    <button 
+  v-else-if="['rejected', 'cancelled'].includes(trip.status) && trip.routeStatus !== 'completed'"
+
                                         @click.stop="openConfirmModal(trip, 'delete')"
                                         class="px-4 py-2 text-sm text-gray-600 transition duration-200 border border-gray-300 rounded-md hover:bg-gray-50">
                                         ลบรายการ
@@ -216,6 +253,155 @@
             </div>
         </div>
 
+        <!-- Review Modal -->
+<div
+  v-if="showReviewModal"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+  @click.self="closeModal"
+>
+  <div class="w-full max-w-xl bg-white rounded-lg shadow-xl overflow-hidden">
+
+  <div class="p-6 max-h-[80vh] overflow-y-auto">
+
+    <!-- HEADER -->
+    <h2 class="mb-6 text-2xl font-semibold text-gray-800">
+      รีวิวผู้ขับ
+    </h2>
+
+    <!-- ⭐ Rating -->
+    <div class="mb-6">
+      <label class="block mb-2 text-sm font-medium text-gray-700">
+        ให้คะแนน
+      </label>
+
+      <div class="flex gap-2">
+        <button
+          v-for="star in 5"
+          :key="star"
+          @click="rating = star"
+          type="button"
+          class="text-3xl transition hover:scale-110"
+        >
+          <span :class="star <= rating ? 'text-yellow-400' : 'text-gray-300'">
+            ★
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ✅ Review Categories -->
+    <div v-if="rating > 0" class="mb-6">
+
+      <label
+        class="block mb-3 text-sm font-medium"
+        :class="rating <= 2 ? 'text-red-500' : 'text-green-600'"
+      >
+        {{ rating <= 2
+            ? 'อะไรที่ควรปรับปรุง?'
+            : 'อะไรที่ประทับใจ?' }}
+      </label>
+
+      <div class="grid grid-cols-2 gap-3 p-4 border rounded-lg bg-gray-50">
+        <label
+          v-for="category in reviewCategories"
+          :key="category.value"
+          class="flex items-center gap-2 cursor-pointer"
+        >
+          <input
+            type="checkbox"
+            :value="category.value"
+            v-model="selectedCategories"
+            class="w-4 h-4 text-blue-600 border-gray-300 rounded"
+          />
+          <span class="text-sm text-gray-700">{{ category.label }}</span>
+        </label>
+      </div>
+
+      <p v-if="selectedCategories.length === 0"
+         class="mt-2 text-xs text-gray-400">
+        ไม่ระบุหมวดหมู่
+      </p>
+    </div>
+
+    <!-- 📝 Comment -->
+    <div class="mb-6">
+      <label class="block mb-2 text-sm font-medium text-gray-700">
+        ความคิดเห็น
+      </label>
+
+      <textarea
+        v-model="comment"
+        rows="4"
+        placeholder="เขียนรีวิวของคุณ..."
+        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+      ></textarea>
+    </div>
+
+    <!-- 🖼 Upload Images -->
+    <div class="mb-6">
+      <label class="block mb-2 text-sm font-medium text-gray-700">
+        เพิ่มรูปภาพ (ไม่บังคับ)
+      </label>
+
+      <input
+        type="file"
+        multiple
+        accept="image/*"
+        @change="handleImages"
+        class="w-full text-sm"
+      />
+
+      <!-- Preview -->
+      <div v-if="imagePreviews.length"
+           class="flex flex-wrap gap-3 mt-4">
+
+        <div
+          v-for="(img, index) in imagePreviews"
+          :key="index"
+          class="relative"
+        >
+          <img
+            :src="img"
+            class="object-cover w-24 h-24 rounded-lg shadow"
+          />
+
+          <button
+            @click="removeImage(index)"
+            type="button"
+            class="absolute -top-2 -right-2 px-2 text-xs text-white bg-red-500 rounded-full shadow"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="flex justify-end gap-3 pt-5 border-t">
+      <button
+        @click="closeModal"
+        type="button"
+        class="px-5 py-2 text-sm bg-gray-200 rounded-lg hover:bg-gray-300"
+      >
+        ยกเลิก
+      </button>
+
+      <button
+        @click="submitReview"
+        type="button"
+        class="px-5 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+      >
+        ส่งรีวิว
+      </button>
+    </div>
+     </div>
+
+  </div>
+</div>
+
+
+
+
         <ConfirmModal :show="isModalVisible" :title="modalContent.title" :message="modalContent.message"
             :confirmText="modalContent.confirmText" :variant="modalContent.variant" @confirm="handleConfirmAction"
             @cancel="closeConfirmModal" />
@@ -234,8 +420,12 @@ import { useToast } from '~/composables/useToast'
 dayjs.locale('th')
 dayjs.extend(buddhistEra)
 
+const selectedImages = ref([])
+const imagePreviews = ref([])
 const { $api } = useNuxtApp()
 const { toast } = useToast()
+const rating = ref(0)
+const comment = ref('')
 
 // --- State Management ---
 const activeTab = ref('pending')
@@ -263,6 +453,7 @@ const tabs = [
     { status: 'confirmed', label: 'ยืนยันแล้ว' },
     { status: 'rejected', label: 'ปฏิเสธ' },
     { status: 'cancelled', label: 'ยกเลิก' },
+    { status: 'completed', label: 'จบทริปแล้ว' },
     { status: 'all', label: 'ทั้งหมด' }
 ]
 
@@ -286,11 +477,166 @@ const selectedCancelReason = ref('')
 const cancelReasonError = ref('')
 const tripToCancel = ref(null)
 
+const showReviewModal = ref(false)
+const selectedTripForReview = ref(null)
+const selectedCategories = ref([])
+
+
+
 // --- Computed Properties ---
 const filteredTrips = computed(() => {
     if (activeTab.value === 'all') return allTrips.value
-    return allTrips.value.filter((trip) => trip.status === activeTab.value)
+
+    return allTrips.value.filter((trip) => {
+        // ถ้า route completed → บังคับให้อยู่ในแท็บ completed เท่านั้น
+        if (trip.routeStatus === 'completed') {
+            return activeTab.value === 'completed'
+        }
+
+        return trip.status === activeTab.value
+    })
 })
+
+function openReviewModal(trip) {
+  selectedTripForReview.value = trip
+  showReviewModal.value = true
+}
+
+
+const handleImages = (e) => {
+  const files = Array.from(e.target.files)
+
+  selectedImages.value.push(...files)
+
+  files.forEach(file => {
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      imagePreviews.value.push(event.target.result)
+    }
+    reader.readAsDataURL(file)
+  })
+}
+
+const removeImage = (index) => {
+  selectedImages.value.splice(index, 1)
+  imagePreviews.value.splice(index, 1)
+}
+
+const uploadImages = async () => {
+  const urls = []
+
+  for (const file of selectedImages.value) {
+    const formData = new FormData()
+    formData.append("file", file)
+    formData.append("upload_preset", "painamnae_G1_sec11")
+
+    const { secure_url } = await $fetch(
+      "https://api.cloudinary.com/v1_1/dawfywcw9/image/upload",
+      {
+        method: "POST",
+        body: formData
+      }
+    )
+
+    urls.push(secure_url)
+  }
+
+  return urls
+}
+
+// ⭐ เปลี่ยนหมวดตาม rating
+const reviewCategories = computed(() => {
+  if (rating.value === 0) return []
+  if (rating.value <= 2) return negativeCategories
+  return positiveCategories
+})
+
+
+// 🔥 รีเซ็ต tag ทุกครั้งที่ rating เปลี่ยน
+watch(rating, () => {
+  selectedCategories.value = []
+})
+
+const positiveCategories = [
+  { label: 'สะอาด', value: 'CLEAN' },
+  { label: 'คนขับมารยาทดี', value: 'POLITE_DRIVER' },
+  { label: 'ตรงเวลา', value: 'ON_TIME' },
+  { label: 'ขับปลอดภัย', value: 'SAFE_DRIVING' },
+  { label: 'บริการเป็นกันเอง', value: 'FRIENDLY_SERVICE' }
+]
+
+const negativeCategories = [
+  { label: 'รถไม่สะอาด', value: 'DIRTY' },
+  { label: 'คนขับพูดจาไม่สุภาพ', value: 'RUDE_DRIVER' },
+  { label: 'มาสาย', value: 'LATE' },
+  { label: 'ขับรถอันตราย', value: 'UNSAFE_DRIVING' },
+  { label: 'บริการไม่เป็นมิตร', value: 'UNFRIENDLY_SERVICE' }
+]
+
+const resetForm = () => {
+  rating.value = 0
+  selectedCategories.value = []
+  comment.value = ''
+  images.value = []
+  imagePreviews.value = []
+}
+
+const closeModal = () => {
+  showReviewModal.value = false
+  resetForm()
+}
+
+const submitReview = async () => {
+  if (!rating.value) {
+    toast.error("กรุณาให้คะแนนก่อน")
+    return
+  }
+
+  if (!selectedTripForReview.value?.id) {
+    toast.error("ไม่พบข้อมูลการจอง")
+    return
+  }
+
+  try {
+    // Upload รูปก่อน
+    const imageUrls = await uploadImages()
+
+    await $api('/reviews', {
+      method: 'POST',
+      body: {
+        bookingId: selectedTripForReview.value.id,
+        rating: rating.value,
+        comment: comment.value?.trim() || null,
+        tags: selectedCategories.value || [],
+        images: imageUrls || []
+      }
+    })
+
+    toast.success("รีวิวสำเร็จ 🎉")
+
+    resetReviewForm()
+
+    await fetchMyTrips()
+
+  } catch (error) {
+    const message =
+      error?.data?.message ||   // สำคัญใน Nuxt 3
+      error?.response?.data?.message ||
+      error?.message ||
+      "Something went wrong"
+
+    toast.error(message)
+  }
+}
+
+const resetReviewForm = () => {
+  showReviewModal.value = false
+  rating.value = 0
+  comment.value = ""
+  selectedCategories.value = []
+  selectedImages.value = []
+  imagePreviews.value = []
+}
 
 const selectedTrip = computed(() => {
     return allTrips.value.find((trip) => trip.id === selectedTripId.value) || null
@@ -363,6 +709,8 @@ async function fetchMyTrips() {
             return {
                 id: b.id,
                 status: String(b.status || '').toLowerCase(),
+                status: b.status.toLowerCase(),
+                routeStatus: String(b.route.status || '').toLowerCase(),
                 origin: start?.name || `(${Number(start.lat).toFixed(2)}, ${Number(start.lng).toFixed(2)})`,
                 destination: end?.name || `(${Number(end.lat).toFixed(2)}, ${Number(end.lng).toFixed(2)})`,
                 originAddress: start?.address ? cleanAddr(start.address) : null,
@@ -488,8 +836,16 @@ function getPlaceName(placeId) {
 
 const getTripCount = (status) => {
     if (status === 'all') return allTrips.value.length
-    return allTrips.value.filter((trip) => trip.status === status).length
+
+    return allTrips.value.filter((trip) => {
+        if (trip.routeStatus === 'completed') {
+            return status === 'completed'
+        }
+
+        return trip.status === status
+    }).length
 }
+
 
 const toggleTripDetails = (tripId) => {
     const tripForMap = allTrips.value.find((trip) => trip.id === tripId)

@@ -101,7 +101,13 @@
                                         <div class="flex items-start justify-between">
                                             <div>
                                                 <div class="flex items-center">
-                                                    <h4 class="font-semibold text-gray-900">{{ route.driver.name }}</h4>
+                                                    <h4
+                                                        class="font-semibold text-blue-600 cursor-pointer hover:underline"
+                                                        @click.stop="openDriverReviews(route.driver)"
+                                                        >
+                                                        {{ route.driver.name }}
+                                                    </h4>
+
 
                                                     <div v-if="route.driver.isVerified"
                                                         class="relative group ml-1.5 flex items-center">
@@ -119,14 +125,29 @@
                                                 </div>
                                                 <div class="flex items-center mt-1">
                                                     <div class="flex text-yellow-400">
-                                                        <span v-for="star in 5" :key="star">{{ star <=
-                                                            route.driver.rating ? '★' : '☆' }}</span>
-                                                    </div>
-                                                    <span class="ml-2 text-sm text-gray-600">
-                                                        {{ route.driver.rating }} ({{ route.driver.reviews }} รีวิว)
-                                                    </span>
+                                                        <span v-for="star in 5" :key="star">
+                                                            {{
+                                                            star <= Math.round(
+                                                                Number(driverReviewMap?.[route.driver?.id]?.average || 0)
+                                                            )
+                                                                ? '★'
+                                                                : '☆'
+                                                            }}
+                                                        </span>
+                                                        </div>
+
+                                                        <span class="ml-2 text-sm text-gray-600">
+                                                        {{
+                                                            driverReviewMap?.[route.driver?.id]?.average
+                                                            ? Number(driverReviewMap?.[route.driver?.id]?.average).toFixed(1)
+                                                            : '-'
+                                                        }}
+                                                        ({{ driverReviewMap?.[route.driver?.id]?.totalReviews || 0 }} รีวิว)
+                                                        </span>
                                                 </div>
-                                            </div>
+                                            </div> 
+
+
                                             <div class="text-right">
                                                 <div class="text-lg font-bold text-blue-600">{{ route.price }} บาท</div>
                                                 <div class="text-sm text-gray-600">ต่อที่นั่ง</div>
@@ -241,6 +262,154 @@
         </div>
 
         <transition name="modal-fade">
+            <div v-if="showDriverReviewModal" class="modal-overlay" @click.self="closeDriverReviewModal">
+                <div class="modal-content max-w-2xl p-6 overflow-y-auto max-h-[90vh]">
+
+                <!-- HEADER -->
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold">
+                    รีวิวของ {{ selectedDriver?.name }}
+                    </h3>
+
+                    <button
+                    class="px-3 py-1 text-sm text-white bg-red-500 rounded"
+                    @click="closeDriverReviewModal"
+                    >
+                    ปิด
+                    </button>
+                </div>
+
+                <!-- LOADING -->
+                <div v-if="loadingReviewSummary" class="text-center text-gray-400">
+                    กำลังโหลดรีวิว...
+                </div>
+
+                <!-- HAS REVIEWS -->
+                <div v-else-if="driverReviewSummary && driverReviewSummary.totalReviews > 0">
+
+                    <!-- ⭐ SUMMARY -->
+                    <div class="mb-4 text-center">
+                    <div class="text-3xl font-bold text-gray-800">
+                        {{ driverReviewSummary.average }}
+                    </div>
+
+                    <div class="text-yellow-400 text-lg">
+                        <span v-for="i in 5" :key="i">
+                        {{ i <= Math.round(Number(driverReviewSummary.average)) ? '★' : '☆' }}
+                        </span>
+                    </div>
+
+                    <div class="text-sm text-gray-500">
+                        {{ driverReviewSummary.totalReviews }} รีวิว
+                    </div>
+                    </div>
+
+                    <!-- TAG FILTER -->
+                    <div class="flex flex-wrap gap-2 mb-4">
+
+                    <button
+                        @click="selectedTag = null"
+                        :class="[
+                        'px-4 py-2 rounded-full text-sm border',
+                        !selectedTag ? 'bg-green-600 text-white' : 'bg-white'
+                        ]"
+                    >
+                        ทั้งหมด
+                    </button>
+
+                    <button
+                        v-for="tag in REVIEW_TAGS"
+                        :key="tag"
+                        @click="selectedTag = tag"
+                        :class="[
+                        'px-4 py-2 rounded-full text-sm border',
+                        selectedTag === tag ? 'bg-green-600 text-white' : 'bg-white'
+                        ]"
+                    >
+                        {{ TAG_LABELS[tag] }}
+                    </button>
+
+                    </div>
+
+                    <!-- REVIEW LIST -->
+                    <div v-if="filteredReviews.length" class="space-y-4">
+
+                    <div
+                        v-for="review in filteredReviews"
+                        :key="review.id"
+                        class="p-4 bg-white border rounded-2xl shadow-sm space-y-3"
+                    >
+
+                        <!-- HEADER -->
+                        <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <img
+                            :src="review.reviewer?.profilePicture 
+                            || 'https://ui-avatars.com/api/?name=' + (review.reviewer?.firstName || 'U')"
+                            class="w-9 h-9 rounded-full object-cover"
+                            />
+                            <div>
+                            <div class="text-sm font-semibold">
+                                {{ review.reviewer?.firstName || 'ผู้ใช้' }}
+                            </div>
+                            <div class="text-xs text-gray-400">
+                                {{ new Date(review.createdAt).toLocaleDateString() }}
+                            </div>
+                            </div>
+                        </div>
+
+                        <div class="text-yellow-500 font-semibold text-sm">
+                            ⭐ {{ review.rating }}
+                        </div>
+                        </div>
+
+                        <!-- COMMENT -->
+                        <div class="text-sm text-gray-700">
+                        {{ review.comment || 'ไม่มีข้อความ' }}
+                        </div>
+
+                        <!-- TAGS -->
+                        <div v-if="review.tags?.length" class="flex flex-wrap gap-1">
+                        <span
+                            v-for="tag in review.tags"
+                            :key="tag"
+                            class="px-2 py-1 text-xs bg-green-50 text-green-600 rounded-full"
+                        >
+                            {{ TAG_LABELS[tag] || tag }}
+                        </span>
+                        </div>
+
+                        <!-- IMAGES -->
+                        <div v-if="parsedImages(review).length" class="grid grid-cols-3 gap-2">
+                        <img
+                            v-for="(img, index) in parsedImages(review)"
+                            :key="index"
+                            :src="img"
+                            class="object-cover w-full h-24 rounded-xl"
+                        />
+                        </div>
+
+                    </div>
+                    </div>
+
+                    <div v-else class="text-gray-400 text-sm text-center">
+                    ไม่มีรีวิวในหมวดนี้
+                    </div>
+
+                </div>
+
+                <!-- NO REVIEWS -->
+                <div v-else class="text-center text-gray-400">
+                    ยังไม่มีรีวิว
+                </div>
+
+                </div>
+            </div>
+            </transition>
+
+
+
+        <transition name="modal-fade">
             <div v-if="showModal && bookingRoute" class="modal-overlay" @click.self="closeModal">
                 <div class="modal-content">
                     <template v-if="!bookingPickingTarget">
@@ -305,13 +474,8 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="flex items-center">
-                                        <div class="flex text-sm text-yellow-400">
-                                            <span v-for="star in 5" :key="star">{{ star <= bookingRoute.driver.rating
-                                                ? '★' : '☆' }}</span>
-                                        </div>
-                                        <span class="ml-2 text-sm text-gray-600">{{ bookingRoute.driver.rating }} ({{
-                                            bookingRoute.driver.reviews }} รีวิว)</span>
+                                    <div class="mt-4">
+
                                     </div>
                                 </div>
                             </div>
@@ -477,6 +641,17 @@ import { navigateTo } from '#app';
 dayjs.locale('th')
 dayjs.extend(buddhistEra)
 
+//show review driver
+const showDriverReviewModal = ref(false)
+const selectedDriver = ref(null)
+const driverReviews = ref([])
+const loadingDriverReviewห = ref(false)
+const driverReviewMap = ref({})
+const reviewSummary = ref(null)
+const loadingReviewSummary = ref(false)
+
+
+
 const { $api } = useNuxtApp()
 const { toast } = useToast();
 const { token } = useAuth();
@@ -544,6 +719,8 @@ const RADIUS_METERS = 500
 const routes = ref([])
 const selectedRoute = ref(null)
 const isLoading = ref(false)
+const driverReviewSummary = ref(null)
+
 
 const mapContainer = ref(null)
 let gmap = null               // แผนที่ของ Google
@@ -677,6 +854,7 @@ async function handleSearch() {
                 originAddress: route.startLocation?.address ? cleanAddr(route.startLocation.address) : null,
                 destinationAddress: route.endLocation?.address ? cleanAddr(route.endLocation.address) : null,
                 driver: {
+                    id: route.driver?.id,
                     name: `${route.driver?.firstName || ''} ${route.driver?.lastName || ''}`.trim() || 'ไม่ระบุชื่อ',
                     image: route.driver?.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(route.driver?.firstName || 'U')}&background=random&size=64`,
                     rating: 4.5,
@@ -694,6 +872,12 @@ async function handleSearch() {
                 stops,
                 stopsCoords,
             }
+        })
+        //preload รีวิวของ driver ทุกคน
+        routes.value.forEach(route => {
+        if (route.driver?.id) {
+            fetchDriverReviewSummary(route.driver.id)
+        }
         })
 
         await waitMapReady()
@@ -934,22 +1118,141 @@ async function formatPrettyAddress(geocodeResult) {
 }
 
 function openModal(route) {
-    if (!token.value) {
-        return navigateTo('/login');
-    }
-    if (route && route.availableSeats > 0) {
-        bookingRoute.value = route
-        bookingSeats.value = 1
-        pickupPoint.value = ''
-        dropoffPoint.value = ''
-        pickupData.value = { lat: null, lng: null, placeId: null, address: null, name: null }
-        dropoffData.value = { lat: null, lng: null, placeId: null, address: null, name: null }
-        bookingPickingTarget.value = null
-        showModal.value = true
+    console.log("OPEN CLICKED")
 
-        nextTick(() => initBookingAutocomplete())
+    if (!token.value) {
+        console.log("NO TOKEN")
+        return navigateTo('/login')
     }
+
+    if (!route) {
+        console.log("NO ROUTE")
+        return
+    }
+
+    console.log("Seats:", route.availableSeats)
+
+    if (Number(route.availableSeats) <= 0) {
+        console.log("NO SEATS")
+        return
+    }
+
+    // ตั้งค่าข้อมูลจอง
+    bookingRoute.value = route
+    bookingSeats.value = 1
+    pickupPoint.value = ''
+    dropoffPoint.value = ''
+
+    // เปิด modal จอง
+    showModal.value = true
+
+    // init autocomplete จุดรับส่ง
+    nextTick(() => initBookingAutocomplete())
 }
+
+const openDriverReviews = async (driver) => {
+  selectedDriver.value = driver
+  showDriverReviewModal.value = true
+
+  // ถ้ายังไม่มี → ค่อยโหลด
+  if (!driverReviewMap.value[driver.id]) {
+    await fetchDriverReviewSummary(driver.id)
+  }
+
+  driverReviewSummary.value = driverReviewMap.value[driver.id]
+}
+
+const closeDriverReviewModal = () => {
+  showDriverReviewModal.value = false
+  selectedDriver.value = null
+  driverReviews.value = []
+}
+
+const REVIEW_TAGS = [
+  'CLEAN',
+  'POLITE_DRIVER',
+  'ON_TIME',
+  'SAFE_DRIVING',
+  'FRIENDLY_SERVICE',
+  'DIRTY',
+    'RUDE_DRIVER',
+    'LATE',
+    'UNSAFE_DRIVING',
+    'UNFRIENDLY_SERVICE'
+]
+
+const TAG_LABELS = {
+  CLEAN: "สะอาด",
+  ON_TIME: "ตรงเวลา",
+  POLITE_DRIVER: "คนขับมารยาทดี",
+  SAFE_DRIVING: "ขับปลอดภัย",
+  FRIENDLY_SERVICE: "บริการเป็นกันเอง",
+  DIRTY: "รถไม่สะอาด",
+  RUDE_DRIVER: "คนขับพูดจาไม่สุภาพ",
+  LATE: "มาสาย",
+  UNSAFE_DRIVING: "ขับรถอันตราย",
+  UNFRIENDLY_SERVICE: "บริการไม่เป็นมิตร"
+}
+
+const allTags = computed(() => {
+  if (!reviewSummary.value?.latestReviews) return []
+
+  const tags = reviewSummary.value.latestReviews.flatMap(r => r.tags || [])
+  return [...new Set(tags)]
+})
+
+const selectedTag = ref(null)
+
+const filteredReviews = computed(() => {
+  if (!driverReviewSummary.value?.latestReviews) return []
+
+  if (!selectedTag.value) {
+    return driverReviewSummary.value.latestReviews
+  }
+
+  return driverReviewSummary.value.latestReviews.filter(review =>
+    (review.tags || []).includes(selectedTag.value)
+  )
+})
+
+//review driver แบบ map ไว้ เผื่อเปิดดูหลายคน จะได้ไม่ต้องโหลดซ้ำ
+const fetchDriverReviewSummary = async (driverId) => {
+  if (!driverId) return
+
+  // ถ้ามีแล้ว ไม่ต้องโหลดซ้ำ
+  if (driverReviewMap.value[driverId]) return
+
+  try {
+    const data = await $api(`/drivers/${driverId}/review-summary`)
+    console.log("REVIEW SUMMARY FROM API:", data) 
+    data.latestReviews = data.latestReviews.map(r => ({
+      ...r,
+      images: Array.isArray(r.images) ? r.images : []
+    }))
+
+    driverReviewMap.value[driverId] = data
+
+  } catch (err) {
+    console.error(err)
+    driverReviewMap.value[driverId] = null
+  }
+}
+
+const parsedImages = (review) => {
+  if (!review.images) return []
+
+  if (Array.isArray(review.images)) {
+    return review.images
+  }
+
+  try {
+    return JSON.parse(review.images)
+  } catch (e) {
+    return []
+  }
+}
+
+
 
 function closeModal() {
     showModal.value = false

@@ -164,11 +164,27 @@
 
                                 <!-- ปุ่มขวาล่าง -->
                                 <div class="flex justify-end" :class="{ 'mt-4': selectedTripId !== route.id }">
-                                    <NuxtLink :to="`/myRoute/${route.id}/edit`"
+                                    <NuxtLink
+                                        v-if="route.status !== 'completed'"
+                                        :to="`/myRoute/${route.id}/edit`"
                                         class="px-4 py-2 text-sm text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700"
                                         @click.stop>
                                         แก้ไขเส้นทาง
                                     </NuxtLink>
+
+                                    <button
+                                        v-if="route.status === 'available'"
+                                        @click.stop="startTrip(route)"
+                                        class="px-4 py-2 ml-2 text-sm text-white bg-orange-500 rounded-md hover:bg-orange-600">
+                                        เริ่มทริป
+                                    </button>
+                                    <button
+                                        v-if="route.status === 'in_transit'"
+                                        @click.stop="openCompleteModal(route)"
+                                        class="px-4 py-2 ml-2 text-sm text-white bg-green-600 rounded-md hover:bg-green-700">
+                                        จบทริป
+                                    </button>
+
                                 </div>
                             </div>
                         </div>
@@ -196,6 +212,11 @@
                                                 class="status-badge status-rejected">ปฏิเสธ</span>
                                             <span v-else-if="trip.status === 'cancelled'"
                                                 class="status-badge status-cancelled">ยกเลิก</span>
+                                                <span v-else-if="trip.status === 'completed'"
+      class="status-badge status-completed">
+      จบทริปแล้ว 
+</span>
+
                                         </div>
                                         <p class="mt-1 text-sm text-gray-600">จุดนัดพบ: {{ trip.pickupPoint }}</p>
                                         <p class="text-sm text-gray-600">
@@ -368,7 +389,7 @@
                 <div class="lg:col-span-1">
                     <div class="sticky overflow-hidden bg-white border border-gray-300 rounded-lg shadow-md top-8">
                         <div class="p-3 border-gray-300">
-                            <h3 class="text-lg font-semibold text-gray-900">แผนที่เส้นทาง</h3>
+                            <h3 class="text-lg font-semibold text-gray-900">แผนที่เส้นทาง </h3>
                             <p class="mt-1 text-sm text-gray-600">
                                 {{ selectedLabel ? selectedLabel : 'คลิกที่รายการเพื่อดูเส้นทาง' }}
                             </p>
@@ -426,6 +447,8 @@ const tabs = [
     { status: 'cancelled', label: 'ยกเลิก' },
     { status: 'all', label: 'ทั้งหมด' },
     { status: 'myRoutes', label: 'เส้นทางของฉัน' },
+    { status: 'completed', label: 'จบทริปแล้ว' },
+
 ]
 
 definePageMeta({ middleware: 'auth' })
@@ -473,7 +496,7 @@ async function fetchMyRoutes() {
     try {
         const routes = await $api('/routes/me')
 
-        const allowedRouteStatuses = new Set(['AVAILABLE', 'FULL', 'IN_TRANSIT'])
+        const allowedRouteStatuses = new Set(['AVAILABLE', 'FULL', 'IN_TRANSIT','COMPLETED' ])
 
         const formatted = []
         const ownRoutes = []
@@ -522,9 +545,14 @@ async function fetchMyRoutes() {
 
             // แปลงเป็น "คำขอจอง" ต่อ booking
             for (const b of (r.bookings || [])) {
+                const bookingStatus = (b.status || '').toLowerCase()
+                const routeStatusLower = (r.status || '').toLowerCase()
                 formatted.push({
                     id: b.id,
-                    status: (b.status || '').toLowerCase(),
+                    status: routeStatusLower === 'completed'
+            ? 'completed'
+            : bookingStatus,
+                    
                     origin: start?.name || `(${Number(start.lat).toFixed(2)}, ${Number(start.lng).toFixed(2)})`,
                     destination: end?.name || `(${Number(end.lat).toFixed(2)}, ${Number(end.lng).toFixed(2)})`,
                     originHasName: !!start?.name,
@@ -806,6 +834,15 @@ const handleConfirmAction = async () => {
             await $api(`/bookings/${bookingId}`, { method: 'DELETE' })
             toast.success('ลบรายการสำเร็จ', 'ลบคำขอออกจากรายการแล้ว')
         }
+        else if (action === 'complete') {
+
+    await $api(`/routes/${tripToAction.value.id}/complete`, {
+        method: 'PATCH',
+        body: { status: 'COMPLETED' }
+    })
+    toast.success('สำเร็จ', 'จบทริปเรียบร้อยแล้ว')
+}
+
         closeConfirmModal()
         await fetchMyRoutes()
     } catch (error) {
@@ -823,6 +860,19 @@ const copyEmail = async (email) => {
         toast.error('คัดลอกไม่สำเร็จ', 'ลองใหม่อีกครั้ง')
     }
 }
+
+const openCompleteModal = (route) => {
+    tripToAction.value = route
+    modalContent.value = {
+        title: 'จบทริป',
+        message: `ต้องการจบเส้นทาง "${route.origin} → ${route.destination}" ใช่หรือไม่?`,
+        confirmText: 'จบทริป',
+        action: 'complete',
+        variant: 'primary',
+    }
+    isModalVisible.value = true
+}
+
 
 function formatDistance(input) {
     if (typeof input !== 'string') return input
@@ -922,6 +972,21 @@ watch(activeTab, () => {
         if (filteredTrips.value.length > 0) updateMap(filteredTrips.value[0])
     }
 })
+
+const startTrip = async (route) => {
+  try {
+    await $api(`/routes/${route.id}/start`, {
+      method: 'PATCH'
+    })
+
+    toast.success("เริ่มทริปแล้ว")
+
+    await fetchMyRoutes()
+  } catch (err) {
+    toast.error(err?.data?.message || "เริ่มทริปไม่สำเร็จ")
+  }
+}
+
 </script>
 
 <style scoped>
@@ -1015,4 +1080,10 @@ watch(activeTab, () => {
 .duration-300 {
     animation-duration: 300ms;
 }
+
+.status-completed {
+    background-color: #e0e7ff;
+    color: #3730a3;
+}
+
 </style>

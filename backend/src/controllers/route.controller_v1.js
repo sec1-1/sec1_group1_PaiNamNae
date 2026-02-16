@@ -393,6 +393,83 @@ const adminDeleteRoute = asyncHandler(async (req, res) => {
   });
 });
 
+const startRoute = asyncHandler(async (req, res) => {
+  const driverId = req.user.sub
+  const { id } = req.params
+
+  const route = await routeService.getRouteById(id)
+
+  if (!route) throw new ApiError(404, "Route not found")
+  if (route.driverId !== driverId) throw new ApiError(403, "Forbidden")
+
+  // ป้องกันเริ่มซ้ำ (แนะนำ)
+  if (route.status === "IN_TRANSIT")
+    throw new ApiError(400, "Trip already started")
+
+  if (route.status === "COMPLETED")
+    throw new ApiError(400, "Trip already completed")
+
+  if (route.status === "CANCELLED")
+    throw new ApiError(400, "Trip cancelled")
+
+  const updated = await routeService.updateRoute(id, {
+    status: "IN_TRANSIT",
+    actualStartTime: new Date()
+  })
+
+  res.status(200).json({
+    success: true,
+    message: "Trip started",
+    data: updated
+  })
+})
+
+
+const completeRoute = asyncHandler(async (req, res) => {
+  const driverId = req.user.sub
+  const { id } = req.params
+
+  const route = await routeService.getRouteById(id)
+
+  if (!route) throw new ApiError(404, "Route not found")
+  if (route.driverId !== driverId) throw new ApiError(403, "Forbidden")
+  if (route.status !== "IN_TRANSIT")
+    throw new ApiError(400, "Trip must be in progress first")
+
+  const updated = await routeService.updateRoute(id, {
+    status: "COMPLETED",
+    actualEndTime: new Date()
+  })
+
+  res.status(200).json({
+    success: true,
+    message: "Trip completed",
+    data: updated
+  })
+})
+
+const cancelRoute = asyncHandler(async (req, res) => {
+  const driverId = req.user.sub
+  const { id } = req.params
+
+  const route = await routeService.getRouteById(id)
+
+  if (!route) throw new ApiError(404, "Route not found")
+  if (route.driverId !== driverId) throw new ApiError(403, "Forbidden")
+  if (route.status === "COMPLETED")
+    throw new ApiError(400, "Completed trip cannot be cancelled")
+
+  const updated = await routeService.updateRoute(id, {
+    status: "CANCELLED"
+  })
+
+  res.status(200).json({
+    success: true,
+    message: "Trip cancelled",
+    data: updated
+  })
+})
+
 module.exports = {
   getAllRoutes,
   listRoutes,
@@ -406,4 +483,7 @@ module.exports = {
   adminUpdateRoute,
   adminDeleteRoute,
   adminGetRoutesByDriver,
+  startRoute,
+  completeRoute,
+  cancelRoute 
 };

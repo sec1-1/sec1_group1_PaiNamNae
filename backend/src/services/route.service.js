@@ -371,6 +371,14 @@ const cancelRoute = async (routeId, driverId, opts = {}) => {
   return { id: routeId, status: RouteStatus.CANCELLED, cancelledBy: 'DRIVER', cancelledAt: now };
 };
 
+const updateRouteStatus = async (id, status) => {
+  return prisma.route.update({
+    where: { id },
+    data: { status },
+  });
+};
+
+
 module.exports = {
   getAllRoutes,
   searchRoutes,
@@ -379,5 +387,6 @@ module.exports = {
   createRoute,
   updateRoute,
   deleteRoute,
-  cancelRoute
+  cancelRoute,
+  updateRouteStatus
 };

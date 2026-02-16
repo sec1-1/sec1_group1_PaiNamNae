@@ -2,7 +2,7 @@ const express = require("express");
 const validate = require("../middlewares/validate");
 const { protect, requireAdmin } = require("../middlewares/auth");
 const requireDriverVerified = require('../middlewares/driverVerified');
-const routeController = require("../controllers/route.controller");
+const routeController = require("../controllers/route.controller_v1");
 const {
   idParamSchema,
   createRouteSchema,
@@ -120,6 +120,23 @@ router.patch(
   validate({ params: idParamSchema, body: cancelRouteSchema }),
   routeController.cancelRoute
 );
+// start /routes/:id
+router.patch(
+  "/:id/start",
+  protect,
+  requireDriverVerified,
+  validate({ params: idParamSchema }),
+  routeController.startRoute
+);
+
+// complete /routes/:id
+router.patch(
+  "/:id/complete",
+  protect,
+  requireDriverVerified,
+  validate({ params: idParamSchema }),
+  routeController.completeRoute
+);
 
 // DELETE /routes/:id
 router.delete(
@@ -129,5 +146,6 @@ router.delete(
   validate({ params: idParamSchema }),
   routeController.deleteRoute
 );
+
 
 module.exports = router;
