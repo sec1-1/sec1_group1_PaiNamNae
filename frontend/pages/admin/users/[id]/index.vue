@@ -258,6 +258,16 @@
 
                                     <!-- Actions -->
                                     <div class="flex items-center justify-end gap-2">
+                                        <!-- [Added] Ban/Unban Buttons -->
+                                        <button v-if="user.isActive" @click="onBanUser" :disabled="sending"
+                                            class="px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700 disabled:bg-red-400">
+                                            ระงับผู้ใช้
+                                        </button>
+                                        <button v-else @click="onUnbanUser" :disabled="sending"
+                                            class="px-4 py-2 text-white bg-green-600 rounded-md hover:bg-green-700 disabled:bg-green-400">
+                                            ยกเลิกการระงับ
+                                        </button>
+                                        <!-- ----------------------- -->
                                         <button @click="resetNotify" :disabled="sending"
                                             class="px-3 py-2 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-60">
                                             ล้างฟอร์ม
@@ -279,6 +289,14 @@
         <div id="overlay" class="fixed inset-0 z-40 hidden bg-black bg-opacity-50 lg:hidden"
             @click="closeMobileSidebar"></div>
     </div>
+    
+    <!-- [Added] Ban User Modal -->
+    <BanUserModal ref="banUserModalRef" :show="showBanModal" @close="closeBanModal" @confirm="confirmBan" />
+    <!-- -------------------- -->
+
+    <!-- [Added] Unban User Modal -->
+    <UnbanUserModal ref="unbanUserModalRef" :show="showUnbanModal" :user="user" @close="closeUnbanModal" @confirm="confirmUnban" />
+    <!-- ---------------------- -->
 </template>
 
 <script setup>
@@ -422,13 +440,13 @@ async function fetchUser() {
     }
 }
 
-/* ---------- PATCH: toggle verify ---------- */
+/* ---------- PATCH: toggle verify status ---------- */
 async function onToggleVerify(next) {
     if (!user.value) return
     const prev = !!user.value.isVerified
     if (prev === next) return
 
-    // optimistic
+    // optimistic update
     user.value.isVerified = next
     toggling.value = true
 
@@ -466,6 +484,53 @@ async function onToggleVerify(next) {
         toggling.value = false
     }
 }
+
+/*--------- [Added]User Active Status Management---------*/
+const showBanModal = ref(false)
+const banUserModalRef = ref(null)
+
+const showUnbanModal = ref(false)
+const unbanUserModalRef = ref(null)
+
+// Single function to handle status update
+async function toggleUserStatus(isActive, reason = null, modalRef, closeFn) {
+    if (!user.value) return
+    try {
+        const config = useRuntimeConfig()
+        const token = useCookie('token').value || (process.client ? localStorage.getItem('token') : '')
+        
+        await $fetch(`/users/admin/${user.value.id}/status`, {
+            baseURL: config.public.apiBase,
+            method: 'PATCH',
+            headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+            body: { isActive, reason }
+        })
+
+        // Update local state
+        user.value.isActive = isActive
+        
+        // Show Success or Close
+        if (modalRef?.value?.switchToSuccess) {
+            modalRef.value.switchToSuccess()
+        } else {
+            closeFn()
+        }
+    } catch (err) {
+        console.error(err)
+        toast.error('เกิดข้อผิดพลาด', 'ไม่สามารถอัปเดตสถานะได้')
+    }
+}
+/*--------- [Added] User Status Button----------*/
+// Ban Actions
+const onBanUser = () => showBanModal.value = true
+const closeBanModal = () => showBanModal.value = false
+const confirmBan = (reason) => toggleUserStatus(false, reason, banUserModalRef, closeBanModal)
+
+// [Added] Unban Actions
+const onUnbanUser = () => showUnbanModal.value = true
+const closeUnbanModal = () => showUnbanModal.value = false
+const confirmUnban = () => toggleUserStatus(true, null, unbanUserModalRef, closeUnbanModal)
+/* -------------------------------------------------------------------------- */
 
 /* ---------- layout helpers ---------- */
 function closeMobileSidebar() {

@@ -172,7 +172,12 @@
                                         </span>
                                     </td>
                                     <td class="px-4 py-3">
-                                        <span
+                                        <span v-if="!u.isActive"
+                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">
+                                            <i class="mr-1 fa-solid fa-ban"></i>
+                                            ถูกระงับ
+                                        </span>
+                                        <span v-else
                                             class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full"
                                             :class="u.isVerified ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'">
                                             <i class="mr-1 fa-solid fa-circle-check" v-if="u.isVerified"></i>
@@ -217,6 +222,18 @@
                                             title="ลบ" aria-label="ลบ">
                                             <i class="text-lg fa-regular fa-trash-can"></i>
                                         </button>
+                                        <!-- [Added] Ban/Unban Icon -->
+                                        <button v-if="u.isActive" @click="onBanUser(u)"
+                                            class="p-2 text-gray-500 transition-colors cursor-pointer hover:text-red-700"
+                                            title="ระงับการใช้งาน" aria-label="ระงับการใช้งาน">
+                                            <i class="text-lg fa-solid fa-ban"></i>
+                                        </button>
+                                        <button v-else @click="onUnbanUser(u)"
+                                            class="p-2 text-gray-500 transition-colors cursor-pointer hover:text-green-600"
+                                            title="ยกเลิกการระงับ" aria-label="ยกเลิกการระงับ">
+                                            <i class="text-lg fa-solid fa-check"></i>
+                                        </button>
+                                        <!-- ------------------------- -->
                                     </td>
                                 </tr>
 
@@ -276,6 +293,13 @@
         <ConfirmModal :show="showDelete" :title="`ลบผู้ใช้${deletingUser?.email ? ' : ' + deletingUser.email : ''}`"
             message="การลบนี้เป็นการลบถาวร ข้อมูลทั้งหมดจะถูกลบและไม่สามารถกู้คืนได้ คุณต้องการดำเนินการต่อหรือไม่?"
             confirmText="ลบถาวร" cancelText="ยกเลิก" variant="danger" @confirm="confirmDelete" @cancel="cancelDelete" />
+
+        <!-- [Added] Ban User Modal -->
+        <BanUserModal ref="banUserModalRef" :show="showBanModal" @close="closeBanModal" @confirm="confirmBan" />
+        
+        <!-- [Added] Unban User Modal -->
+        <UnbanUserModal ref="unbanUserModalRef" :show="showUnbanModal" :user="unbanningUser" @close="closeUnbanModal" @confirm="confirmUnban" />
+        <!-- ------------------------- -->
     </div>
 </template>
 
@@ -288,6 +312,9 @@ import buddhistEra from 'dayjs/plugin/buddhistEra'
 import AdminHeader from '~/components/admin/AdminHeader.vue'
 import AdminSidebar from '~/components/admin/AdminSidebar.vue'
 import ConfirmModal from '~/components/ConfirmModal.vue'
+// [Added] Import BanUserModal
+import BanUserModal from '~/components/BanUserModal.vue'
+// -----------------------------
 import { useToast } from '~/composables/useToast'
 
 dayjs.locale('th')
@@ -546,6 +573,137 @@ async function deleteUser(id) {
 
     return body
 }
+
+/* -------------------------------------------------------------------------- */
+/*                               [Added] User Status Management                        */
+/* -------------------------------------------------------------------------- */
+
+// Modal State
+const showBanModal = ref(false)
+const banningUser = ref(null)
+const banUserModalRef = ref(null)
+
+const showUnbanModal = ref(false)
+const unbanningUser = ref(null)
+const unbanUserModalRef = ref(null)
+
+/**
+ * Opens the Ban User Modal
+ * @param {Object} u - The user object to ban
+ */
+function onBanUser(u) {
+    banningUser.value = u
+    showBanModal.value = true
+}
+
+function closeBanModal() {
+    showBanModal.value = false
+    banningUser.value = null
+}
+
+/**
+ * Executes the ban action via API
+ * @param {string} reason - The reason for banning selected in the modal
+ */
+async function confirmBan(reason) {
+    if (!banningUser.value) return
+    const user = banningUser.value
+    
+    try {
+        const config = useRuntimeConfig()
+        const token = useCookie('token').value || (process.client ? localStorage.getItem('token') : '')
+        
+        // Call API to set isActive = false
+        const res = await fetch(`${config.public.apiBase}/users/admin/${user.id}/status`, {
+            method: 'PATCH',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
+            body: JSON.stringify({ 
+                isActive: false,
+                reason: reason 
+            }),
+            credentials: 'include',
+        })
+
+        if (!res.ok) {
+            throw new Error('Failed to suspend user')
+        }
+
+        // Update local state
+        user.isActive = false
+        
+        // Show Success Modal Step
+        if (banUserModalRef.value) {
+            banUserModalRef.value.switchToSuccess()
+        } else {
+            closeBanModal()
+        }
+    } catch (err) {
+        console.error(err)
+        toast.error('เกิดข้อผิดพลาด', 'ไม่สามารถระงับผู้ใช้ได้')
+    }
+}
+
+/**
+ * Opens the Unban User Modal
+ * @param {Object} u - The user object to unban
+ */
+function onUnbanUser(u) {
+    unbanningUser.value = u
+    showUnbanModal.value = true
+}
+
+function closeUnbanModal() {
+    showUnbanModal.value = false
+    unbanningUser.value = null
+}
+
+/**
+ * Executes the unban action via API
+ */
+async function confirmUnban() {
+    if (!unbanningUser.value) return
+    const user = unbanningUser.value
+    
+    try {
+        const config = useRuntimeConfig()
+        const token = useCookie('token').value || (process.client ? localStorage.getItem('token') : '')
+        
+        const res = await fetch(`${config.public.apiBase}/users/admin/${user.id}/status`, {
+            method: 'PATCH',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
+            body: JSON.stringify({ 
+                isActive: true
+            }),
+            credentials: 'include',
+        })
+
+        if (!res.ok) {
+            throw new Error('Failed to unsuspend user')
+        }
+
+        // Update local state
+        user.isActive = true
+        
+        // Show Success Modal Step
+        if (unbanUserModalRef.value) {
+            unbanUserModalRef.value.switchToSuccess()
+        } else {
+            closeUnbanModal()
+        }
+    } catch (err) {
+        console.error(err)
+        toast.error('เกิดข้อผิดพลาด', 'ไม่สามารถยกเลิกการระงับผู้ใช้ได้')
+    }
+}
+/* -------------------------------------------------------------------------- */
 /* --------------------------------------------- */
 
 useHead({
