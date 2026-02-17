@@ -7,7 +7,6 @@ The format is based on **Keep a Changelog**, and this project adheres to **Seman
 ## AI Declaration
 Parts of this changelog were drafted with the assistance of an AI language model (Gemini 3 Pro). All entries were reviewed and edited by the project author for accuracy and completeness.
 
-## [Unreleased]
 
 ### Added
 
