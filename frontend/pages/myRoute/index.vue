@@ -282,18 +282,6 @@
                                                 </svg>
                                             </button>
                                         </div>
-
-                                        <div class="flex items-center mt-1">
-                                            <div class="flex text-sm text-yellow-400">
-                                                <span>
-                                                    {{ '★'.repeat(Math.round(trip.passenger.rating)) }}{{ '☆'.repeat(5 -
-                                                        Math.round(trip.passenger.rating)) }}
-                                                </span>
-                                            </div>
-                                            <span class="ml-2 text-sm text-gray-600">
-                                                {{ trip.passenger.rating }} ({{ trip.passenger.reviews }} รีวิว)
-                                            </span>
-                                        </div>
                                     </div>
                                     <div class="text-right">
                                         <div class="text-lg font-bold text-blue-600">{{ trip.price }} บาท</div>
