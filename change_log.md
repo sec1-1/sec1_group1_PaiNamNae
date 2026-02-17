@@ -2,68 +2,74 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on **Keep a Changelog**
+The format is based on **Keep a Changelog**, and this project adheres to **Semantic Versioning**.
 
-### AI Declaration
-Parts of this changelog text were drafted with the assistance of an AI language model (Gemini 3 Pro).
-All entries were reviewed and edited by the project author for accuracy and completeness.
+## AI Declaration
+Parts of this changelog were drafted with the assistance of an AI language model (Gemini 3 Pro). All entries were reviewed and edited by the project author for accuracy and completeness.
+
+## [Unreleased]
 
 ### Added
 
-#### Admin Features (Ban User)
-- **Ban User feature (Admin)**
-  - Created `frontend/components/BanUserModal.vue` to allow admins to select a suspension reason.
-  - Added a **Ban** icon/button to the user management table in `frontend/pages/admin/users/index.vue`.
-  - Implemented modal flow + logic to suspend users via the backend.
-  - Added a confirmation step to prevent accidental suspensions.
-  - Added a success confirmation step to notify admins after a successful suspension.
-  - Updated the user table to show a **Suspended** badge in the **Verification** column for banned users.
-  - Added an **Unban** (check) icon in the **Actions** column for banned users to reactivate them quickly.
+#### Admin (User Suspension)
+- **Ban user (Admin)**
+  - Added `frontend/components/BanUserModal.vue` to allow admins to select a suspension reason.
+  - Added **Ban** action (icon/button) to the user management table in `frontend/pages/admin/users/index.vue`.
+  - Implemented ban modal flow to suspend users via the backend.
+  - Added a confirmation step to reduce accidental suspensions.
+  - Added a success step to confirm suspension completion.
+  - Displayed a **Suspended** badge in the **Verification** column for banned users.
+  - Added an **Unban** (check) action in the **Actions** column for quick reactivation.
 
-- **Unban User modal (Admin)**
-  - Created `frontend/components/UnbanUserModal.vue` for user reactivation.
-  - Implemented a 2-step flow (**Confirm → Success**) to match the ban UX and reduce accidental actions.
+- **Unban user (Admin)**
+  - Added `frontend/components/UnbanUserModal.vue` for user reactivation.
+  - Implemented a 2-step modal flow (**Confirm → Success**) consistent with the ban UX.
 
-#### User & Driver Features (Review System)
-- **User to Driver Review System**: 
-  - Implemented a review submission interface in `frontend/pages/myTrip/index.vue`.
-  - Users can now rate drivers (1-5 stars) after a trip is marked as "completed".
-  - Support for review tags (e.g., "Polite Driver", "Clean Car", "Safe Driving").
-  - Added text comment and image upload capabilities for detailed feedback.
+#### Reviews (User → Driver)
+- **Driver review submission**
+  - Added review submission UI in `frontend/pages/myTrip/index.vue`.
+  - Enabled rating drivers (1–5 stars) after a trip is marked **completed**.
+  - Added selectable review tags (e.g., *Polite Driver*, *Clean Car*, *Safe Driving*).
+  - Added text comments and image upload support for detailed feedback.
 
-- **Driver Review History Display**:
-  - Added a review modal in `frontend/pages/findTrip/index.vue` and `frontend/pages/myTrip/index.vue`.
-  - Clicking on a driver's profile now opens their review history.
-  - Displays average rating, valid review count, and individual review details (reviewer name, date, comment, tags, images).
-  - Added filtering functionality to view reviews by specific tags.
+- **Driver review history**
+  - Added review history modal in `frontend/pages/findTrip/index.vue` and `frontend/pages/myTrip/index.vue`.
+  - Enabled opening driver review history by clicking a driver profile.
+  - Displayed summary metrics (average rating, valid review count) and review details (reviewer name, date, comment, tags, images).
+  - Added filtering to view reviews by tag.
 
-#### Backend & API (Ginny421)
-- Add review system (Frontend & Backend)
-- Add create review API
-- Add review summary API (average, total, distribution)
-- Add review tag categories
-- Add review image upload (Cloudinary integration)
-- Add duplicate review prevention
-- Add review filter by tag
-- `.env` add `NUXT_PUBLIC_CLOUDINARY_CLOUD=xxxxx`, `NUXT_PUBLIC_CLOUDINARY_PRESET=xxxxxxxx`
-- `server.js` add Main API Routes (reviews,drivers)
-- `schema.prisma` add model `Review`, enum `ReviewTag`
+#### Backend & API (Reviews)
+- Added review system (frontend + backend integration).
+- Added API endpoints:
+  - Create review
+  - Review summary (average, totals, distribution)
+  - Filter reviews by tag
+- Added review tag categories.
+- Added review image upload via Cloudinary.
+- Added duplicate review prevention.
+- Updated environment variables:
+  - `NUXT_PUBLIC_CLOUDINARY_CLOUD=xxxxx`
+  - `NUXT_PUBLIC_CLOUDINARY_PRESET=xxxxxxxx`
+- Updated routing:
+  - `server.js` registered main API routes (reviews, drivers).
+- Updated Prisma schema:
+  - `schema.prisma` added `Review` model and `ReviewTag` enum.
 
 ### Changed
 
 #### Admin UI
-- **User Management page** (`frontend/pages/admin/users/index.vue`)
-  - Imported and registered `BanUserModal`.
-  - Added ban flow logic: `onBanUser`, `showBanModal`, and `confirmBan`.
-  - Added Ban button UI to the **Actions** column in the user table.
+- **User Management** (`frontend/pages/admin/users/index.vue`)
+  - Registered `BanUserModal`.
+  - Added ban flow logic: `onBanUser`, `showBanModal`, `confirmBan`.
+  - Added Ban action UI to the **Actions** column.
 
-- **User Details page** (`frontend/pages/admin/users/[id]/index.vue`)
+- **User Details** (`frontend/pages/admin/users/[id]/index.vue`)
   - Added **Ban User** and **Unban User** buttons in the notification section.
-  - Integrated `BanUserModal` for the ban process.
-  - Implemented logic to suspend/reactivate users directly from the details page.
+  - Integrated `BanUserModal` to ban users from the details page.
+  - Implemented suspend/reactivate logic from the details page.
   - Integrated `UnbanUserModal` to confirm user reactivation.
 
 #### User UI/UX
-- **MyTrip Page**: Added "Review Driver" button for completed trips.
-- **FindTrip Page**: Added clickable driver profile/rating to view past reviews before booking.
-- **Modals**: Created responsive modals for both submitting reviews and viewing driver history.
+- **MyTrip**: Added **Review Driver** button for completed trips.
+- **FindTrip**: Made driver profile/rating clickable to view past reviews before booking.
+- **Modals**: Implemented responsive modals for submitting reviews and viewing driver history.
