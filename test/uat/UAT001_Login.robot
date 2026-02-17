@@ -20,9 +20,9 @@ UAT-001 : Step 03 Login Success
     Open Web Page
     Click Element                       xpath=//a[@href='/login']
     Wait Until Location Contains        /login              10s
-    Input Text                          id=identifier       ${VALID_USER}
+    Input Text                          id=identifier       ${PASSENGER_USER}
     Wait Until Element Is Visible       id=password         10s
-    Input Text                          id=password         ${VALID_PASS}
+    Input Text                          id=password         ${PASSENGER_PASS}
     Click Button                        xpath=//button[@type='submit']
 
     # ==== Expected Results ====
