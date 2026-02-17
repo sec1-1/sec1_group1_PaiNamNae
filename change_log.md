@@ -54,6 +54,15 @@ Parts of this changelog were drafted with the assistance of an AI language model
 - Updated Prisma schema:
   - `schema.prisma` added `Review` model and `ReviewTag` enum.
 
+#### TEST
+- **User Acceptance Test**
+  - Added test design document
+  - Added UAT test using robot framework and selenium library
+  - Added UAT test report
+- **API**
+  - Added Test Design Decument & Report
+  - Added API test using Bruno
+
 ### Changed
 
 #### Admin UI
@@ -72,3 +81,5 @@ Parts of this changelog were drafted with the assistance of an AI language model
 - **MyTrip**: Added **Review Driver** button for completed trips.
 - **FindTrip**: Made driver profile/rating clickable to view past reviews before booking.
 - **Modals**: Implemented responsive modals for submitting reviews and viewing driver history.
+
+
