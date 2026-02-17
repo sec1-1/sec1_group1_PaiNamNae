@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.4.1 (Python 3.11.9 on win32)" generated="2026-02-16T20:17:47.436437" rpa="false" schemaversion="5">
+<suite id="s1" name="Login" source="D:\Coding Project\Github Project\Software Engineering\My Branch\sec1_group1_PaiNamNae\test\uat\login.robot">
+<test id="s1-t1" name="UAT-001 : Step 01 Open Web Page" line="6">
+<kw name="Open Web Page" owner="auth_keywords">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-02-16T20:17:47.665315" level="INFO">Opening browser 'chrome' to base url 'http://localhost:3001/'.</msg>
+<msg time="2026-02-16T20:17:47.752077" level="WARN">The chromedriver version (143.0.7499.169) detected in PATH at D:\ChromeForTesting\chromedriver.exe might not be compatible with the detected chrome version (144.0.7559.133); currently, chromedriver 144.0.7559.133 is recommended for chrome 144.*, so it is advised to delete the driver in PATH and retry</msg>
+<arg>${URL}</arg>
+<arg>chrome</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-02-16T20:17:47.665315" elapsed="3.426252"/>
+</kw>
+<status status="PASS" start="2026-02-16T20:17:47.664241" elapsed="3.428834"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//h1[contains(.,'เดินทางร่วมกัน')]</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-02-16T20:17:51.093075" elapsed="0.022488"/>
+</kw>
+<status status="PASS" start="2026-02-16T20:17:47.664241" elapsed="3.451322"/>
+</test>
+<test id="s1-t2" name="UAT-001 : Step 02 Go to Login Page" line="12">
+<kw name="Open Web Page" owner="auth_keywords">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-02-16T20:17:51.116575" level="INFO">Opening browser 'chrome' to base url 'http://localhost:3001/'.</msg>
+<msg time="2026-02-16T20:17:51.209974" level="WARN">The chromedriver version (143.0.7499.169) detected in PATH at D:\ChromeForTesting\chromedriver.exe might not be compatible with the detected chrome version (144.0.7559.133); currently, chromedriver 144.0.7559.133 is recommended for chrome 144.*, so it is advised to delete the driver in PATH and retry</msg>
+<arg>${URL}</arg>
+<arg>chrome</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-02-16T20:17:51.116575" elapsed="2.118409"/>
+</kw>
+<status status="PASS" start="2026-02-16T20:17:51.116575" elapsed="2.118917"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-02-16T20:17:53.237009" level="INFO">Clicking element 'xpath=//a[@href='/login']'.</msg>
+<arg>xpath=//a[@href='/login']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-02-16T20:17:53.237009" elapsed="0.202701"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-02-16T20:17:58.441972" level="INFO">Slept 5 seconds.</msg>
+<arg>5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-02-16T20:17:53.440813" elapsed="5.001159"/>
+</kw>
+<kw name="Location Should Contain" owner="SeleniumLibrary">
+<msg time="2026-02-16T20:17:58.446219" level="INFO">Current location contains '/login'.</msg>
+<arg>/login</arg>
+<doc>Verifies that the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-02-16T20:17:58.441972" elapsed="0.004247"/>
+</kw>
+<status status="PASS" start="2026-02-16T20:17:51.115563" elapsed="7.331667"/>
+</test>
+<test id="s1-t3" name="UAT-001 : Step 03 Login Success" line="19">
+<kw name="Open Web Page" owner="auth_keywords">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-02-16T20:17:58.448221" level="INFO">Opening browser 'chrome' to base url 'http://localhost:3001/'.</msg>
+<msg time="2026-02-16T20:17:58.556655" level="WARN">The chromedriver version (143.0.7499.169) detected in PATH at D:\ChromeForTesting\chromedriver.exe might not be compatible with the detected chrome version (144.0.7559.133); currently, chromedriver 144.0.7559.133 is recommended for chrome 144.*, so it is advised to delete the driver in PATH and retry</msg>
+<arg>${URL}</arg>
+<arg>chrome</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-02-16T20:17:58.448221" elapsed="2.157127"/>
+</kw>
+<status status="PASS" start="2026-02-16T20:17:58.448221" elapsed="2.157127"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-02-16T20:18:00.606399" level="INFO">Clicking element 'xpath=//a[@href='/login']'.</msg>
+<arg>xpath=//a[@href='/login']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-02-16T20:18:00.606399" elapsed="0.107869"/>
+</kw>
+<kw name="Wait Until Location Contains" owner="SeleniumLibrary">
+<arg>/login</arg>
+<arg>10s</arg>
+<doc>Waits until the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-02-16T20:18:00.715278" elapsed="0.007011"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-02-16T20:18:00.723296" level="INFO">Typing text 'Takumi' into text field 'id=identifier'.</msg>
+<arg>id=identifier</arg>
+<arg>${VALID_USER}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-02-16T20:18:00.723296" elapsed="0.124355"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>id=password</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-02-16T20:18:00.847651" elapsed="0.023139"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-02-16T20:18:00.871408" level="INFO">Typing text '123456789' into text field 'id=password'.</msg>
+<arg>id=password</arg>
+<arg>${VALID_PASS}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-02-16T20:18:00.870790" elapsed="0.061517"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-02-16T20:18:00.932909" level="INFO">Clicking button 'xpath=//button[@type='submit']'.</msg>
+<arg>xpath=//button[@type='submit']</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-02-16T20:18:00.932909" elapsed="0.069560"/>
+</kw>
+<kw name="Dashboard User Should Be Visible" owner="auth_keywords">
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//span[normalize-space()='${VALID_FIRST_NAME}']</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-02-16T20:18:01.003974" elapsed="0.218996"/>
+</kw>
+<kw name="Element Should Be Visible" owner="SeleniumLibrary">
+<msg time="2026-02-16T20:18:01.235545" level="INFO">Element 'xpath=//span[normalize-space()='Takumi']' is displayed.</msg>
+<arg>xpath=//span[normalize-space()='${VALID_FIRST_NAME}']</arg>
+<doc>Verifies that the element identified by ``locator`` is visible.</doc>
+<status status="PASS" start="2026-02-16T20:18:01.224383" elapsed="0.011162"/>
+</kw>
+<status status="PASS" start="2026-02-16T20:18:01.003468" elapsed="0.232077"/>
+</kw>
+<status status="PASS" start="2026-02-16T20:17:58.447230" elapsed="2.789316"/>
+</test>
+<status status="PASS" start="2026-02-16T20:17:47.437438" elapsed="13.799108"/>
+</suite>
+<statistics>
+<total>
+<stat pass="3" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Login" id="s1" pass="3" fail="0" skip="0">Login</stat>
+</suite>
+</statistics>
+<errors>
+<msg time="2026-02-16T20:17:47.662223" level="WARN">Error in file 'D:\Coding Project\Github Project\Software Engineering\My Branch\sec1_group1_PaiNamNae\test\resources\keywords\auth_keywords.robot' on line 1: Singular section headers like '*** Variable ***' are deprecated. Use plural format like '*** Variables ***' instead.</msg>
+<msg time="2026-02-16T20:17:47.752077" level="WARN">The chromedriver version (143.0.7499.169) detected in PATH at D:\ChromeForTesting\chromedriver.exe might not be compatible with the detected chrome version (144.0.7559.133); currently, chromedriver 144.0.7559.133 is recommended for chrome 144.*, so it is advised to delete the driver in PATH and retry</msg>
+<msg time="2026-02-16T20:17:51.209974" level="WARN">The chromedriver version (143.0.7499.169) detected in PATH at D:\ChromeForTesting\chromedriver.exe might not be compatible with the detected chrome version (144.0.7559.133); currently, chromedriver 144.0.7559.133 is recommended for chrome 144.*, so it is advised to delete the driver in PATH and retry</msg>
+<msg time="2026-02-16T20:17:58.556655" level="WARN">The chromedriver version (143.0.7499.169) detected in PATH at D:\ChromeForTesting\chromedriver.exe might not be compatible with the detected chrome version (144.0.7559.133); currently, chromedriver 144.0.7559.133 is recommended for chrome 144.*, so it is advised to delete the driver in PATH and retry</msg>
+</errors>
+</robot>

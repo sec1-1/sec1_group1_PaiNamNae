@@ -9,6 +9,8 @@ ${BLACKLIST_PASS}
 ${PASSENGER_USER}       Veerapat
 ${PASSENGER_SURNAME}    Veera
 ${PASSENGER_PASS}       asdfjkl;123
+${REVIEW_TEXT}          
+
 
 *** Keywords ***
 Open Web Page
