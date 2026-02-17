@@ -1,4 +1,13 @@
-<<<,<<<< HEAD
+
+### AI declaration
+โครงงานชิ้นนี้ ได้มีการนําปัญญาประดิษฐ์ ChatGPT5.2 มาใช้เพื่อช่วยในการพัฒนา และจัดโครงสร้างเนื้อหาให้อ่านง่ายขึ้น โดยเฉพาะในส่วนต่อไปนี้:
+- การจัดโครงสร้างหัวข้อ Admin (ขั้นตอนการ Ban/Unban, ขั้นตอนใน modal และการเปลี่ยนแปลง UI)
+- การร่างสรุปฟีเจอร์ Reviews (User → Driver) รวมถึงรายละเอียดการส่งรีวิว และการดูประวัติรีวิว
+- การลิสต์และปรับคำอธิบายส่วน Backend & API (Reviews) เช่น endpoints, การแก้ Prisma schema, environment variables และ routing
+- การปรับรูปแบบและทำให้ส่วน TEST ชัดเจนขึ้น โดยแยก UAT และ API testing ให้เป็นระบบ 
+
+เนื้อหาทั้งหมดที่ AI ช่วยสร้างขึ้น ได้รับการตรวจสอบ ยืนยันความถูกต้อง และแก้ไขโดยผู้เขียนโปรเจกต์ เพื่อให้แน่ใจว่าถูกต้องและครบถ้วน
+
 # Pai Nam Nae - A Safe Ride Sharing App
 
 <!-- A safe ride-sharing application with a **Nuxt.js** frontend and **Express.js** backend, powered by **Prisma** ORM and **PostgreSQL**. -->
