@@ -338,9 +338,13 @@
       <textarea
         v-model="comment"
         rows="4"
-        placeholder="เขียนรีวิวของคุณ..."
+        maxlength="501"
+        placeholder="เขียนรีวิวของคุณ... (สูงสุด 501 ตัวอักษร)"
         class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
       ></textarea>
+      <div class="text-right text-xs text-gray-500 mt-1">
+        {{ comment.length }} / 501
+      </div>
     </div>
 
     <!-- 🖼 Upload Images -->
@@ -352,7 +356,7 @@
       <input
         type="file"
         multiple
-        accept="image/*"
+        accept="image/png, image/jpeg, image/jpg, image/webp"
         @change="handleImages"
         class="w-full text-sm"
       />
@@ -685,10 +689,17 @@ function openReviewModal(trip) {
 
 const handleImages = (e) => {
   const files = Array.from(e.target.files)
+  
+  // Filter only images
+  const validFiles = files.filter(file => file.type.startsWith('image/'))
+  
+  if (validFiles.length < files.length) {
+    toast.error('กรุณาเลือกไฟล์รูปภาพเท่านั้น')
+  }
 
-  selectedImages.value.push(...files)
+  selectedImages.value.push(...validFiles)
 
-  files.forEach(file => {
+  validFiles.forEach(file => {
     const reader = new FileReader()
     reader.onload = (event) => {
       imagePreviews.value.push(event.target.result)
