@@ -1,6 +1,8 @@
 const asyncHandler = require('express-async-handler');
 const { signToken } = require("../utils/jwt");
 const userService = require("../services/user.service");
+const blacklistService = require('../services/blacklist.service')
+
 const ApiError = require('../utils/ApiError');
 
 const login = asyncHandler(async (req, res) => {
@@ -17,6 +19,21 @@ const login = asyncHandler(async (req, res) => {
         throw new ApiError(401, "Your account has been deactivated.");
     }
 
+    // 🚫 CHECK BLACKLIST (เพิ่มตรงนี้)
+    if (user) {
+        const activeBan = await blacklistService.findActiveBanByUserId(user.id)
+
+        if (activeBan) {
+            throw new ApiError(
+                403,
+                activeBan.type === 'PERMANENT'
+                    ? `บัญชีของคุณถูกระงับถาวร: ${activeBan.reason}`
+                    : `บัญชีของคุณถูกระงับชั่วคราวถึง ${activeBan.expiresAt}: ${activeBan.reason}`
+            )
+        }
+    }
+
+
     const passwordIsValid = user ? await userService.comparePassword(user, password) : false;
     if (!user || !passwordIsValid) {
         throw new ApiError(401, "Invalid credentials");
@@ -24,7 +41,7 @@ const login = asyncHandler(async (req, res) => {
 
     const token = signToken({ sub: user.id, role: user.role });
     const {
-        password:_,
+        password: _,
         gender,
         phoneNumber,
         otpCode,
@@ -37,8 +54,8 @@ const login = asyncHandler(async (req, res) => {
         lastLogin,
         createdAt,
         updatedAt,
-        username:__,
-        email:___,
+        username: __,
+        email: ___,
         ...safeUser
     } = user;
 
