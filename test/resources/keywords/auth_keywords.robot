@@ -9,8 +9,9 @@ ${BLACKLIST_PASS}
 ${PASSENGER_USER}       Veerapat
 ${PASSENGER_SURNAME}    Veera
 ${PASSENGER_PASS}       asdfjkl;123
-${REVIEW_TEXT}          
-
+${REVIEW_TEXT}          ขับเร็วทันใจ คนขับสุภาพ รถสะอาด ตรงเวลา
+${IMAGE_PATH}           D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/IMG-8206.jpg
+${INVALID_PATH}         D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/This is pdf file.pdf
 
 *** Keywords ***
 Open Web Page

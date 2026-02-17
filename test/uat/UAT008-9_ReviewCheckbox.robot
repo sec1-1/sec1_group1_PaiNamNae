@@ -30,6 +30,7 @@ UAT-008-02 : Passenger Select Few Checkbox.
     View All Route
     Sleep                   2s
     View Passenger Info
+    Page Should Contain     ${PASSENGER_SURNAME}
     Page Should Contain     สะอาด
     Page Should Contain     ตรงเวลา
 
@@ -60,6 +61,7 @@ UAT-009-02 : Passenger Select All Checkbox.
     View All Route
     Sleep                   2s
     View Passenger Info
+    Page Should Contain     ${PASSENGER_SURNAME}
     Page Should Contain     สะอาด
     Page Should Contain     คนขับมารยาทดี
     Page Should Contain     ตรงเวลา
