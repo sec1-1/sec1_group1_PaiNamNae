@@ -1,0 +1,40 @@
+meta {
+  name: Admin unblacklist user สำเร็จ
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/api/admin/users/{{driver_id}}/unblacklist
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("Status code should be 200", () => {
+    expect(res.status).to.equal(200);
+  });
+  
+  test("Response message should say blacklist", () => {
+    expect(res.body).to.have.property("message");
+    expect(res.body.message).to.equal("User unblacklisted");
+  });
+  
+  test("Data message should be correct", () => {
+    expect(res.body).to.have.property("data");
+    expect(res.body.data).to.have.property("message");
+    expect(res.body.data.message).to.equal("User unblacklisted");
+  });
+  
+  test("UserId should exist", () => {
+    expect(res.body.data).to.have.property("userId");
+    expect(res.body.data.userId).to.be.a("string");
+    expect(res.body.data.userId.length).to.be.greaterThan(5);
+  });
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

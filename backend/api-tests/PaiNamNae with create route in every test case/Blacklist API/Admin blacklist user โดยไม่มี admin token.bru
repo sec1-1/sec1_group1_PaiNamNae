@@ -1,0 +1,22 @@
+meta {
+  name: Admin blacklist user โดยไม่มี admin token
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/api/admin/users/{{driver_id}}/blacklist
+  body: none
+  auth: none
+}
+
+tests {
+  test("Status code should be 401", () => {
+    expect(res.status).to.equal(401);
+  });
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

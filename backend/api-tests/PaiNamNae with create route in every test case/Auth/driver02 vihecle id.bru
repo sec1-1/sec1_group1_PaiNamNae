@@ -1,0 +1,28 @@
+meta {
+  name: driver02 vihecle id
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{base_url}}/api/vehicles
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{driver2_token}}
+}
+
+tests {
+  const body = res.getBody();
+  const json = typeof body === "string" ? JSON.parse(body) : body;
+  
+  bru.setEnvVar("vehicle2Id", json.data[0].id);
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
