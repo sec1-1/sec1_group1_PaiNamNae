@@ -451,29 +451,27 @@
       </div>
 
       <!-- LOADING -->
-      <div v-if="loadingReviewSummary" class="text-center text-gray-400 py-8">
-        กำลังโหลดรีวิว...
-      </div>
+      <!-- Summary is calculated from fetched reviews, no additional loading needed -->
 
       <!-- HAS REVIEWS -->
       <div
-        v-else-if="driverReviewSummary && driverReviewSummary.totalReviews > 0"
+        v-if="driverReviewSummaryComputed && driverReviewSummaryComputed.totalReviews > 0"
       >
 
         <!-- SUMMARY -->
         <div class="mb-6 text-center">
           <div class="text-3xl font-bold text-gray-800">
-            {{ driverReviewSummary.average }}
+            {{ driverReviewSummaryComputed.average }}
           </div>
 
           <div class="text-yellow-400 text-lg">
             <span v-for="i in 5" :key="i">
-              {{ i <= Math.round(Number(driverReviewSummary.average)) ? '★' : '☆' }}
+              {{ i <= Math.round(Number(driverReviewSummaryComputed.average)) ? '★' : '☆' }}
             </span>
           </div>
 
           <div class="text-sm text-gray-500">
-            {{ driverReviewSummary.totalReviews }} รีวิว
+            {{ driverReviewSummaryComputed.totalReviews }} รีวิว
           </div>
         </div>
 
@@ -620,6 +618,22 @@ const driverReviewSummary = ref(null)
 const selectedDriver = ref(null)
 const showDriverReviewModal = ref(false)
 const loadingReviewSummary = ref(false)
+const selectedTag = ref(null)
+
+// Review tags and labels
+const REVIEW_TAGS = ['CLEAN', 'POLITE_DRIVER', 'ON_TIME', 'SAFE_DRIVING', 'FRIENDLY_SERVICE', 'DIRTY', 'RUDE_DRIVER', 'LATE', 'UNSAFE_DRIVING', 'UNFRIENDLY_SERVICE']
+const TAG_LABELS = {
+  CLEAN: 'สะอาด',
+  POLITE_DRIVER: 'คนขับมารยาทดี',
+  ON_TIME: 'ตรงเวลา',
+  SAFE_DRIVING: 'ขับปลอดภัย',
+  FRIENDLY_SERVICE: 'บริการเป็นกันเอง',
+  DIRTY: 'รถไม่สะอาด',
+  RUDE_DRIVER: 'คนขับพูดจาไม่สุภาพ',
+  LATE: 'มาสาย',
+  UNSAFE_DRIVING: 'ขับรถอันตราย',
+  UNFRIENDLY_SERVICE: 'บริการไม่เป็นมิตร'
+}
 
 let gmap = null // Google Map instance
 let activePolyline = null
@@ -679,6 +693,30 @@ const filteredTrips = computed(() => {
 
         return trip.status === activeTab.value
     })
+})
+
+const filteredReviews = computed(() => {
+  if (!selectedTag.value) {
+    return driverReviews.value
+  }
+  
+  return driverReviews.value.filter(review => {
+    return review.tags && review.tags.includes(selectedTag.value)
+  })
+})
+
+const driverReviewSummaryComputed = computed(() => {
+  if (!driverReviews.value || driverReviews.value.length === 0) {
+    return null
+  }
+  
+  const total = driverReviews.value.length
+  const average = (driverReviews.value.reduce((sum, r) => sum + (r.rating || 0), 0) / total).toFixed(1)
+  
+  return {
+    totalReviews: total,
+    average: average
+  }
 })
 
 function openReviewModal(trip) {
@@ -995,10 +1033,32 @@ async function openDriverReviews(driver) {
 
         driverReviews.value = res || []
         selectedDriver.value = driver
+        selectedTag.value = null
         showDriverReviewModal.value = true
     } catch (e) {
         console.error(e)
     }
+}
+
+function closeDriverReviewModal() {
+    showDriverReviewModal.value = false
+    selectedDriver.value = null
+    driverReviews.value = []
+    selectedTag.value = null
+}
+
+function parsedImages(review) {
+  if (!review.images) return []
+  
+  if (typeof review.images === 'string') {
+    try {
+      return JSON.parse(review.images)
+    } catch {
+      return [review.images].filter(Boolean)
+    }
+  }
+  
+  return Array.isArray(review.images) ? review.images : []
 }
 
 function waitMapReady() {
@@ -1343,18 +1403,10 @@ onMounted(() => {
 
 //review driver
 watch(showDriverReviewModal, async (val) => {
-  if (!val || !selectedDriver.value?.id) return
-
-  loadingReviewSummary.value = true
-
-  try {
-    const res = await $api(`/reviews/driver/${selectedDriver.value.id}/summary`)
-    driverReviewSummary.value = res
-  } catch (e) {
-    console.error('โหลดรีวิวไม่สำเร็จ', e)
-  } finally {
-    loadingReviewSummary.value = false
+  if (!val) {
+    return
   }
+  // Summary is now calculated from driverReviews via computed property
 })
 
 function initializeMap() {
