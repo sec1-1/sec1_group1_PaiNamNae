@@ -1,7 +1,6 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
@@ -76,6 +75,25 @@ enum NotificationType {
   ROUTE
 }
 
+enum ReportStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum ReportType {
+  INAPPROPRIATE_BEHAVIOR
+  NO_SHOW
+  SCAM
+  SAFETY_CONCERN
+  OTHER
+}
+
+enum BanType {
+  TEMPORARY
+  PERMANENT
+}
+
 model User {
   id                    String   @id @default(cuid())
   username              String   @unique
@@ -108,6 +126,12 @@ model User {
   reviewsGiven     Review[] @relation("UserReviews")
   reviewsReceived  Review[] @relation("DriverReviews")
 
+  // ⭐ FIX สำคัญ (Report relations)
+  reportsMade     Report[] @relation("Reporter")
+  reportsReceived Report[] @relation("ReportedUser")
+
+  // ⭐ FIX สำคัญ (Blacklist relation)
+  blacklistEntries Blacklist[]
 
   @@index([role])
   @@index([isActive])
@@ -236,6 +260,9 @@ model Booking {
   dropoffLocation Json          @db.Json
   createdAt       DateTime      @default(now())
 
+  // ⭐ FIX: opposite relation
+  reports Report[]
+
   review Review?
 
 }
@@ -266,4 +293,51 @@ model Review {
 
   @@index([revieweeId])
   @@index([routeId])
+}
+
+model Report {
+  id         String @id @default(cuid())
+  reporterId String
+  reporter   User   @relation("Reporter", fields: [reporterId], references: [id], onDelete: Cascade)
+
+  reportedUserId String
+  reportedUser   User   @relation("ReportedUser", fields: [reportedUserId], references: [id], onDelete: Cascade)
+  penaltyApplied   Boolean @default(false)
+
+  bookingId String?
+  booking   Booking? @relation(fields: [bookingId], references: [id])
+
+  type        ReportType
+  description String
+  evidenceUrl String?
+
+  status     ReportStatus @default(PENDING)
+  reviewedBy String?
+  reviewedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@index([reportedUserId])
+  @@index([status])
+}
+
+model Blacklist {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reason    String
+  createdBy String
+  createdAt DateTime @default(now())
+
+  // ⭐ ประเภทการแบน
+  type          BanType  @default(PERMANENT)
+
+  // ⭐ สำหรับ temp ban
+  expiresAt     DateTime?
+
+  // ⭐ สำหรับ unblacklist (soft revoke)
+  revokedAt     DateTime?
+  revokedBy     String?
+  revokeReason  String?
+
 }
