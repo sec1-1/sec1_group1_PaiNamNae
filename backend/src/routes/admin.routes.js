@@ -17,4 +17,19 @@ router.patch(
     adminController.rejectReport
 )
 
+router.post(
+    '/users/:userId/blacklist' , 
+    protect , 
+    requireAdmin , 
+    adminController.blacklistUser
+)
+
+router.post(
+  '/users/:userId/unblacklist',
+  protect,
+  requireAdmin,
+  adminController.unblacklistUser
+)
+
+
 module.exports = router

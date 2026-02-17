@@ -5,9 +5,10 @@ CREATE TYPE "ReportStatus" AS ENUM ('PENDING', 'APPROVED', 'REJECTED');
 CREATE TYPE "ReportType" AS ENUM ('INAPPROPRIATE_BEHAVIOR', 'NO_SHOW', 'SCAM', 'SAFETY_CONCERN', 'OTHER');
 
 -- AlterTable
-ALTER TABLE "Route" ADD COLUMN     "actualEndTime" TIMESTAMP(3),
-ADD COLUMN     "actualStartTime" TIMESTAMP(3),
-ADD COLUMN     "optimizeWaypoints" BOOLEAN DEFAULT false;
+ALTER TABLE "Route"
+ADD COLUMN IF NOT EXISTS "actualEndTime" TIMESTAMP(3),
+ADD COLUMN IF NOT EXISTS "actualStartTime" TIMESTAMP(3),
+ADD COLUMN IF NOT EXISTS "optimizeWaypoints" BOOLEAN DEFAULT false;
 
 -- CreateTable
 CREATE TABLE "Report" (

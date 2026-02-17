@@ -40,4 +40,48 @@ const rejectReport = async (req, res, next) => {
   }
 }
 
-module.exports = { approveReport, rejectReport }
+const blacklistUser = async (req, res, next) => {
+  try {
+    const adminId = req.user.sub
+    const userId = req.params.userId
+    const { reason, type, durationDays } = req.body
+
+    const result = await adminService.blacklistUserDirectly(
+      userId,
+      adminId,
+      { reason, type, durationDays }
+    )
+
+    res.json({
+      message: "User blacklisted",
+      data: result
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+
+const unblacklistUser = async (req, res, next) => {
+  try {
+    const adminId = req.user.sub
+    const userId = req.params.userId
+    const { reason } = req.body
+
+    const result = await adminService.unblacklistUser(
+      userId,
+      adminId,
+      reason
+    )
+
+    res.json({
+      message: "User unblacklisted",
+      data: result
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+
+module.exports = { approveReport, rejectReport , blacklistUser , unblacklistUser }

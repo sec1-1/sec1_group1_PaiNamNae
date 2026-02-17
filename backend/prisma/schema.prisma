@@ -89,6 +89,11 @@ enum ReportType {
   OTHER
 }
 
+enum BanType {
+  TEMPORARY
+  PERMANENT
+}
+
 model User {
   id                    String   @id @default(cuid())
   username              String   @unique
@@ -323,4 +328,16 @@ model Blacklist {
   reason    String
   createdBy String
   createdAt DateTime @default(now())
+
+  // ⭐ ประเภทการแบน
+  type          BanType  @default(PERMANENT)
+
+  // ⭐ สำหรับ temp ban
+  expiresAt     DateTime?
+
+  // ⭐ สำหรับ unblacklist (soft revoke)
+  revokedAt     DateTime?
+  revokedBy     String?
+  revokeReason  String?
+
 }
