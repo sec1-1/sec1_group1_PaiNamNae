@@ -1,0 +1,77 @@
+meta {
+  name: create new review
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/reviews
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "bookingId": "{{bookingId}}",
+    "rating": 5,
+    "comment": "ดีมาก",
+    "tags": ["ON_TIME"]
+  }
+}
+
+tests {
+  // Parse body
+  const body = res.getBody();
+  const review = typeof body === "string" ? JSON.parse(body) : body;
+  
+  // 1) Status Code = 200 หรือ 201
+  test("Status code ต้องเป็น 200 หรือ 201", () => {
+    expect([200, 201]).to.include(res.getStatus());
+  });
+  
+  // 2) ระบบสร้าง review ใหม่สำเร็จ (ต้องมี object review กลับมา)
+  test("ระบบสร้าง review ใหม่สำเร็จ (ต้องมีข้อมูล review กลับมา)", () => {
+    expect(review).to.be.an("object");
+  });
+  
+  // 3) Response ต้องมีข้อมูล review ที่สร้าง
+  
+  test("review.id ต้องไม่เป็นค่าว่าง", () => {
+    expect(review).to.have.property("id");
+    expect(review.id).to.be.a("string");
+    expect(review.id).to.not.be.empty;
+  });
+  
+  test("bookingId ต้องตรงกับที่ส่ง", () => {
+    const reqBody = req.getBody();
+    expect(review).to.have.property("bookingId");
+    expect(review.bookingId).to.equal(reqBody.bookingId);
+  });
+  
+  test("rating ต้องตรงกับที่ส่ง (=5)", () => {
+    expect(review).to.have.property("rating");
+    expect(review.rating).to.equal(5);
+  });
+  
+  test('comment ต้องตรงกับที่ส่ง (= "ดีมาก")', () => {
+    expect(review).to.have.property("comment");
+    expect(review.comment).to.equal("ดีมาก");
+  });
+  
+  test('tags ต้องมีค่า "ON_TIME"', () => {
+    expect(review).to.have.property("tags");
+    expect(review.tags).to.be.an("array");
+    expect(review.tags).to.include("ON_TIME");
+  });
+  
+  test("images ต้องเป็น array", () => {
+    expect(review).to.have.property("images");
+    expect(review.images).to.be.an("array");
+  });
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

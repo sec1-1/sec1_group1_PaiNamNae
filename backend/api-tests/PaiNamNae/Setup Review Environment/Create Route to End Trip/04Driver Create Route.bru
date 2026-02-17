@@ -1,0 +1,53 @@
+meta {
+  name: 04Driver Create Route
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/routes
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{driver_token}}
+}
+
+body:json {
+  {
+    "startLocation": { "lat": 16.4419, "lng": 102.8359 },
+    "endLocation": { "lat": 16.4740, "lng": 102.8230 },
+    "vehicleId": "cmlphrfjf0001rrx5e5hmrs5q",
+    "departureTime": "2026-02-20T09:00:00.000Z",
+    "availableSeats": 2,
+    "pricePerSeat": 50
+  }
+  
+}
+
+tests {
+  const body = res.getBody();
+  const json = typeof body === "string" ? JSON.parse(body) : body;
+  
+  const route = json.data ? json.data : json;
+  
+  test("Create route: status 200 หรือ 201", () => {
+    expect([200, 201]).to.include(res.getStatus());
+  });
+  
+  test("ต้องได้ routeId กลับมา" , () => {
+    expect(route).to.have.property("id");
+    expect(route.id).to.be.a("string");
+    expect(route.id).to.not.be.empty;
+  });
+  
+  // save routeId
+  bru.setEnvVar("routeId", route.id);
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,47 @@
+meta {
+  name: TC-RVW-GET-002
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/api/reviews/driver/{{driver2_id}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  const json = res.getBody();
+  
+  test("Status code ต้องเป็น 200", () => {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Response ต้องเป็น array", () => {
+    expect(json).to.be.an("array");
+  });
+  
+  test("จำนวน review ต้องเท่ากับ 0", () => {
+    expect(json.length).to.equal(0);
+  });
+  
+  test("review ทุกตัวต้องมี rating", () => {
+    json.forEach((rvw) => {
+      expect(rvw).to.have.property("rating");
+      expect(rvw.rating).to.not.be.null;
+    });
+  });
+  
+  test("review ทุกตัวต้องมี comment (ถ้ามีในระบบ)", () => {
+    json.forEach((rvw) => {
+      // comment อาจเป็น null ได้ถ้าระบบอนุญาต
+      expect(rvw).to.have.property("comment");
+    });
+  });
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,14 @@
+meta {
+  name: Reviews
+}
+
+auth {
+  mode: inherit
+}
+
+script:post-response {
+  const body = res.getBody();
+  const json = typeof body === "string" ? JSON.parse(body) : body;
+  bru.setEnvVar("reviewid", json.id);
+  
+}

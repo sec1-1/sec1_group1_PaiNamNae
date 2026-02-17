@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "PaiNamNae with create route in every test case",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

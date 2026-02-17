@@ -1,0 +1,45 @@
+meta {
+  name: 03login driver
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/api/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "{{driver_username}}",
+    "password": "{{driver_password}}"
+  }
+  
+}
+
+script:post-response {
+  const body = res.getBody();
+  const json = typeof body === "string" ? JSON.parse(body) : body;
+  bru.setEnvVar("driver_token", json.data.token);
+}
+
+tests {
+  const body = res.getBody();
+  const json = typeof body === "string" ? JSON.parse(body) : body;
+  
+  test("Login driver: status 200", () => {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("ต้องได้ token", () => {
+    expect(json.data.token).to.be.a("string");
+  });
+  
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

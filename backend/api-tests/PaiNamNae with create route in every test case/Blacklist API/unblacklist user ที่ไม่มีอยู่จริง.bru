@@ -1,0 +1,23 @@
+meta {
+  name: unblacklist user ที่ไม่มีอยู่จริง
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{base_url}}/api/admin/users/d001/unblacklist
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("Status code should be 404", () => {
+    expect(res.status).to.equal(404);
+  });
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,49 @@
+meta {
+  name: Create new review (Unauthorized)
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{base_url}}/api/reviews
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "bookingId": "{{bookingId}}",
+    "rating": 5,
+    "comment": "รีวิวแบบไม่มี token",
+    "tags": ["ON_TIME"]
+  }
+}
+
+tests {
+  const body = res.getBody();
+  const json = typeof body === "string" ? JSON.parse(body) : body;
+  
+  test("Status code ต้องเป็น 401 (Unauthorized)", () => {
+    expect(res.getStatus()).to.equal(401);
+  });
+  
+  test("success ต้องเป็น false", () => {
+    expect(json).to.have.property("success");
+    expect(json.success).to.equal(false);
+  });
+  
+  test('message ต้องมีคำว่า "unauthorized" หรือ "no token"', () => {
+    expect(json).to.have.property("message");
+    expect(json.message).to.be.a("string");
+  
+    const msg = json.message.toLowerCase();
+    expect(msg.includes("unauthorized") || msg.includes("no token")).to.equal(true);
+  });
+  
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
