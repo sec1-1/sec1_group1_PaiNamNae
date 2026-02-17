@@ -4,8 +4,16 @@ ${VALID_PASS}           123456789
 ${ADMIN_USER}           admin123
 ${ADMIN_FIRST_NAME}     System
 ${ADMIN_PASS}           123456789
-${BLACKLIST_USER}       
-${BLACKLIST_PASS}   
+${BLACKLIST_USER}       goodboy
+${BLACKLIST_EMAIL}      good@mail.com
+${BLACKLIST_PASS}       asdfjkl;123
+${BLACKLIST_SUR}        Goodboy
+${BLACKLIST_LAST}       andgoodgirl
+${BLACKLIST_TEL}        0987654333
+${BLACKLIST_ID}         1234567890987
+${EXPID_DATE}           02022030
+${BLACKLIST_ID_PATH}        D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/IDCard.jpg
+${BLACKLIST_SELF_PATH}      D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/Selfies.jpg
 ${PASSENGER_USER}       Veerapat
 ${PASSENGER_SURNAME}    Veera
 ${PASSENGER_PASS}       asdfjkl;123
@@ -22,8 +30,8 @@ Admin Login
     Click Element                   xpath=//a[@href='/login']
     Wait Until Location Contains    /login    10s
     Location Should Contain         /login
-    Input Text                      id=identifier    ${ADMIN_USER}
-    Input Text                      id=password    ${ADMIN_PASS}
+    Input Text                      id=identifier       ${ADMIN_USER}
+    Input Text                      id=password         ${ADMIN_PASS}
     Click Button                    xpath=//button[@type='submit']
 
 Go To User Management Page
