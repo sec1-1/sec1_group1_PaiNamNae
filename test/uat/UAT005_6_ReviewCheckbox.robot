@@ -3,22 +3,23 @@ Library    SeleniumLibrary
 Resource       ../resources/keywords/auth_keywords.robot
 
 *** Test Cases ***
-# ==== UAT-005 Passenger Give 1 Star ====
-UAT-005-01 : Passenger Login
+# ==== UAT-005 Passenger Select Few Checkbox. ====
+UAT-009-01 : Passenger Login
     Passenger Login
 
     # ==== Expected Results ====
     Dashboard User Should Be Visible
 
-UAT-005-02 : Passenger Give 1 Star
-    Passenger Login
-    Sleep    2s
+UAT-005-02 : Passenger Select Few Checkbox.
     View My Trip
     Sleep    2s
-    Click Element       xpath=(//button[normalize-space()="รีวิวผู้ขับ"])[1]
+    Click Element       xpath=(//button[normalize-space()="รีวิวผู้ขับ"])[5]
     Sleep    2s
-    Click Element       xpath=(//button[@type="button"][.//span[contains(normalize-space(),"★")]])[1]
+    Click Element       xpath=(//button[@type="button"][.//span[contains(normalize-space(),"★")]])[4]
     Sleep    2s
+    Select Few Checkbox
+    Sleep    2s
+
     Click Element       xpath=//button[normalize-space()="ส่งรีวิว"]
 
     # ==== Expected Results ====
@@ -27,25 +28,27 @@ UAT-005-02 : Passenger Give 1 Star
     View All Route
     Sleep                   2s
     View Passenger Info
-    Page Should Contain     1
     Page Should Contain     ${PASSENGER_SURNAME}
+    Page Should Contain     สะอาด
+    Page Should Contain     ตรงเวลา
 
-# ==== UAT-006 Passenger Give 5 Star ====
+# ==== UAT-006 Passenger Select Few Checkbox. ====
 UAT-006-01 : Passenger Login
     Passenger Login
 
     # ==== Expected Results ====
     Dashboard User Should Be Visible
 
-UAT-006-02 : Passenger Give 5 Star
-    Passenger Login
-    Sleep    2s
+UAT-006-02 : Passenger Select All Checkbox.
     View My Trip
     Sleep    2s
-    Click Element       xpath=(//button[normalize-space()="รีวิวผู้ขับ"])[2]
+    Click Element       xpath=(//button[normalize-space()="รีวิวผู้ขับ"])[6]
     Sleep    2s
     Click Element       xpath=(//button[@type="button"][.//span[contains(normalize-space(),"★")]])[5]
     Sleep    2s
+    Select All Checkboxes
+    Sleep    2s
+
     Click Element       xpath=//button[normalize-space()="ส่งรีวิว"]
 
     # ==== Expected Results ====
@@ -54,24 +57,11 @@ UAT-006-02 : Passenger Give 5 Star
     View All Route
     Sleep                   2s
     View Passenger Info
-    Page Should Contain     5
     Page Should Contain     ${PASSENGER_SURNAME}
+    Page Should Contain     สะอาด
+    Page Should Contain     คนขับมารยาทดี
+    Page Should Contain     ตรงเวลา
+    Page Should Contain     ขับปลอดภัย
+    Page Should Contain     บริการเป็นกันเอง
 
-# ==== UAT-007 Passenger Do not Give a Star ====
-UAT-007-01 : Passenger Login
-    Passenger Login
 
-    # ==== Expected Results ====
-    Dashboard User Should Be Visible
-
-UAT-007-02 : Passenger Do not Give a Star
-    Passenger Login
-    Sleep    2s
-    View My Trip
-    Sleep    2s
-    Click Element       xpath=(//button[normalize-space()="รีวิวผู้ขับ"])[3]
-    Sleep    2s
-    Click Element       xpath=//button[normalize-space()="ส่งรีวิว"]
-
-    # ==== Expected Results ====
-    Wait Until Element Is Visible    xpath=//*[contains(text(),"กรุณาให้คะแนนก่อน")]    10s

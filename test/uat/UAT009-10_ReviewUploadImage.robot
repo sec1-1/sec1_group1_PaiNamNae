@@ -1,26 +1,23 @@
 *** Settings ***
 Library    SeleniumLibrary
-Library    String
 Resource   ../resources/keywords/auth_keywords.robot
 
 *** Test Cases ***
-# ==== UAT-010 Passenger Comments Under 501 Characters ====
-UAT-010-01 : Passenger Login
+# ==== UAT-009 Passenger Upload Image File ====
+UAT-009-01 : Passenger Login
     Passenger Login
 
     # ==== Expected Results ====
     Dashboard User Should Be Visible
 
-UAT-010-02 : Passenger Comments Under 501 Characters
-    Passenger Login
-    Sleep    2s
+UAT-009-02 : Passenger Upload Image File
     View My Trip
     Sleep    2s
-    Click Element       xpath=(//button[normalize-space()="รีวิวผู้ขับ"])[4]
+    Click Element       xpath=(//button[normalize-space()="รีวิวผู้ขับ"])[9]
     Sleep    2s
     Click Element       xpath=(//button[@type="button"][.//span[contains(normalize-space(),"★")]])[5]
     Sleep    2s
-    Input Text    xpath=//textarea[@placeholder="เขียนรีวิวของคุณ..."]    ${REVIEW_TEXT}
+    Choose File         xpath=//input[@type="file"]    ${IMAGE_PATH}
     Sleep    2s
     Click Element       xpath=//button[normalize-space()="ส่งรีวิว"]
 
@@ -30,30 +27,28 @@ UAT-010-02 : Passenger Comments Under 501 Characters
     View All Route
     Sleep                   2s
     View Passenger Info
-    Page Should Contain     ${REVIEW_TEXT}
-    Page Should Contain     ${PASSENGER_SURNAME}
+    Sleep                   2s
+    Element Should Be Visible       xpath=(//div[contains(@class,"rounded-2xl")])[1]//div[contains(@class,"grid")]//img
+    Page Should Contain             ${PASSENGER_SURNAME}
 
-# ==== UAT-010 Passenger Comments Over 501 Characters ====
-UAT-011-01 : Passenger Login
+
+# ==== UAT-010 Passenger Upload Invalid File ====
+UAT-013-01 : Passenger Login
     Passenger Login
 
     # ==== Expected Results ====
     Dashboard User Should Be Visible
 
-UAT-011-02 : Passenger Comments Over 501 Characters
-    Passenger Login
-    Sleep    2s
+UAT-010-02 : Passenger Upload Invalid File
     View My Trip
     Sleep    2s
-    Click Element       xpath=(//button[normalize-space()="รีวิวผู้ขับ"])[8]
+    Click Element       xpath=(//button[normalize-space()="รีวิวผู้ขับ"])[10]
     Sleep    2s
     Click Element       xpath=(//button[@type="button"][.//span[contains(normalize-space(),"★")]])[5]
     Sleep    2s
-    ${Text}=  Generate Random String  600  [LETTERS]
-    Input Text    xpath=//textarea[@placeholder="เขียนรีวิวของคุณ..."]    ${text}
+    Choose File         xpath=//input[@type="file"]    ${INVALID_PATH}
     Sleep    2s
     Click Element       xpath=//button[normalize-space()="ส่งรีวิว"]
 
     # ==== Expected Results ====
     Wait Until Element Is Visible    xpath=//*[contains(text(),"ไม่สามารถรีวิวได้")]    10s
-
