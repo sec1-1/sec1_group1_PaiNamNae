@@ -485,20 +485,29 @@ async function onToggleVerify(next) {
     }
 }
 
-/*--------- [Added]User Active Status Management---------*/
+/* -------------------------------------------------------------------------- */
+/*                               [Added] User Active Status Management         */
+/* -------------------------------------------------------------------------- */
+
+// State สำหรับควบคุมการแสดงผล Modal ระงับ/ยกเลิกการระงับ
 const showBanModal = ref(false)
 const banUserModalRef = ref(null)
 
 const showUnbanModal = ref(false)
 const unbanUserModalRef = ref(null)
 
-// Single function to handle status update
+/** 
+ * ฟังก์ชันสำหรับจัดการการเปลี่ยนสถานะผู้ใช้ (Ban/Unban)
+ * รวม Logic การเรียก API และการอัปเดต UI ไว้ในที่เดียว
+ * รับค่า isActive ที่ต้องการเปลี่ยน, เหตุผล (ถ้ามี), และ ref ของ Modal เพื่อสั่งให้แสดงหน้า Success หรือปิด Modal เมื่อทำรายการสำเร็จ
+ */
 async function toggleUserStatus(isActive, reason = null, modalRef, closeFn) {
     if (!user.value) return
     try {
         const config = useRuntimeConfig()
         const token = useCookie('token').value || (process.client ? localStorage.getItem('token') : '')
         
+        // เรียก API เพื่ออัปเดตสถานะที่ Database
         await $fetch(`/users/admin/${user.value.id}/status`, {
             baseURL: config.public.apiBase,
             method: 'PATCH',
@@ -506,10 +515,11 @@ async function toggleUserStatus(isActive, reason = null, modalRef, closeFn) {
             body: { isActive, reason }
         })
 
-        // Update local state
+        // Update local state: อัปเดตข้อมูลในหน้าเว็บทันทีโดยไม่ต้อง reload
         user.value.isActive = isActive
         
-        // Show Success or Close
+        // UI Feedback: ถ้า Modal มีฟังก์ชัน switchToSuccess ให้เรียกใช้เพื่อแสดงหน้าสำเร็จ
+        // ถ้าไม่มี ให้ปิด Modal ทันที
         if (modalRef?.value?.switchToSuccess) {
             modalRef.value.switchToSuccess()
         } else {
@@ -520,17 +530,22 @@ async function toggleUserStatus(isActive, reason = null, modalRef, closeFn) {
         toast.error('เกิดข้อผิดพลาด', 'ไม่สามารถอัปเดตสถานะได้')
     }
 }
-/*--------- [Added] User Status Button----------*/
-// Ban Actions
+
+/* -------------------------------------------------------------------------- */
+/*                          [Added] Action Handles                            */
+/* -------------------------------------------------------------------------- */
+
+// Ban Actions (การระงับผู้ใช้)
 const onBanUser = () => showBanModal.value = true
 const closeBanModal = () => showBanModal.value = false
+// ส่ง isActive = false และ modalRef ของ BanUserModal ไปให้ toggleUserStatus
 const confirmBan = (reason) => toggleUserStatus(false, reason, banUserModalRef, closeBanModal)
 
-// [Added] Unban Actions
+// Unban Actions (การยกเลิกการระงับ)
 const onUnbanUser = () => showUnbanModal.value = true
 const closeUnbanModal = () => showUnbanModal.value = false
+// ส่ง isActive = true และ modalRef ของ UnbanUserModal ไปให้ toggleUserStatus
 const confirmUnban = () => toggleUserStatus(true, null, unbanUserModalRef, closeUnbanModal)
-/* -------------------------------------------------------------------------- */
 
 /* ---------- layout helpers ---------- */
 function closeMobileSidebar() {

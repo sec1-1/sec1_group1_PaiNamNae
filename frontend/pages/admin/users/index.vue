@@ -704,7 +704,6 @@ async function confirmUnban() {
     }
 }
 /* -------------------------------------------------------------------------- */
-/* --------------------------------------------- */
 
 useHead({
     title: 'TailAdmin Dashboard',
@@ -864,7 +863,7 @@ onUnmounted(() => {
     }
 }
 
-/* ---- สไตล์ของสวิตช์ ---- */
+/* ---- Switch Style ---- */
 .switch {
     position: relative;
     width: 42px;
