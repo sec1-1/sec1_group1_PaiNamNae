@@ -46,9 +46,24 @@ Passenger Login
     Input Text                      id=password                     ${PASSENGER_PASS}
     Click Button                    xpath=//button[@type='submit']
 
+View All Route
+    Click Element                   xpath=//a[@href='/findTrip']
+    
 View My Trip
     Click Element                   xpath=//a[@href='/myTrip']
     Sleep                           2s
     Click Element                   xpath=//button[starts-with(normalize-space(), "ทั้งหมด")]
-    Sleep                           2s
-    Click Element                   xpath=(//button[normalize-space()="รีวิวผู้ขับ"])[1]
+
+View Passenger Info
+    Wait Until Element Is Visible    xpath=//h4[normalize-space()="Takumi Fujiwara"]    10s
+    Click Element                    xpath=//h4[normalize-space()="Takumi Fujiwara"]
+Select Few Checkbox
+    Select Checkbox    xpath=//input[@value="CLEAN"]
+    Select Checkbox    xpath=//input[@value="ON_TIME"]
+
+Select All Checkboxes
+    Select Checkbox    xpath=//input[@value="CLEAN"]
+    Select Checkbox    xpath=//input[@value="POLITE_DRIVER"]
+    Select Checkbox    xpath=//input[@value="ON_TIME"]
+    Select Checkbox    xpath=//input[@value="SAFE_DRIVING"]
+    Select Checkbox    xpath=//input[@value="FRIENDLY_SERVICE"]
