@@ -75,23 +75,31 @@ enum NotificationType {
   ROUTE
 }
 
+enum BanType {
+  TEMPORARY
+  PERMANENT
+}
+
+enum ReportType {
+  DRIVER
+  PASSENGER
+}
+
+enum ReportCategory {
+  VEHICLE_ISSUE
+  PASSENGER_ISSUE
+  ROAD_ISSUE
+  SAFETY_ISSUE
+  PAYMENT_ISSUE
+  NO_SHOW
+  OTHER
+}
+
 enum ReportStatus {
   PENDING
   APPROVED
   REJECTED
-}
-
-enum ReportType {
-  INAPPROPRIATE_BEHAVIOR
-  NO_SHOW
-  SCAM
-  SAFETY_CONCERN
-  OTHER
-}
-
-enum BanType {
-  TEMPORARY
-  PERMANENT
+  RESOLVED
 }
 
 model User {
@@ -127,8 +135,9 @@ model User {
   reviewsReceived  Review[] @relation("DriverReviews")
 
   // ⭐ FIX สำคัญ (Report relations)
-  reportsMade     Report[] @relation("Reporter")
-  reportsReceived Report[] @relation("ReportedUser")
+  reportsMade           Report[]            @relation("ReporterReports")
+  reportsReceived       Report[]            @relation("ReportedUser")
+  resolvedReports       Report[]            @relation("ResolvedReports")
 
   // ⭐ FIX สำคัญ (Blacklist relation)
   blacklistEntries Blacklist[]
@@ -236,7 +245,7 @@ model Route {
 
   bookings        Booking[]
   reviews         Review[]
-
+  reports Report[]
 
   @@index([driverId])
   @@index([vehicleId])
@@ -296,29 +305,41 @@ model Review {
 }
 
 model Report {
-  id         String @id @default(cuid())
-  reporterId String
-  reporter   User   @relation("Reporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  id              String         @id @default(cuid())
 
-  reportedUserId String
-  reportedUser   User   @relation("ReportedUser", fields: [reportedUserId], references: [id], onDelete: Cascade)
-  penaltyApplied   Boolean @default(false)
+  reporterId      String
+  reporter        User           @relation("ReporterReports", fields: [reporterId], references: [id])
 
-  bookingId String?
-  booking   Booking? @relation(fields: [bookingId], references: [id])
+  type            ReportType
+  category        ReportCategory
+  status          ReportStatus   @default(PENDING)
 
-  type        ReportType
-  description String
-  evidenceUrl String?
+  description     String
+  images          Json?          @db.Json
 
-  status     ReportStatus @default(PENDING)
-  reviewedBy String?
-  reviewedAt DateTime?
+  routeId         String?
+  route           Route?         @relation(fields: [routeId], references: [id])
 
-  createdAt DateTime @default(now())
+  bookingId       String?
+  booking         Booking?       @relation(fields: [bookingId], references: [id])
 
-  @@index([reportedUserId])
+  targetUserId    String?
+  targetUser      User?          @relation("ReportedUser", fields: [targetUserId], references: [id])
+
+  adminNotes      String?
+  resolvedAt      DateTime?
+  resolvedById    String?
+  resolvedBy      User?          @relation("ResolvedReports", fields: [resolvedById], references: [id])
+
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@index([reporterId])
+  @@index([routeId])
+  @@index([bookingId])
   @@index([status])
+  @@index([type])
+  @@index([createdAt])
 }
 
 model Blacklist {
