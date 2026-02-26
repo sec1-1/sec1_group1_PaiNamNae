@@ -1,32 +1,72 @@
+*** Comments ***
+# ============================================================
+# ชื่อไฟล์: auth_resource.robot
+#
+# คำอธิบาย:
+#     ไฟล์นี้ใช้สำหรับเก็บ Keyword ที่เกี่ยวข้องกับ
+#     การยืนยันตัวตน (Authentication) เช่น
+#     Login, Logout และการจัดการ Session
+#
+# วัตถุประสงค์:
+#     - รวมคำสั่งด้าน Auth ไว้ส่วนกลาง
+#     - ลดการเขียนโค้ดซ้ำในแต่ละ Test Case
+#     - เพิ่มความสะดวกในการแก้ไขและบำรุงรักษา
+#
+# แนวทางการใช้งาน:
+#     ให้นำไฟล์นี้ไปเรียกใช้ใน Test Case ด้วยคำสั่ง:
+#         Resource    ../../resources/auth_resource.robot
+#
+# ข้อกำหนดในการพัฒนา:
+#     - ห้ามกำหนด Username/Password แบบ Hardcode
+#       (ให้ใช้ไฟล์ Variables แยกต่างหาก)
+#     - Keyword ควรออกแบบให้สามารถใช้งานซ้ำได้
+#     - ไม่ควรสร้าง Keyword ที่ผูกกับ Sprint ใด Sprint หนึ่ง
+#     - หากเพิ่ม Flow ใหม่ ให้จัดกลุ่มให้ชัดเจน
+#
+# ผู้ดูแลไฟล์:
+#     ทีม UAT Automation
+#
+# วันที่แก้ไขล่าสุด:
+#     26-02-2026
+
+*** Settings ***
+Library         SeleniumLibrary
+Resource       ../resources/keywords/auth_keywords.robot
+
+
 *** Variables ***
+# ตัวแปรที่ใช้บน Localhost
 ${URL}    http://localhost:3001/
-${VALID_PASS}           123456789
-${ADMIN_USER}           admin123
-${ADMIN_FIRST_NAME}     System
-${ADMIN_PASS}           123456789
-${BLACKLIST_USER}       goodboy
-${BLACKLIST_EMAIL}      good@mail.com
-${BLACKLIST_PASS}       asdfjkl;123
-${BLACKLIST_SUR}        Goodboy
-${BLACKLIST_LAST}       andgoodgirl
-${BLACKLIST_TEL}        0987654333
-${BLACKLIST_ID}         1234567890987
-${EXPID_DATE}           02022030
+${VALID_PASS}               123456789
+${ADMIN_USER}               admin123
+${ADMIN_FIRST_NAME}         System
+${ADMIN_PASS}               123456789
+${BLACKLIST_USER}           goodboy
+${BLACKLIST_EMAIL}          good@mail.com
+${BLACKLIST_PASS}           asdfjkl;123
+${BLACKLIST_SUR}            Goodboy
+${BLACKLIST_LAST}           andgoodgirl
+${BLACKLIST_TEL}            0987654333
+${BLACKLIST_ID}             1234567890987
+${EXPID_DATE}               02022030
 ${BLACKLIST_ID_PATH}        D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/IDCard.jpg
 ${BLACKLIST_SELF_PATH}      D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/Selfies.jpg
-${PASSENGER_USER}       Veerapat
-${PASSENGER_SURNAME}    Veera
-${PASSENGER_PASS}       asdfjkl;123
-${REVIEW_TEXT}          ขับเร็วทันใจ คนขับสุภาพ รถสะอาด ตรงเวลา
-${IMAGE_PATH}           D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/IMG-8206.jpg
-${INVALID_PATH}         D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/This is pdf file.pdf
+${PASSENGER_USER}           Veerapat
+${PASSENGER_SURNAME}        Veera
+${PASSENGER_PASS}           asdfjkl;123
+${REVIEW_TEXT}              ขับเร็วทันใจ คนขับสุภาพ รถสะอาด ตรงเวลา
+${IMAGE_PATH}               D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/IMG-8206.jpg
+${INVALID_PATH}             D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/This is pdf file.pdf
 
+# ตัวแปรที่ใช้บนเว็บที่ Deploy แล้ว
+
+
+# รวมฟังก์ชั่นทั้งหมด สามารถพิมพ์แค่ชื่อและนำไปใช้ได้เลยในไฟล์ UAT_Test
 *** Keywords ***
-Open Web Page
-    Open Browser                    ${URL}    chrome
-
+# -----------------------------
+# กลุ่ม: Login
+# -----------------------------
 Admin Login
-    Open Web Page
     Click Element                   xpath=//a[@href='/login']
     Wait Until Location Contains    /login    10s
     Location Should Contain         /login
@@ -34,12 +74,17 @@ Admin Login
     Input Text                      id=password         ${ADMIN_PASS}
     Click Button                    xpath=//button[@type='submit']
 
-Go To User Management Page
-    Mouse Over                          xpath=//span[normalize-space()='${ADMIN_FIRST_NAME}']
-    Wait Until Element Is Visible       xpath=//a[@href='/admin/users']    10s
-    Click Element                       xpath=//a[@href='/admin/users']
-    Page Should Contain                 User Management   
+Passenger Login
+    Click Element                   xpath=//a[@href='/login']
+    Wait Until Location Contains    /login                          10s
+    Location Should Contain         /login
+    Input Text                      id=identifier                   ${PASSENGER_USER}
+    Input Text                      id=password                     ${PASSENGER_PASS}
+    Click Button                    xpath=//button[@type='submit']
 
+# -----------------------------
+# กลุ่ม: ตรวจสอบว่าอยู่ในหน้า Dashboard
+# -----------------------------
 Dashboard User Should Be Visible
     Wait Until Element Is Visible       xpath=//span[normalize-space()='${PASSENGER_SURNAME}']    10s
     Element Should Be Visible           xpath=//span[normalize-space()='${PASSENGER_SURNAME}']
@@ -48,18 +93,18 @@ Dashboard Admin Should Be Visible
     Wait Until Element Is Visible       xpath=//span[normalize-space()='${ADMIN_FIRST_NAME}']    10s
     Element Should Be Visible           xpath=//span[normalize-space()='${ADMIN_FIRST_NAME}']
 
-Passenger Login
-    Open Web Page
-    Click Element                   xpath=//a[@href='/login']
-    Wait Until Location Contains    /login                          10s
-    Location Should Contain         /login
-    Input Text                      id=identifier                   ${PASSENGER_USER}
-    Input Text                      id=password                     ${PASSENGER_PASS}
-    Click Button                    xpath=//button[@type='submit']
+# -----------------------------
+# กลุ่ม: กดปุ่มไปแต่ละหน้า
+# -----------------------------
+Go To User Management Page
+    Mouse Over                          xpath=//span[normalize-space()='${ADMIN_FIRST_NAME}']
+    Wait Until Element Is Visible       xpath=//a[@href='/admin/users']    10s
+    Click Element                       xpath=//a[@href='/admin/users']
+    Page Should Contain                 User Management   
 
 View All Route
     Click Element                   xpath=//a[@href='/findTrip']
-    
+
 View My Trip
     Click Element                   xpath=//a[@href='/myTrip']
     Sleep                           2s
@@ -68,6 +113,10 @@ View My Trip
 View Passenger Info
     Wait Until Element Is Visible    xpath=//h4[normalize-space()="Takumi Fujiwara"]    10s
     Click Element                    xpath=//h4[normalize-space()="Takumi Fujiwara"]
+
+# -----------------------------
+# กลุ่ม: Checkbox Review
+# -----------------------------
 Select Few Checkbox
     Select Checkbox    xpath=//input[@value="CLEAN"]
     Select Checkbox    xpath=//input[@value="ON_TIME"]
