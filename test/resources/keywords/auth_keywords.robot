@@ -57,9 +57,19 @@ ${PASSENGER_PASS}           asdfjkl;123
 ${REVIEW_TEXT}              ขับเร็วทันใจ คนขับสุภาพ รถสะอาด ตรงเวลา
 ${IMAGE_PATH}               D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/IMG-8206.jpg
 ${INVALID_PATH}             D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/This is pdf file.pdf
+${IMAGE01_PATH}
+${IMAGE02_PATH}
+${VIDEO01_PATH}
+${VIDEO02_PATH}
 
 # ตัวแปรที่ใช้บนเว็บที่ Deploy แล้ว
+${PASSENGER_REVIEW_USER}
+${PASSENGER_REVIEW_SURNAME}
+${PASSENGER_REVIEW_PASS}
 
+${PASSENGER_VIEW_USER}
+${PASSENGER_VIEW_SURNAME}
+${PASSENGER_VIEW_PASS}
 
 # รวมฟังก์ชั่นทั้งหมด สามารถพิมพ์แค่ชื่อและนำไปใช้ได้เลยในไฟล์ UAT_Test
 *** Keywords ***
@@ -81,6 +91,32 @@ Passenger Login
     Input Text                      id=identifier                   ${PASSENGER_USER}
     Input Text                      id=password                     ${PASSENGER_PASS}
     Click Button                    xpath=//button[@type='submit']
+
+# ฟังก์ชั่นนี้ ใช้ข้อมูลจาก Database จริง
+Passenger Create Review Login
+    Click Element                   xpath=//a[@href='/login']
+    Wait Until Location Contains    /login                          10s
+    Location Should Contain         /login
+    Input Text                      id=identifier                   ${PASSENGER_REVIEW_USER}
+    Input Text                      id=password                     ${PASSENGER_REVIEW_PASS}
+    Click Button                    xpath=//button[@type='submit']
+
+    # ==== Expected Results ====
+    Wait Until Element Is Visible       xpath=//span[normalize-space()='${PASSENGER_REVIEW_SURNAME}']    10s
+    Element Should Be Visible           xpath=//span[normalize-space()='${PASSENGER_REVIEW_SURNAME}']
+
+# ฟังก์ชั่นนี้ ใช้ข้อมูลจาก Database จริง
+Passenger View Review Login
+    Click Element                   xpath=//a[@href='/login']
+    Wait Until Location Contains    /login                          10s
+    Location Should Contain         /login
+    Input Text                      id=identifier                   ${PASSENGER_VIEW_USER}
+    Input Text                      id=password                     ${PASSENGER_VIEW_USER}
+    Click Button                    xpath=//button[@type='submit']
+
+    # ==== Expected Results ====
+    Wait Until Element Is Visible       xpath=//span[normalize-space()='${PASSENGER_VIEW_SURNAME}']    10s
+    Element Should Be Visible           xpath=//span[normalize-space()='${PASSENGER_VIEW_SURNAME}']
 
 # -----------------------------
 # กลุ่ม: ตรวจสอบว่าอยู่ในหน้า Dashboard
@@ -127,3 +163,12 @@ Select All Checkboxes
     Select Checkbox    xpath=//input[@value="ON_TIME"]
     Select Checkbox    xpath=//input[@value="SAFE_DRIVING"]
     Select Checkbox    xpath=//input[@value="FRIENDLY_SERVICE"]
+
+# -----------------------------
+# กลุ่ม: Upload File
+# -----------------------------
+Upload 2 Image and 1 Video
+    Choose File         xpath=//input[@type="file"]    ${IMAGE01_PATH}
+    Choose File         xpath=//input[@type="file"]    ${IMAGE02_PATH}
+    Choose File         xpath=//input[@type="file"]    ${VIDEO01_PATH}
+

@@ -5,7 +5,7 @@
 Resource       ../resources/keywords/auth_keywords.robot
 
 *** Test Cases ***
-UAT-ReportFail-003  : Passenger Report and upload image 4 file
+UAT-ReportFail-004  : Passenger Report and upload image 4 file
     Open Browser                    ${URL}    edge
     Passenger Login
     Dashboard User Should Be Visible
@@ -19,7 +19,7 @@ UAT-ReportFail-003  : Passenger Report and upload image 4 file
     # ผู้โดยสารอยู่ในหน้ารายงาน ไม่สามารถรายงานได้ 
     # พร้อมขึ้นข้อความว่า "(รอ Frontend Design)"
 
-UAT-ReportFail-004  : Passenger Report and do not select topic
+UAT-ReportFail-005  : Passenger Report and do not select topic
     Open Browser                    ${URL}    edge
     Passenger Login
     Dashboard User Should Be Visible
@@ -33,7 +33,7 @@ UAT-ReportFail-004  : Passenger Report and do not select topic
     # ผู้โดยสารอยู่ในหน้ารายงาน ไม่สามารถรายงานได้ 
     # พร้อมขึ้นข้อความว่า "(รอ Frontend Design)"
 
-UAT-ReportFail-005  : Passenger Report and do not fill report detail
+UAT-ReportFail-006  : Passenger Report and do not fill report detail
     Open Browser                    ${URL}    edge
     Passenger Login
     Dashboard User Should Be Visible
@@ -47,7 +47,7 @@ UAT-ReportFail-005  : Passenger Report and do not fill report detail
     # ผู้โดยสารอยู่ในหน้ารายงาน ไม่สามารถรายงานได้ 
     # พร้อมขึ้นข้อความว่า "(รอ Frontend Design)"
 
-UAT-ReportFail-006  : Passenger Report and do not fill anything
+UAT-ReportFail-007  : Passenger Report and do not fill anything
     Open Browser                    ${URL}    edge
     Passenger Login
     Dashboard User Should Be Visible
