@@ -1,40 +1,44 @@
 const prisma = require("../utils/prisma")
 
-const findActiveBanByUserId = async(userId) => {
-    const now = new Date()
+const findActiveBanByUserId = async (userId) => {
+  const now = new Date()
 
-    return await prisma.blacklist.findFirst({
-        where: {
-            userId , 
-            revokedAt: null ,
-            OR: [
-                { type: 'PERMANENT' } , 
-                {
-                    type: 'TEMPORARY' , 
-                    expiresAt: { gt: now }
-                }
-            ]
+  return await prisma.blacklist.findFirst({
+    where: {
+      userId,
+      revokedAt: null,
+      OR: [
+        { type: 'PERMANENT' },
+        {
+          type: 'TEMPORARY',
+          expiresAt: { gt: now }
         }
-    })
+      ]
+    }
+  })
 }
 
-const checkBlacklistBeforeRegister = async(email , nationalIdNumber , phoneNumber) => {
-    
-    const existingUser = await prisma.user.findFirst({
-        where: {
-            OR: [
-                nationalIdNumber ? { nationalIdNumber } : undefined , 
-                phoneNumber ? { phoneNumber } : undefined , 
-                email ? { email } : undefined  
-            ].filter(Boolean)
-        }
-    })
+const checkBlacklistBeforeRegister = async ({
+  email,
+  nationalIdNumber,
+  phoneNumber
+}) => {
 
-    if(!existingUser) {
-        return null
+  const existingUser = await prisma.user.findFirst({
+    where: {
+      OR: [
+        nationalIdNumber ? { nationalIdNumber } : undefined,
+        phoneNumber ? { phoneNumber } : undefined,
+        email ? { email } : undefined
+      ].filter(Boolean)
     }
+  })
 
-    return await findActiveBanByUserId(existingUser.id)
+  if (!existingUser) {
+    return null
+  }
+
+  return await findActiveBanByUserId(existingUser.id)
 }
 
 module.exports = {

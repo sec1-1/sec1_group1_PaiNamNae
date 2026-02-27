@@ -286,6 +286,7 @@ model Review {
   rating      Int
   comment     String?
   images      Json?    @db.Json
+  videos      Json?    @db.Json
 
   tags        ReviewTag[]
 

@@ -19,7 +19,7 @@ const allowedNegativeTags = [
 exports.createReview = async (req, res) => {
   try {
     const userId = req.user.sub
-    const { bookingId, rating, comment, tags, images } = req.body
+    const { bookingId, rating, comment, tags, images, videos } = req.body
 
     // หา booking
     const booking = await prisma.booking.findUnique({
@@ -74,7 +74,8 @@ exports.createReview = async (req, res) => {
         rating: Number(rating),
         comment: comment || null,
         tags: tags || [],
-        images: images || []
+        images: images || [],
+        videos: videos || []
     }
 })
 

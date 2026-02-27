@@ -41,29 +41,29 @@
                                                 {{ trip.origin }} → {{ trip.destination }}
                                             </h4>
                                             <span v-if="trip.routeStatus === 'completed'"
-    class="status-badge status-completed">
-    จบทริปแล้ว
-</span>
+                                                class="status-badge status-completed">
+                                                จบทริปแล้ว
+                                            </span>
 
-<span v-else-if="trip.status === 'pending'"
-    class="status-badge status-pending">
-    รอดำเนินการ
-</span>
+                                            <span v-else-if="trip.status === 'pending'"
+                                                class="status-badge status-pending">
+                                                รอดำเนินการ
+                                            </span>
 
-<span v-else-if="trip.status === 'confirmed'"
-    class="status-badge status-confirmed">
-    ยืนยันแล้ว
-</span>
+                                            <span v-else-if="trip.status === 'confirmed'"
+                                                class="status-badge status-confirmed">
+                                                ยืนยันแล้ว
+                                            </span>
 
-<span v-else-if="trip.status === 'rejected'"
-    class="status-badge status-rejected">
-    ปฏิเสธ
-</span>
+                                            <span v-else-if="trip.status === 'rejected'"
+                                                class="status-badge status-rejected">
+                                                ปฏิเสธ
+                                            </span>
 
-<span v-else-if="trip.status === 'cancelled'"
-    class="status-badge status-cancelled">
-    ยกเลิก
-</span>
+                                            <span v-else-if="trip.status === 'cancelled'"
+                                                class="status-badge status-cancelled">
+                                                ยกเลิก
+                                            </span>
 
                                         </div>
                                         <p class="mt-1 text-sm text-gray-600">จุดนัดพบ: {{ trip.pickupPoint }}</p>
@@ -187,29 +187,21 @@
                                         </button>
                                     </template>
 
-<template v-if="trip.routeStatus === 'completed'">
-  <button
-    @click.stop="openReviewModal(trip)"
-    class="px-4 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700">
-    รีวิวผู้ขับ
-  </button>
-</template>
+                                <template v-if="trip.routeStatus === 'completed'">
+                                <button
+                                    @click.stop="openReviewModal(trip)"
+                                    class="px-4 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                                    รีวิวผู้ขับ
+                                </button>
+                                </template>
 
-
-                                    
-
-                                    
-                                    
-
-                                    <!-- REJECTED / CANCELLED: ลบได้ -->
-                                    <button 
-  v-else-if="['rejected', 'cancelled'].includes(trip.status) && trip.routeStatus !== 'completed'"
-
+                                <!-- REJECTED / CANCELLED: ลบได้ -->
+                                <button v-else-if="['rejected', 'cancelled'].includes(trip.status) && trip.routeStatus !== 'completed'"
                                         @click.stop="openConfirmModal(trip, 'delete')"
                                         class="px-4 py-2 text-sm text-gray-600 transition duration-200 border border-gray-300 rounded-md hover:bg-gray-50">
                                         ลบรายการ
-                                    </button>
-                                </div>
+                                </button>
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -259,7 +251,7 @@
             </div>
         </div>
 
-        <!-- Review Modal -->
+<!-- Review Modal -->
 <div
   v-if="showReviewModal"
   class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
@@ -373,6 +365,46 @@
 
           <button
             @click="removeImage(index)"
+            type="button"
+            class="absolute -top-2 -right-2 px-2 text-xs text-white bg-red-500 rounded-full shadow"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🎥 Upload Videos -->
+    <div class="mb-6">
+      <label class="block mb-2 text-sm font-medium text-gray-700">
+        เพิ่มวิดีโอ (ไม่บังคับ)
+      </label>
+
+      <input
+        type="file"
+        multiple
+        accept="video/*"
+        @change="handleVideos"
+        class="w-full text-sm"
+      />
+
+      <!-- Preview -->
+      <div v-if="videoPreviews.length"
+           class="flex flex-wrap gap-3 mt-4">
+
+        <div
+          v-for="(vid, index) in videoPreviews"
+          :key="index"
+          class="relative"
+        >
+          <video
+            :src="vid"
+            controls
+            class="object-cover w-24 h-24 rounded-lg shadow"
+          ></video>
+
+          <button
+            @click="removeVideo(index)"
             type="button"
             class="absolute -top-2 -right-2 px-2 text-xs text-white bg-red-500 rounded-full shadow"
           >
@@ -549,17 +581,24 @@
               </span>
             </div>
 
-            <!-- IMAGES -->
+            <!-- MEDIA (images / videos) -->
             <div
-              v-if="parsedImages(review).length"
+              v-if="parsedMedia(review).length"
               class="grid grid-cols-3 gap-2"
             >
-              <img
-                v-for="(img, index) in parsedImages(review)"
-                :key="index"
-                :src="img"
-                class="object-cover w-full h-24 rounded-xl"
-              />
+              <template v-for="(m, index) in parsedMedia(review)" :key="index">
+                <img
+                  v-if="m.type === 'image'"
+                  :src="m.url"
+                  class="object-cover w-full h-24 rounded-xl"
+                />
+                <video
+                  v-else
+                  controls
+                  :src="m.url"
+                  class="object-cover w-full h-24 rounded-xl"
+                ></video>
+              </template>
             </div>
           </div>
         </div>
@@ -595,6 +634,9 @@ dayjs.extend(buddhistEra)
 
 const selectedImages = ref([])
 const imagePreviews = ref([])
+// new video support
+const selectedVideos = ref([])
+const videoPreviews = ref([])
 const { $api } = useNuxtApp()
 const { toast } = useToast()
 const rating = ref(0)
@@ -683,6 +725,7 @@ function openReviewModal(trip) {
 }
 
 
+// handle image files (unchanged)
 const handleImages = (e) => {
   const files = Array.from(e.target.files)
 
@@ -702,9 +745,29 @@ const removeImage = (index) => {
   imagePreviews.value.splice(index, 1)
 }
 
-const uploadImages = async () => {
-  const urls = []
+// new helpers for video files
+const handleVideos = (e) => {
+  const files = Array.from(e.target.files)
 
+  selectedVideos.value.push(...files)
+
+  files.forEach(file => {
+    const url = URL.createObjectURL(file)
+    videoPreviews.value.push(url)
+  })
+}
+
+const removeVideo = (index) => {
+  selectedVideos.value.splice(index, 1)
+  videoPreviews.value.splice(index, 1)
+}
+
+// unified media uploader (images + videos)
+const uploadMedia = async () => {
+  const imageUrls = []
+  const videoUrls = []
+
+  // upload images first
   for (const file of selectedImages.value) {
     const formData = new FormData()
     formData.append("file", file)
@@ -718,10 +781,39 @@ const uploadImages = async () => {
       }
     )
 
-    urls.push(secure_url)
+    imageUrls.push(secure_url)
   }
 
-  return urls
+  // upload videos separately (Cloudinary uses different endpoint)
+  for (const file of selectedVideos.value) {
+    const formData = new FormData()
+    formData.append("file", file)
+    formData.append("upload_preset", "painamnae_G1_sec11")
+
+    const { secure_url } = await $fetch(
+      "https://api.cloudinary.com/v1_1/dawfywcw9/video/upload",
+      {
+        method: "POST",
+        body: formData
+      }
+    )
+
+    videoUrls.push(secure_url)
+  }
+
+  return { imageUrls, videoUrls }
+}
+
+// helper to merge images/videos for display
+const parsedMedia = (review) => {
+  const arr = []
+  if (review.images && Array.isArray(review.images)) {
+    arr.push(...review.images.map(u => ({ type: 'image', url: u })))
+  }
+  if (review.videos && Array.isArray(review.videos)) {
+    arr.push(...review.videos.map(u => ({ type: 'video', url: u })))
+  }
+  return arr
 }
 
 // ⭐ เปลี่ยนหมวดตาม rating
@@ -779,8 +871,8 @@ const submitReview = async () => {
   }
 
   try {
-    // Upload รูปก่อน
-    const imageUrls = await uploadImages()
+    // Upload media files first
+    const { imageUrls, videoUrls } = await uploadMedia()
 
     await $api('/reviews', {
       method: 'POST',
@@ -789,7 +881,8 @@ const submitReview = async () => {
         rating: rating.value,
         comment: comment.value?.trim() || null,
         tags: selectedCategories.value || [],
-        images: imageUrls || []
+        images: imageUrls || [],
+        videos: videoUrls || []
       }
     })
 
@@ -817,6 +910,8 @@ const resetReviewForm = () => {
   selectedCategories.value = []
   selectedImages.value = []
   imagePreviews.value = []
+  selectedVideos.value = []
+  videoPreviews.value = []
 }
 
 const selectedTrip = computed(() => {

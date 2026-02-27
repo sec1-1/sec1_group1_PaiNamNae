@@ -80,7 +80,7 @@ router.post(
         { name: 'nationalIdPhotoUrl', maxCount: 1 },
         { name: 'selfiePhotoUrl', maxCount: 1 }
     ]),
-    validate({ body: createUserSchema }),
+    //validate({ body: createUserSchema }),
     userController.createUser
 );
 
