@@ -185,6 +185,11 @@
                                             class="px-4 py-2 text-sm text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700">
                                             แชทกับผู้ขับ
                                         </button>
+                                        <button @click.stop="trip.hasReport ? openProgressForTrip(trip) : openReportModal(trip)"
+                                                class="px-4 py-2 ml-2 text-sm text-white transition duration-200 rounded-md"
+                                                :class="trip.hasReport ? 'bg-orange-500 hover:bg-orange-600' : 'bg-red-600 hover:bg-red-700'">
+                                                {{ trip.hasReport ? 'ติดตามสถานะ' : 'รายงาน' }}
+                                        </button>
                                     </template>
 
 <template v-if="trip.routeStatus === 'completed'">
@@ -581,6 +586,102 @@
   </div>
 </transition>
 
+<!-- REPORT MODAL -->
+<div
+  v-if="showReportModal"
+  class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50"
+  @click.self="closeReportModal"
+>
+  <div class="w-full max-w-lg p-6 bg-white rounded-2xl shadow-xl">
+
+    <h3 class="mb-4 text-xl font-semibold">
+      รายงานปัญหา
+    </h3>
+
+    <!-- Category -->
+    <div class="mb-4">
+      <label class="block mb-2 text-sm font-medium text-gray-700">
+        หัวข้อปัญหา
+      </label>
+
+      <select
+        v-model="passengerReportCategory"
+        class="w-full p-2 border rounded-lg"
+      >
+        <option disabled value="">-- เลือกหัวข้อ --</option>
+        <option value="SAFETY">ความปลอดภัย</option>
+        <option value="BEHAVIOR">พฤติกรรมคนขับ</option>
+        <option value="PAYMENT">ปัญหาการชำระเงิน</option>
+        <option value="OTHER">อื่น ๆ</option>
+      </select>
+    </div>
+
+    <!-- Description -->
+    <div class="mb-4">
+      <label class="block mb-2 text-sm font-medium text-gray-700">
+        รายละเอียด
+      </label>
+
+      <textarea
+        v-model="reportText"
+        rows="4"
+        class="w-full p-3 border rounded-lg"
+        placeholder="อธิบายปัญหาที่พบ..."
+      ></textarea>
+    </div>
+
+    <!-- Images -->
+    <div class="mb-4">
+      <label class="block mb-2 text-sm font-medium text-gray-700">
+        แนบรูปภาพ (สูงสุด 2 รูป)
+      </label>
+
+      <input
+        type="file"
+        multiple
+        @change="handleReportFiles"
+      />
+
+      <div class="flex gap-2 mt-3">
+        <div
+          v-for="(img, i) in reportImages"
+          :key="i"
+          class="relative"
+        >
+          <img
+            :src="img.url"
+            class="object-cover w-20 h-20 rounded-lg"
+          />
+          <button
+            @click="removeReportImage(i)"
+            class="absolute -top-2 -right-2 text-xs text-white bg-red-500 rounded-full px-2"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-end gap-3">
+      <button
+        @click="closeReportModal"
+        class="px-4 py-2 bg-gray-200 rounded-lg"
+      >
+        ยกเลิก
+      </button>
+
+      <button
+        @click="submitReport"
+        class="px-4 py-2 text-white bg-red-600 rounded-lg hover:bg-red-700"
+      >
+        ส่งรายงาน
+      </button>
+    </div>
+
+  </div>
+</div>
+
 </template>
 
 <script setup>
@@ -605,8 +706,11 @@ const comment = ref('')
 // --- State Management ---
 const activeTab = ref('pending')
 const selectedTripId = ref(null)
+const isProgressModalVisible = ref(false)
 const isLoading = ref(false)
 const mapContainer = ref(null)
+const passengerReportCategory = ref('')
+const modalTab = ref('trip')
 let map = null
 let currentPolyline = null
 let currentMarkers = []
@@ -970,7 +1074,9 @@ async function fetchMyTrips() {
                     (typeof b.route.durationSeconds === 'number' ? `${Math.round(b.route.durationSeconds / 60)} นาที` : '-'),
                 distanceText:
                     (typeof b.route.distance === 'string' ? formatDistance(b.route.distance) : b.route.distance) ||
-                    (typeof b.route.distanceMeters === 'number' ? `${(b.route.distanceMeters / 1000).toFixed(1)} กม.` : '-')
+                    (typeof b.route.distanceMeters === 'number' ? `${(b.route.distanceMeters / 1000).toFixed(1)} กม.` : '-') ,
+                hasReport: false ,
+                reportData: null
             }
         })
 
@@ -1421,6 +1527,112 @@ function initializeMap() {
     geocoder = new google.maps.Geocoder()
     placesService = new google.maps.places.PlacesService(gmap)
     mapReady.value = true
+}
+
+// --- Report Modal State
+const showReportModal = ref(false)
+const reportTrip = ref(null)
+const reportText = ref('')
+const reportImages = ref([])
+
+function openReportModal(trip) {
+    reportTrip.value = trip
+    passengerReportCategory.value = ''
+    reportText.value = ''
+    reportImages.value.forEach(it => it.url && URL.revokeObjectURL(it.url))
+    reportImages.value = []
+    showReportModal.value = true
+}
+
+function openProgressForTrip(trip) {
+    selectedTripId.value = trip.id
+    modalTab.value = 'report' // Open to report tab by default when tracking
+    isProgressModalVisible.value = true
+}
+
+function closeReportModal() {
+    showReportModal.value = false
+    setTimeout(() => {
+        reportTrip.value = null
+    }, 200)
+}
+
+function handleReportFiles(e) {
+    const files = Array.from(e.target.files || [])
+    const remaining = 2 - reportImages.value.length
+    files.slice(0, remaining).forEach(f => {
+        reportImages.value.push({ file: f, url: URL.createObjectURL(f) })
+    })
+    e.target.value = ''
+}
+
+function removeReportImage(idx) {
+    const it = reportImages.value[idx]
+    if (it?.url) URL.revokeObjectURL(it.url)
+    reportImages.value.splice(idx, 1)
+}
+
+async function submitReport() {
+    if (!reportTrip.value) return
+    if (!passengerReportCategory.value) {
+        toast.error('กรุณาเลือกหัวข้อปัญหา', 'กรุณาเลือกหัวข้อปัญหาที่พบ')
+        return
+    }
+    try {
+        const fd = new FormData()
+        fd.append('type', 'PASSENGER_REPORT')
+        fd.append('category', passengerReportCategory.value)
+        fd.append('description', reportText.value || 'ไม่ได้ระบุรายละเอียด')
+        if (reportTrip.value.routeId) {
+            fd.append('routeId', reportTrip.value.routeId)
+        }
+        fd.append('bookingId', reportTrip.value.id)
+        fd.append('targetUserId', reportTrip.value.driver?.id || '')
+        reportImages.value.forEach((it) => {
+            if (it.file) fd.append('images', it.file)
+        })
+
+        await $api('/reports', { method: 'POST', body: fd })
+        toast.success('ขอบคุณที่แจ้งรายงาน', 'ทีมงานจะตรวจสอบในเร็วๆ นี้')
+
+        // update trip in place to show the new status
+        const tripInList = allTrips.value.find(t => t.id === reportTrip.value.id)
+        if (tripInList) {
+            tripInList.hasReport = true
+            tripInList.reportData = { 
+                status: 'PENDING', 
+                category: passengerReportCategory.value,
+                description: reportText.value || 'ไม่ได้ระบุรายละเอียด',
+                createdAt: new Date(),
+                adminNotes: null 
+            }
+        }
+
+        closeReportModal()
+        checkReportsForTrips() // background sync to get server data (like images if processed)
+    } catch (err) {
+        console.error('Failed to submit report', err)
+        toast.error('ไม่สามารถส่งรายงานได้', err?.data?.message || 'โปรดลองอีกครั้ง')
+    }
+}
+
+async function checkReportsForTrips() {
+    try {
+        // Fetch all reports made by the current user
+        const res = await $api('/reports/me')
+        const reports = res.data || res || []
+        
+        // Match reports with trips by bookingId
+        allTrips.value.forEach(trip => {
+            const report = reports.find(r => r.bookingId === trip.id && r.type === 'PASSENGER')
+            if (report) {
+                trip.hasReport = true
+                trip.reportData = report
+            }
+        })
+    } catch (e) {
+        console.error('Failed to check reports for trips', e)
+    }
 }
 </script>
 
