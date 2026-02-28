@@ -591,100 +591,115 @@
   </div>
 </transition>
 
-<!-- REPORT MODAL -->
-<div
-  v-if="showReportModal"
-  class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50"
-  @click.self="closeReportModal"
->
-  <div class="w-full max-w-lg p-6 bg-white rounded-2xl shadow-xl">
-
-    <h3 class="mb-4 text-xl font-semibold">
-      รายงานปัญหา
-    </h3>
-
-    <!-- Category -->
-    <div class="mb-4">
-      <label class="block mb-2 text-sm font-medium text-gray-700">
-        หัวข้อปัญหา
-      </label>
-
-      <select
-        v-model="passengerReportCategory"
-        class="w-full p-2 border rounded-lg"
-      >
-        <option disabled value="">-- เลือกหัวข้อ --</option>
-        <option value="SAFETY_ISSUE">ความปลอดภัย</option>
-        <option value="BEHAVIOR">พฤติกรรมคนขับ</option>
-        <option value="PAYMENT">ปัญหาการชำระเงิน</option>
-        <option value="OTHER">อื่น ๆ</option>
-      </select>
-    </div>
-
-    <!-- Description -->
-    <div class="mb-4">
-      <label class="block mb-2 text-sm font-medium text-gray-700">
-        รายละเอียด
-      </label>
-
-      <textarea
-        v-model="reportText"
-        rows="4"
-        class="w-full p-3 border rounded-lg"
-        placeholder="อธิบายปัญหาที่พบ..."
-      ></textarea>
-    </div>
-
-    <!-- Images -->
-    <div class="mb-4">
-      <label class="block mb-2 text-sm font-medium text-gray-700">
-        แนบรูปภาพ (สูงสุด 2 รูป)
-      </label>
-
-      <input
-        type="file"
-        multiple
-        @change="handleReportFiles"
-      />
-
-      <div class="flex gap-2 mt-3">
-        <div
-          v-for="(img, i) in reportImages"
-          :key="i"
-          class="relative"
-        >
-          <img
-            :src="img.url"
-            class="object-cover w-20 h-20 rounded-lg"
-          />
-          <button
-            @click="removeReportImage(i)"
-            class="absolute -top-2 -right-2 text-xs text-white bg-red-500 rounded-full px-2"
-          >
-            ✕
+  <div
+    v-if="showReportModal"
+    class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
+    @click.self="closeReportModal"
+  >
+    <div 
+      class="w-full max-w-lg overflow-hidden transition-all transform bg-white shadow-2xl rounded-3xl animate-in fade-in zoom-in duration-300"
+    >
+      <div class="relative p-6 pb-0">
+        <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-red-500 via-orange-500 to-red-600"></div>
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-2xl font-bold text-gray-800">
+            รายงานปัญหา
+          </h3>
+          <button @click="closeReportModal" class="p-2 transition-colors rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           </button>
         </div>
+        <p class="text-sm text-gray-500">ความปลอดภัยของคุณคือสิ่งสำคัญ โปรดแจ้งให้เราทราบ</p>
+      </div>
+
+      <div class="p-6 space-y-5">
+        <div>
+          <label class="block mb-2 text-sm font-semibold text-gray-700">
+            หัวข้อปัญหา
+          </label>
+          <div class="relative group">
+            <select
+              v-model="passengerReportCategory"
+              class="w-full px-4 py-3 transition-all border-2 border-gray-100 appearance-none rounded-xl focus:border-red-500 focus:ring-0 bg-gray-50/50"
+            >
+              <option disabled value="">-- เลือกหัวข้อที่เกี่ยวข้อง --</option>
+              <option value="SAFETY_ISSUE">🚨 ความปลอดภัย</option>
+              <option value="BEHAVIOR">👤 พฤติกรรมคนขับ</option>
+              <option value="PAYMENT">💰 ปัญหาการชำระเงิน</option>
+              <option value="OTHER">📁 อื่น ๆ</option>
+            </select>
+            <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-400">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block mb-2 text-sm font-semibold text-gray-700">
+            รายละเอียดเหตุการณ์
+          </label>
+          <textarea
+            v-model="reportText"
+            rows="4"
+            class="w-full p-4 transition-all border-2 border-gray-100 rounded-xl focus:border-red-500 focus:ring-0 bg-gray-50/50 placeholder:text-gray-400"
+            placeholder="รบกวนระบุรายละเอียดเพื่อให้เราตรวจสอบได้รวดเร็วขึ้น..."
+          ></textarea>
+        </div>
+
+        <div>
+          <label class="block mb-2 text-sm font-semibold text-gray-700">
+            หลักฐานรูปภาพ <span class="font-normal text-gray-400">(สูงสุด 2 รูป)</span>
+          </label>
+          
+          <div class="flex flex-wrap gap-4">
+            <label v-if="reportImages.length < 2" class="flex flex-col items-center justify-center w-24 h-24 transition-all border-2 border-dashed border-gray-200 cursor-pointer rounded-2xl hover:border-red-400 hover:bg-red-50 group">
+              <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                <svg class="w-8 h-8 mb-1 text-gray-400 group-hover:text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                <span class="text-[10px] text-gray-400 group-hover:text-red-500 uppercase font-bold">เพิ่มรูป</span>
+              </div>
+              <input type="file" class="hidden" multiple @change="handleReportFiles" accept="image/*" />
+            </label>
+
+            <div
+              v-for="(img, i) in reportImages"
+              :key="i"
+              class="relative group animate-in zoom-in duration-200"
+            >
+              <img
+                :src="img.url"
+                class="object-cover w-24 h-24 shadow-md rounded-2xl ring-2 ring-white"
+              />
+              <button
+                @click="removeReportImage(i)"
+                class="absolute flex items-center justify-center w-6 h-6 text-white transition-transform bg-red-500 rounded-full shadow-lg -top-2 -right-2 hover:scale-110 active:scale-95"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 p-6 pt-2">
+        <button
+          @click="closeReportModal"
+          class="flex-1 py-3 font-semibold text-gray-600 transition-all rounded-xl hover:bg-gray-100 active:scale-95"
+        >
+          ยกเลิก
+        </button>
+
+        <button
+          @click="submitReport"
+          :disabled="!passengerReportCategory || !reportText"
+          class="flex-[2] py-3 font-semibold text-white transition-all bg-red-600 rounded-xl hover:bg-red-700 shadow-lg shadow-red-200 active:scale-95 disabled:opacity-50 disabled:grayscale disabled:pointer-events-none"
+        >
+          ส่งรายงานความปลอดภัย
+        </button>
       </div>
     </div>
-
-    <!-- Buttons -->
-    <div class="flex justify-end gap-3">
-      <button
-        @click="closeReportModal"
-        class="px-4 py-2 bg-gray-200 rounded-lg"
-      >
-        ยกเลิก
-      </button>
-
-      <button
-        @click="submitReport"
-        class="px-4 py-2 text-white bg-red-600 rounded-lg hover:bg-red-700"
-      >
-        ส่งรายงาน
-      </button>
-    </div>
   </div>
-</div>
 
 
         <!-- Progress Modal -->
