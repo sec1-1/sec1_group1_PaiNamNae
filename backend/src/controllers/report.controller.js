@@ -1,11 +1,14 @@
 const reportService = require('../services/report.service');
 const ApiError = require('../utils/ApiError');
 const asyncHandler = require('express-async-handler');
+const { uploadToCloudinary } = require('../utils/cloudinary');
+
 /**
  * @desc    Create report
  * @route   POST /reports
  */
 const createReport = asyncHandler(async (req, res) => {
+
   const { type, category, description, routeId, bookingId, targetUserId } = req.body;
 
   let imageUrls = [];
