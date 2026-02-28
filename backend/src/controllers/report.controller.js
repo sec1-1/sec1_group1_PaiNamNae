@@ -18,7 +18,7 @@ const createReport = asyncHandler(async (req, res) => {
   }
 
   const reportData = {
-    reporterId: req.user.id,
+    reporterId: req.user.sub,
     type,
     category,
     description,
