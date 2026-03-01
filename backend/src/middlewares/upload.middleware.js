@@ -6,7 +6,7 @@ const storage = multer.memoryStorage();
 
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 10 * 1024 * 1024 }, // ขยายเป็น 10 MB
+    limits: { fileSize: 50 * 1024 * 1024 }, // ขยายเป็น 50 MB
     fileFilter: (req, file, cb) => {
         // อนุญาตไฟล์รูปภาพและวิดีโอ
         if (file.mimetype.startsWith('image/') || file.mimetype.startsWith('video/')) {

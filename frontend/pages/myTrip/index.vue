@@ -362,7 +362,7 @@
       <label class="block mb-2 text-sm font-medium text-gray-700">
         เพิ่มรูปหรือวิดีโอ (ไม่บังคับ)
         <span class="text-xs text-gray-400">
-          (สูงสุด 3 รูปและ 3 วิดีโอ, ขนาดแต่ละไฟล์ไม่เกิน 10MB)
+          (สูงสุด 3 รูปและ 3 วิดีโอ, ขนาดแต่ละไฟล์ไม่เกิน 50MB)
         </span>
       </label>
 
@@ -654,8 +654,8 @@
             >
               <option disabled value="">-- เลือกหัวข้อที่เกี่ยวข้อง --</option>
               <option value="SAFETY_ISSUE">🚨 ความปลอดภัย</option>
-              <option value="BEHAVIOR">👤 พฤติกรรมคนขับ</option>
-              <option value="PAYMENT">💰 ปัญหาการชำระเงิน</option>
+              <option value="PASSENGER_ISSUE">👤 พฤติกรรมคนขับ</option>
+              <option value="PAYMENT_ISSUE">💰 ปัญหาการชำระเงิน</option>
               <option value="OTHER">📁 อื่น ๆ</option>
             </select>
             <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-400">
@@ -678,7 +678,7 @@
 
         <div>
           <label class="block mb-2 text-sm font-semibold text-gray-700">
-            หลักฐานรูปหรือวิดีโอ <span class="font-normal text-gray-400">(สูงสุด 3 รูปและ 3 วิดีโอ, ไฟล์ละไม่เกิน 10MB)</span>
+            หลักฐานรูปหรือวิดีโอ <span class="font-normal text-gray-400">(สูงสุด 3 รูปและ 3 วิดีโอ, ไฟล์ละไม่เกิน 50MB)</span>
           </label>
           
           <div class="flex flex-wrap gap-4">
@@ -890,7 +890,7 @@ const videoPreviews = ref([])
 // limits for review attachments
 const MAX_IMAGES = 3
 const MAX_VIDEOS = 3
-const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10 MB
+const MAX_FILE_SIZE = 50 * 1024 * 1024 // 50 MB
 
 const { $api } = useNuxtApp()
 const { toast } = useToast()
@@ -1029,7 +1029,7 @@ const handleMedia = (e) => {
 
   files.forEach(file => {
     if (file.size > MAX_FILE_SIZE) {
-      toast.error('ขนาดไฟล์ต้องไม่เกิน 10MB')
+      toast.error('ขนาดไฟล์ต้องไม่เกิน 50MB')
       return
     }
 
@@ -1841,7 +1841,7 @@ const reportVideos = ref([])
 // limits for report attachments
 const REPORT_MAX_IMAGES = 3
 const REPORT_MAX_VIDEOS = 3
-const REPORT_MAX_FILE_SIZE = 10 * 1024 * 1024 // 10 MB
+const REPORT_MAX_FILE_SIZE = 50 * 1024 * 1024 // 50 MB
 
 function openReportModal(trip) {
     reportTrip.value = trip
@@ -1877,7 +1877,7 @@ function handleReportFiles(e) {
 
     files.forEach(f => {
         if (f.size > REPORT_MAX_FILE_SIZE) {
-            toast.error('ขนาดไฟล์ต้องไม่เกิน 10MB')
+            toast.error('ขนาดไฟล์ต้องไม่เกิน 50MB')
             return
         }
         if (f.type.startsWith('image/')) {
