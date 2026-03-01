@@ -295,6 +295,7 @@ model Review {
   rating      Int
   comment     String?
   images      Json?    @db.Json
+  videos      Json?    @db.Json
 
   tags        ReviewTag[]
 
@@ -316,6 +317,7 @@ model Report {
 
   description     String
   images          Json?          @db.Json
+  videos          Json?          @db.Json
 
   routeId         String?
   route           Route?         @relation(fields: [routeId], references: [id])

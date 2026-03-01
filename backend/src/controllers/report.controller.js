@@ -12,12 +12,22 @@ const createReport = asyncHandler(async (req, res) => {
   const { type, category, description, routeId, bookingId, targetUserId } = req.body;
 
   let imageUrls = [];
-  if (req.files && req.files.images) {
-    const uploads = req.files.images.map(file =>
-      uploadToCloudinary(file.buffer, 'reports')
-    );
-    const results = await Promise.all(uploads);
-    imageUrls = results.map(r => r.url);
+  let videoUrls = [];
+  if (req.files) {
+    if (req.files.images) {
+      const uploads = req.files.images.map(file =>
+        uploadToCloudinary(file.buffer, 'reports')
+      );
+      const results = await Promise.all(uploads);
+      imageUrls = results.map(r => r.url);
+    }
+    if (req.files.videos) {
+      const uploads = req.files.videos.map(file =>
+        uploadToCloudinary(file.buffer, 'reports', { resource_type: 'video' })
+      );
+      const results = await Promise.all(uploads);
+      videoUrls = results.map(r => r.url);
+    }
   }
 
   const reportData = {
@@ -26,6 +36,7 @@ const createReport = asyncHandler(async (req, res) => {
     category,
     description,
     images: imageUrls.length > 0 ? imageUrls : null,
+    videos: videoUrls.length > 0 ? videoUrls : null,
     routeId: routeId || null,
     bookingId: bookingId || null,
     targetUserId: targetUserId || null,

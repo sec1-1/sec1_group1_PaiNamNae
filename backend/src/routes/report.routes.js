@@ -64,7 +64,11 @@ router.get(
 router.post(
     '/',
     protect,
-    upload.fields([{ name: 'images', maxCount: 2 }]),
+    // allow up to 3 images and 3 videos in same request
+    upload.fields([
+        { name: 'images', maxCount: 3 },
+        { name: 'videos', maxCount: 3 }
+    ]),
     validate({ body: createReportSchema }),
     reportController.createReport
 );

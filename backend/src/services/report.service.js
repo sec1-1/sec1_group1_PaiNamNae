@@ -52,6 +52,7 @@ const createReport = async (reportData) => {
       category: reportData.category,
       description: reportData.description,
       images: reportData.images || null,
+      videos: reportData.videos || null,
       routeId: reportData.routeId || null,
       bookingId: reportData.bookingId || null,
       targetUserId: reportData.targetUserId || null,

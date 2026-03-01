@@ -357,27 +357,30 @@
       </div>
     </div>
 
-    <!-- 🖼 Upload Images -->
+    <!-- � Upload media (images/videos) -->
     <div class="mb-6">
       <label class="block mb-2 text-sm font-medium text-gray-700">
-        เพิ่มรูปภาพ (ไม่บังคับ)
+        เพิ่มรูปหรือวิดีโอ (ไม่บังคับ)
+        <span class="text-xs text-gray-400">
+          (สูงสุด 3 รูปและ 3 วิดีโอ, ขนาดแต่ละไฟล์ไม่เกิน 10MB)
+        </span>
       </label>
 
       <input
         type="file"
         multiple
-        accept="image/png, image/jpeg, image/jpg, image/webp"
-        @change="handleImages"
+        accept="image/*,video/*"
+        @change="handleMedia"
         class="w-full text-sm"
       />
 
-      <!-- Preview -->
-      <div v-if="imagePreviews.length"
+      <!-- Previews -->
+      <div v-if="imagePreviews.length || videoPreviews.length"
            class="flex flex-wrap gap-3 mt-4">
 
         <div
           v-for="(img, index) in imagePreviews"
-          :key="index"
+          :key="`img-${index}`"
           class="relative"
         >
           <img
@@ -387,6 +390,26 @@
 
           <button
             @click="removeImage(index)"
+            type="button"
+            class="absolute -top-2 -right-2 px-2 text-xs text-white bg-red-500 rounded-full shadow"
+          >
+            ✕
+          </button>
+        </div>
+
+        <div
+          v-for="(vid, index) in videoPreviews"
+          :key="`vid-${index}`"
+          class="relative"
+        >
+          <video
+            :src="vid"
+            class="object-cover w-24 h-24 rounded-lg shadow"
+            controls
+          ></video>
+
+          <button
+            @click="removeVideo(index)"
             type="button"
             class="absolute -top-2 -right-2 px-2 text-xs text-white bg-red-500 rounded-full shadow"
           >
@@ -561,17 +584,24 @@
               </span>
             </div>
 
-            <!-- IMAGES -->
+            <!-- IMAGES AND VIDEOS -->
             <div
-              v-if="parsedImages(review).length"
-              class="grid grid-cols-3 gap-2"
+              v-if="parsedImages(review).length || parsedVideos(review).length"
+              class="flex flex-wrap gap-2"
             >
               <img
                 v-for="(img, index) in parsedImages(review)"
-                :key="index"
+                :key="`img-${index}`"
                 :src="img"
-                class="object-cover w-full h-24 rounded-xl"
+                class="object-cover w-24 h-24 rounded-xl"
               />
+              <video
+                v-for="(vid, index) in parsedVideos(review)"
+                :key="`vid-${index}`"
+                :src="vid"
+                class="object-cover w-24 h-24 rounded-xl"
+                controls
+              ></video>
             </div>
           </div>
         </div>
@@ -648,23 +678,23 @@
 
         <div>
           <label class="block mb-2 text-sm font-semibold text-gray-700">
-            หลักฐานรูปภาพ <span class="font-normal text-gray-400">(สูงสุด 2 รูป)</span>
+            หลักฐานรูปหรือวิดีโอ <span class="font-normal text-gray-400">(สูงสุด 3 รูปและ 3 วิดีโอ, ไฟล์ละไม่เกิน 10MB)</span>
           </label>
           
           <div class="flex flex-wrap gap-4">
-            <label v-if="reportImages.length < 2" class="flex flex-col items-center justify-center w-24 h-24 transition-all border-2 border-dashed border-gray-200 cursor-pointer rounded-2xl hover:border-red-400 hover:bg-red-50 group">
+            <label v-if="reportImages.length < REPORT_MAX_IMAGES || reportVideos.length < REPORT_MAX_VIDEOS" class="flex flex-col items-center justify-center w-24 h-24 transition-all border-2 border-dashed border-gray-200 cursor-pointer rounded-2xl hover:border-red-400 hover:bg-red-50 group">
               <div class="flex flex-col items-center justify-center pt-5 pb-6">
                 <svg class="w-8 h-8 mb-1 text-gray-400 group-hover:text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                 </svg>
-                <span class="text-[10px] text-gray-400 group-hover:text-red-500 uppercase font-bold">เพิ่มรูป</span>
+                <span class="text-[10px] text-gray-400 group-hover:text-red-500 uppercase font-bold">เพิ่มไฟล์</span>
               </div>
-              <input type="file" class="hidden" multiple @change="handleReportFiles" accept="image/*" />
+              <input type="file" class="hidden" multiple @change="handleReportFiles" accept="image/*,video/*" />
             </label>
 
             <div
               v-for="(img, i) in reportImages"
-              :key="i"
+              :key="`img-${i}`"
               class="relative group animate-in zoom-in duration-200"
             >
               <img
@@ -673,6 +703,23 @@
               />
               <button
                 @click="removeReportImage(i)"
+                class="absolute flex items-center justify-center w-6 h-6 text-white transition-transform bg-red-500 rounded-full shadow-lg -top-2 -right-2 hover:scale-110 active:scale-95"
+              >
+                ✕
+              </button>
+            </div>
+            <div
+              v-for="(vid, i) in reportVideos"
+              :key="`vid-${i}`"
+              class="relative group animate-in zoom-in duration-200"
+            >
+              <video
+                :src="vid.url"
+                class="object-cover w-24 h-24 shadow-md rounded-2xl ring-2 ring-white"
+                controls
+              ></video>
+              <button
+                @click="removeReportVideo(i)"
                 class="absolute flex items-center justify-center w-6 h-6 text-white transition-transform bg-red-500 rounded-full shadow-lg -top-2 -right-2 hover:scale-110 active:scale-95"
               >
                 ✕
@@ -762,12 +809,17 @@
                                             "{{ selectedTrip.reportData?.description }}"
                                         </p>
                                     </div>
-                                    <div v-if="selectedTrip.reportData?.images?.length" class="pt-2">
-                                        <span class="opacity-75 block mb-2 font-medium">รูปภาพประกอบ:</span>
+                                    <div v-if="(selectedTrip.reportData?.images?.length || selectedTrip.reportData?.videos?.length)" class="pt-2">
+                                        <span class="opacity-75 block mb-2 font-medium">ไฟล์ประกอบ:</span>
                                         <div class="flex flex-wrap gap-2">
-                                            <img v-for="(img, idx) in selectedTrip.reportData.images" :key="idx" :src="img" 
+                                            <img v-if="selectedTrip.reportData?.images" 
+                                                v-for="(img, idx) in selectedTrip.reportData.images" :key="`img-${idx}`" :src="img" 
                                                 class="w-20 h-20 object-cover rounded-lg border-2 border-white shadow-sm hover:scale-105 transition-transform cursor-pointer" 
                                                 @click="window.open(img, '_blank')"
+                                            />
+                                            <video v-if="selectedTrip.reportData?.videos" 
+                                                v-for="(vid, idx) in selectedTrip.reportData.videos" :key="`vid-${idx}`" :src="vid" 
+                                                class="w-20 h-20 object-cover rounded-lg border-2 border-white shadow-sm hover:scale-105 transition-transform cursor-pointer" controls
                                             />
                                         </div>
                                     </div>
@@ -829,8 +881,17 @@ import ReportStatusCard from '@/components/ReportStatusCard.vue'
 dayjs.locale('th')
 dayjs.extend(buddhistEra)
 
+// media state for review popup
 const selectedImages = ref([])
+const selectedVideos = ref([])
 const imagePreviews = ref([])
+const videoPreviews = ref([])
+
+// limits for review attachments
+const MAX_IMAGES = 3
+const MAX_VIDEOS = 3
+const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10 MB
+
 const { $api } = useNuxtApp()
 const { toast } = useToast()
 const rating = ref(0)
@@ -962,25 +1023,41 @@ function openReviewModal(trip) {
 }
 
 
-const handleImages = (e) => {
-  const files = Array.from(e.target.files)
-  
-  // Filter only images
-  const validFiles = files.filter(file => file.type.startsWith('image/'))
-  
-  if (validFiles.length < files.length) {
-    toast.error('กรุณาเลือกไฟล์รูปภาพเท่านั้น')
-  }
+// generic media handler for review (images/videos)
+const handleMedia = (e) => {
+  const files = Array.from(e.target.files || [])
 
-  selectedImages.value.push(...validFiles)
-
-  validFiles.forEach(file => {
-    const reader = new FileReader()
-    reader.onload = (event) => {
-      imagePreviews.value.push(event.target.result)
+  files.forEach(file => {
+    if (file.size > MAX_FILE_SIZE) {
+      toast.error('ขนาดไฟล์ต้องไม่เกิน 10MB')
+      return
     }
-    reader.readAsDataURL(file)
+
+    if (file.type.startsWith('image/')) {
+      if (selectedImages.value.length >= MAX_IMAGES) {
+        toast.error(`เพิ่มรูปได้สูงสุด ${MAX_IMAGES} รูป`)
+        return
+      }
+      selectedImages.value.push(file)
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        imagePreviews.value.push(event.target.result)
+      }
+      reader.readAsDataURL(file)
+    } else if (file.type.startsWith('video/')) {
+      if (selectedVideos.value.length >= MAX_VIDEOS) {
+        toast.error(`เพิ่มวิดีโอได้สูงสุด ${MAX_VIDEOS} วิดีโอ`)
+        return
+      }
+      selectedVideos.value.push(file)
+      const url = URL.createObjectURL(file)
+      videoPreviews.value.push(url)
+    } else {
+      toast.error('กรุณาเลือกไฟล์รูปหรือวิดีโอเท่านั้น')
+    }
   })
+
+  e.target.value = ''
 }
 
 const removeImage = (index) => {
@@ -988,27 +1065,43 @@ const removeImage = (index) => {
   imagePreviews.value.splice(index, 1)
 }
 
-const uploadImages = async () => {
-  const urls = []
+const removeVideo = (index) => {
+  selectedVideos.value.splice(index, 1)
+  const url = videoPreviews.value[index]
+  if (url) URL.revokeObjectURL(url)
+  videoPreviews.value.splice(index, 1)
+}
 
-  for (const file of selectedImages.value) {
+// upload images/videos and return object
+const uploadMedia = async () => {
+  const result = { images: [], videos: [] }
+
+  const uploadFile = async (file, resourceType) => {
     const formData = new FormData()
     formData.append("file", file)
     formData.append("upload_preset", "painamnae_G1_sec11")
 
-    const { secure_url } = await $fetch(
-      "https://api.cloudinary.com/v1_1/dawfywcw9/image/upload",
-      {
-        method: "POST",
-        body: formData
-      }
-    )
-
-    urls.push(secure_url)
+    const endpoint = `https://api.cloudinary.com/v1_1/dawfywcw9/${resourceType}/upload`
+    const { secure_url } = await $fetch(endpoint, {
+      method: "POST",
+      body: formData
+    })
+    return secure_url
   }
 
-  return urls
+  for (const file of selectedImages.value) {
+    const url = await uploadFile(file, 'image')
+    result.images.push(url)
+  }
+  for (const file of selectedVideos.value) {
+    const url = await uploadFile(file, 'video')
+    result.videos.push(url)
+  }
+
+  return result
 }
+
+
 
 // ⭐ เปลี่ยนหมวดตาม rating
 const reviewCategories = computed(() => {
@@ -1065,8 +1158,8 @@ const submitReview = async () => {
   }
 
   try {
-    // Upload รูปก่อน
-    const imageUrls = await uploadImages()
+    // Upload media ก่อน
+    const { images: imageUrls, videos: videoUrls } = await uploadMedia()
 
     await $api('/reviews', {
       method: 'POST',
@@ -1075,7 +1168,8 @@ const submitReview = async () => {
         rating: rating.value,
         comment: comment.value?.trim() || null,
         tags: selectedCategories.value || [],
-        images: imageUrls || []
+        images: imageUrls || [],
+        videos: videoUrls || []
       }
     })
 
@@ -1103,6 +1197,8 @@ const resetReviewForm = () => {
   selectedCategories.value = []
   selectedImages.value = []
   imagePreviews.value = []
+  selectedVideos.value = []
+  videoPreviews.value = []
 }
 
 const selectedTrip = computed(() => {
@@ -1300,6 +1396,20 @@ function parsedImages(review) {
   }
   
   return Array.isArray(review.images) ? review.images : []
+}
+
+function parsedVideos(review) {
+  if (!review.videos) return []
+  
+  if (typeof review.videos === 'string') {
+    try {
+      return JSON.parse(review.videos)
+    } catch {
+      return [review.videos].filter(Boolean)
+    }
+  }
+  
+  return Array.isArray(review.videos) ? review.videos : []
 }
 
 function waitMapReady() {
@@ -1726,13 +1836,18 @@ const showReportModal = ref(false)
 const reportTrip = ref(null)
 const reportText = ref('')
 const reportImages = ref([])
+const reportVideos = ref([])
+
+// limits for report attachments
+const REPORT_MAX_IMAGES = 3
+const REPORT_MAX_VIDEOS = 3
+const REPORT_MAX_FILE_SIZE = 10 * 1024 * 1024 // 10 MB
 
 function openReportModal(trip) {
     reportTrip.value = trip
     passengerReportCategory.value = ''
     reportText.value = ''
-    reportImages.value.forEach(it => it.url && URL.revokeObjectURL(it.url))
-    reportImages.value = []
+    resetReportAttachments()
     showReportModal.value = true
 }
 
@@ -1744,16 +1859,42 @@ function openProgressForTrip(trip) {
 
 function closeReportModal() {
     showReportModal.value = false
+    resetReportAttachments()
     setTimeout(() => {
         reportTrip.value = null
     }, 200)
 }
 
+function resetReportAttachments() {
+    reportImages.value.forEach(it => it.url && URL.revokeObjectURL(it.url))
+    reportImages.value = []
+    reportVideos.value.forEach(it => it.url && URL.revokeObjectURL(it.url))
+    reportVideos.value = []
+}
+
 function handleReportFiles(e) {
     const files = Array.from(e.target.files || [])
-    const remaining = 2 - reportImages.value.length
-    files.slice(0, remaining).forEach(f => {
-        reportImages.value.push({ file: f, url: URL.createObjectURL(f) })
+
+    files.forEach(f => {
+        if (f.size > REPORT_MAX_FILE_SIZE) {
+            toast.error('ขนาดไฟล์ต้องไม่เกิน 10MB')
+            return
+        }
+        if (f.type.startsWith('image/')) {
+            if (reportImages.value.length >= REPORT_MAX_IMAGES) {
+                toast.error(`เพิ่มรูปได้สูงสุด ${REPORT_MAX_IMAGES} รูป`)
+                return
+            }
+            reportImages.value.push({ file: f, url: URL.createObjectURL(f) })
+        } else if (f.type.startsWith('video/')) {
+            if (reportVideos.value.length >= REPORT_MAX_VIDEOS) {
+                toast.error(`เพิ่มวิดีโอได้สูงสุด ${REPORT_MAX_VIDEOS} วิดีโอ`)
+                return
+            }
+            reportVideos.value.push({ file: f, url: URL.createObjectURL(f) })
+        } else {
+            toast.error('กรุณาเลือกไฟล์รูปหรือวิดีโอเท่านั้น')
+        }
     })
     e.target.value = ''
 }
@@ -1762,6 +1903,12 @@ function removeReportImage(idx) {
     const it = reportImages.value[idx]
     if (it?.url) URL.revokeObjectURL(it.url)
     reportImages.value.splice(idx, 1)
+}
+
+function removeReportVideo(idx) {
+    const it = reportVideos.value[idx]
+    if (it?.url) URL.revokeObjectURL(it.url)
+    reportVideos.value.splice(idx, 1)
 }
 
 async function submitReport() {
@@ -1796,6 +1943,12 @@ async function submitReport() {
         reportImages.value.forEach((it) => {
             if (it?.file) {
                 fd.append('images', it.file)
+            }
+        })
+        // ✅ videos
+        reportVideos.value.forEach((it) => {
+            if (it?.file) {
+                fd.append('videos', it.file)
             }
         })
 
