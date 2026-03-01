@@ -5,29 +5,6 @@
 Resource       ../resources/keywords/auth_keywords.robot
 
 *** Test Cases ***
-UAT-ReportFail-009  : Admin change report status from ... to ...
-    #==== หน้าจอฝั่ง Admin =====
-    Open Browser                    ${URL}    edge
-    Admin Login
-    Dashboard Admin Should Be Visible
-    Go To User Management Page
-    # ไปหน้า Report Management
-    # กดเลือกรายการรีพอร์ต
-    # เปลี่ยนสถานะจาก ... เป็น ...
-    # กดยืนยัน
-
-    #==== หน้าจอฝั่ง Passenger ====
-    Open Browser                    ${URL}    edge
-    Passenger Login
-    Dashboard User Should Be Visible
-    # กดดู Notification และเห็นการแจ้งเตือนสถานะ
-    # กดดูโปรไฟล์ตัวเอง
-    # กดเข้าหน้า "การรายงานของคุณ"
-
-    # ==== Expected Results ====
-    # ผู้โดยสารอยู่ในหน้าดูทริป
-    # เห็นผลการรายงานเป็น
-
 UAT-ReportFail-010  : Admin change report status from ... to ...
     #==== หน้าจอฝั่ง Admin =====
     Open Browser                    ${URL}    edge
@@ -51,7 +28,30 @@ UAT-ReportFail-010  : Admin change report status from ... to ...
     # ผู้โดยสารอยู่ในหน้าดูทริป
     # เห็นผลการรายงานเป็น
 
-UAT-ReportFail-011  : Admin change report status from ... to reject
+UAT-ReportFail-011  : Admin change report status from ... to ...
+    #==== หน้าจอฝั่ง Admin =====
+    Open Browser                    ${URL}    edge
+    Admin Login
+    Dashboard Admin Should Be Visible
+    Go To User Management Page
+    # ไปหน้า Report Management
+    # กดเลือกรายการรีพอร์ต
+    # เปลี่ยนสถานะจาก ... เป็น ...
+    # กดยืนยัน
+
+    #==== หน้าจอฝั่ง Passenger ====
+    Open Browser                    ${URL}    edge
+    Passenger Login
+    Dashboard User Should Be Visible
+    # กดดู Notification และเห็นการแจ้งเตือนสถานะ
+    # กดดูโปรไฟล์ตัวเอง
+    # กดเข้าหน้า "การรายงานของคุณ"
+
+    # ==== Expected Results ====
+    # ผู้โดยสารอยู่ในหน้าดูทริป
+    # เห็นผลการรายงานเป็น
+
+UAT-ReportFail-012  : Admin change report status from ... to reject
     #==== หน้าจอฝั่ง Admin =====
     Open Browser                    ${URL}    edge
     Admin Login
@@ -74,7 +74,7 @@ UAT-ReportFail-011  : Admin change report status from ... to reject
     # ผู้โดยสารอยู่ในหน้าดูทริป
     # เห็นผลการรายงานเป็น
 
-UAT-ReportFail-012  : Admin change report status from ... to Need More Info
+UAT-ReportFail-013  : Admin change report status from ... to Need More Info
     #==== หน้าจอฝั่ง Admin =====
     Open Browser                    ${URL}    edge
     Admin Login
@@ -98,7 +98,7 @@ UAT-ReportFail-012  : Admin change report status from ... to Need More Info
     # ผู้โดยสารอยู่ในหน้าดูทริป
     # เห็นผลการรายงานเป็น
 
-UAT-ReportFail-013  : Passenger sent info to admin 
+UAT-ReportFail-014  : Passenger sent info to admin 
     #==== หน้าจอฝั่ง Passenger ====
     Open Browser                    ${URL}    edge
     Passenger Login

@@ -31,6 +31,7 @@
 
 *** Settings ***
 Library         SeleniumLibrary
+Library         String
 Resource       ../resources/keywords/auth_keywords.robot
 
 
@@ -54,13 +55,13 @@ ${BLACKLIST_SELF_PATH}      D:/Coding Project/Github Project/Software Engineerin
 ${PASSENGER_USER}           Veerapat
 ${PASSENGER_SURNAME}        Veera
 ${PASSENGER_PASS}           asdfjkl;123
-${REVIEW_TEXT}              ขับเร็วทันใจ คนขับสุภาพ รถสะอาด ตรงเวลา
+
 ${IMAGE_PATH}               D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/IMG-8206.jpg
 ${INVALID_PATH}             D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/This is pdf file.pdf
-${IMAGE01_PATH}
-${IMAGE02_PATH}
-${VIDEO01_PATH}
-${VIDEO02_PATH}
+${IMAGE01_PATH}             ..\..\..\image\pexels-hazardos-8041.jpg
+${IMAGE02_PATH}             ..\..\..\image\pexels-hazardos-80412.jpg
+${IMAGE03_PATH}             ..\..\..\image\pexels-hazardos-804129.jpg
+${VIDEO01_PATH}             ..\..\..\image\3785380-hd_1920_1080_25fps.mp4             
 
 # ตัวแปรที่ใช้บนเว็บที่ Deploy แล้ว
 ${PASSENGER_REVIEW_USER}
@@ -70,6 +71,10 @@ ${PASSENGER_REVIEW_PASS}
 ${PASSENGER_VIEW_USER}
 ${PASSENGER_VIEW_SURNAME}
 ${PASSENGER_VIEW_PASS}
+
+# ตัวแปรที่ใช้ได้ทั้ง Localhost และ Deploy 
+${REVIEW_TEXT}              ขับเร็วทันใจ คนขับสุภาพ รถสะอาด ตรงเวลา
+${REPORT_TEXT}              ขับรถแย่มาก ฝ่าไปแดง ขับเร็ว ขับส่ายไปส่ายมา
 
 # รวมฟังก์ชั่นทั้งหมด สามารถพิมพ์แค่ชื่อและนำไปใช้ได้เลยในไฟล์ UAT_Test
 *** Keywords ***
@@ -172,3 +177,12 @@ Upload 2 Image and 1 Video
     Choose File         xpath=//input[@type="file"]    ${IMAGE02_PATH}
     Choose File         xpath=//input[@type="file"]    ${VIDEO01_PATH}
 
+Upload 3 Image and 1 Video
+    Choose File         xpath=//input[@type="file"]    ${IMAGE01_PATH}
+    Choose File         xpath=//input[@type="file"]    ${IMAGE02_PATH}
+    Choose File         xpath=//input[@type="file"]    ${IMAGE03_PATH}
+    Choose File         xpath=//input[@type="file"]    ${VIDEO01_PATH}
+
+# -----------------------------
+# กลุ่ม: Report
+# -----------------------------

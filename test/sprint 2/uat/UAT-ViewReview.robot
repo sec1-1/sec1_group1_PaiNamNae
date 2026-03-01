@@ -47,5 +47,5 @@ UAT-ViewReview-015  : Passenger Upload 4 File
     Click Element                       xpath=//button[normalize-space()="ส่งรีวิว"]
 
     # ==== Expected Results ====
-    # อยู่ในหน้ารีวิว
+    Page Should Contain             รีวิวผู้ขับ
     # ต้องมีข้อความอะไรสักอย่างบอกว่า มีปัญหา

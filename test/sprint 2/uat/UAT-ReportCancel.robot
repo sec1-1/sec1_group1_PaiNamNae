@@ -9,11 +9,9 @@ UAT-ReportFail-008  : Passenger press cancel button
     Open Browser                    ${URL}    edge
     Passenger Login
     Dashboard User Should Be Visible
-    View All Route
-    # กดหน้าอะไรสักอย่างที่ดูทริปที่เดินแล้ว (รอแก้ไขให้รัน Project บน Localhost ให้ได้ก่อน)
-    # กดเลือกทริปแรก
-    # กดรีพอร์ต
-    # กดยกเลิก
+    View My Trip
+    Click Element                   xpath=(//button[normalize-space()="รายงาน"])[1]
+    Click Element                   xpath=(//button[normalize-space()="ยกเลิก"])
 
     # ==== Expected Results ====
-    # ผู้โดยสารอยู่ในหน้าดูทริป
+    Location Should Contain         /myTrip
