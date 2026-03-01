@@ -18,7 +18,11 @@ const findActiveBanByUserId = async(userId) => {
     })
 }
 
-const checkBlacklistBeforeRegister = async(email , nationalIdNumber , phoneNumber) => {
+const checkBlacklistBeforeRegister = async ({
+  email,
+  nationalIdNumber,
+  phoneNumber
+}) => {
     
     const existingUser = await prisma.user.findFirst({
         where: {
