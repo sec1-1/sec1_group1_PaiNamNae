@@ -285,22 +285,22 @@
                 </div>
 
                 <!-- HAS REVIEWS -->
-                <div v-else-if="driverReviewSummary && driverReviewSummary.totalReviews > 0">
+                <div v-else-if="driverReviewSummaryComputed && driverReviewSummaryComputed.totalReviews > 0">
 
                     <!-- ⭐ SUMMARY -->
                     <div class="mb-4 text-center">
                     <div class="text-3xl font-bold text-gray-800">
-                        {{ driverReviewSummary.average }}
+                        {{ driverReviewSummaryComputed.average }}
                     </div>
 
-                    <div class="text-yellow-400 text-lg">
+                        <div class="text-yellow-400 text-lg">
                         <span v-for="i in 5" :key="i">
-                        {{ i <= Math.round(Number(driverReviewSummary.average)) ? '★' : '☆' }}
+                        {{ i <= Math.round(Number(driverReviewSummaryComputed.average)) ? '★' : '☆' }}
                         </span>
                     </div>
 
                     <div class="text-sm text-gray-500">
-                        {{ driverReviewSummary.totalReviews }} รีวิว
+                        {{ driverReviewSummaryComputed.totalReviews }} รีวิว
                     </div>
                     </div>
 
@@ -379,16 +379,30 @@
                         </span>
                         </div>
 
+                        <!-- IMAGES AND VIDEOS -->
+                        <div
+                        v-if="parsedImages(review).length || parsedVideos(review).length"
+                        class="flex flex-wrap gap-2"
+                        >
+
                         <!-- IMAGES -->
-                        <div v-if="parsedImages(review).length" class="grid grid-cols-3 gap-2">
                         <img
                             v-for="(img, index) in parsedImages(review)"
-                            :key="index"
+                            :key="`img-${index}`"
                             :src="img"
-                            class="object-cover w-full h-24 rounded-xl"
+                            class="object-cover w-24 h-24 rounded-xl"
                         />
-                        </div>
 
+                        <!-- VIDEOS (thumbnail style like myTrip) -->
+                        <video
+                            v-for="(vid, index) in parsedVideos(review)"
+                            :key="`vid-${index}`"
+                            :src="vid"
+                            class="object-cover w-24 h-24 rounded-xl"
+                            controls
+                        ></video>
+
+                        </div>
                     </div>
                     </div>
 
@@ -644,8 +658,10 @@ dayjs.extend(buddhistEra)
 //show review driver
 const showDriverReviewModal = ref(false)
 const selectedDriver = ref(null)
+// raw reviews array; populated each time the modal opens (no cache)
 const driverReviews = ref([])
-const loadingDriverReviewห = ref(false)
+const loadingDriverReview = ref(false)
+// summary cache keyed by driverId; used for quick metrics/average
 const driverReviewMap = ref({})
 const reviewSummary = ref(null)
 const loadingReviewSummary = ref(false)
@@ -1155,17 +1171,27 @@ const openDriverReviews = async (driver) => {
   showDriverReviewModal.value = true
 
   // ถ้ายังไม่มี → ค่อยโหลด
-  if (!driverReviewMap.value[driver.id]) {
-    await fetchDriverReviewSummary(driver.id)
-  }
+    // always fetch the full review list (myTrip behavior)
+    try {
+        const res = await $api(`/reviews/driver/${driver.id}`)
+        driverReviews.value = res || []
+    } catch (e) {
+        console.error('failed to load driver reviews', e)
+        driverReviews.value = []
+    }
 
-  driverReviewSummary.value = driverReviewMap.value[driver.id]
+    // still populate summary cache for metrics (average, tags, etc.)
+    if (!driverReviewMap.value[driver.id]) {
+        await fetchDriverReviewSummary(driver.id)
+    }
+    driverReviewSummary.value = driverReviewMap.value[driver.id]
 }
 
 const closeDriverReviewModal = () => {
   showDriverReviewModal.value = false
   selectedDriver.value = null
-  driverReviews.value = []
+    driverReviews.value = []
+    driverReviewSummary.value = null
 }
 
 const REVIEW_TAGS = [
@@ -1203,54 +1229,132 @@ const allTags = computed(() => {
 
 const selectedTag = ref(null)
 
+// filter based on raw review list instead of the summary object
+// this ensures that any freshly fetched videos/comments are always shown
 const filteredReviews = computed(() => {
-  if (!driverReviewSummary.value?.latestReviews) return []
+    if (!selectedTag.value) {
+        return driverReviews.value
+    }
 
-  if (!selectedTag.value) {
-    return driverReviewSummary.value.latestReviews
-  }
-
-  return driverReviewSummary.value.latestReviews.filter(review =>
-    (review.tags || []).includes(selectedTag.value)
-  )
+    return driverReviews.value.filter(review =>
+        (review.tags || []).includes(selectedTag.value)
+    )
 })
+
+// compute average and total directly from driverReviews (used in modal header)
+const driverReviewSummaryComputed = computed(() => {
+    if (!driverReviews.value || driverReviews.value.length === 0) {
+        return null
+    }
+    const total = driverReviews.value.length
+    const average = (
+        driverReviews.value.reduce((sum, r) => sum + (r.rating || 0), 0) / total
+    ).toFixed(1)
+    return { totalReviews: total, average }
+})
+
 
 //review driver แบบ map ไว้ เผื่อเปิดดูหลายคน จะได้ไม่ต้องโหลดซ้ำ
 const fetchDriverReviewSummary = async (driverId) => {
+  console.log("CALL FETCH DRIVER REVIEW", driverId)
   if (!driverId) return
-
-  // ถ้ามีแล้ว ไม่ต้องโหลดซ้ำ
   if (driverReviewMap.value[driverId]) return
 
   try {
-    const data = await $api(`/drivers/${driverId}/review-summary`)
-    console.log("REVIEW SUMMARY FROM API:", data) 
-    data.latestReviews = data.latestReviews.map(r => ({
+    // ⭐ ดึง summary (คะแนนรวม)
+    const summary = await $api(`/drivers/${driverId}/review-summary`)
+
+    // ⭐ ดึง reviews จริง (มี videos)
+    const reviews = await $api(`/reviews/driver/${driverId}`)
+
+    console.log("SUMMARY:", summary)
+    console.log("REVIEWS:", reviews)
+
+    // ⭐ ทำให้ reviews media เป็น array เสมอ
+    const normalizedReviews = (reviews || []).map(r => ({
       ...r,
-      images: Array.isArray(r.images) ? r.images : []
+      images: Array.isArray(r.images) ? r.images : (r.images ? [r.images] : []),
+      videos: Array.isArray(r.videos) ? r.videos : (r.videos ? [r.videos] : [])
     }))
 
-    driverReviewMap.value[driverId] = data
+    // ⭐ ถ้า summary ไม่มี latestReviews ให้สร้าง
+    if (!summary.latestReviews) {
+      summary.latestReviews = normalizedReviews
+    }
+    // ⭐ ถ้ามีอยู่แล้ว ให้ merge videos เข้าไป
+    else {
+      const reviewMap = {}
+      normalizedReviews.forEach(r => reviewMap[r.id] = r)
+
+      summary.latestReviews = summary.latestReviews.map(r => ({
+        ...r,
+        images: reviewMap[r.id]?.images || r.images || [],
+        videos: reviewMap[r.id]?.videos || []
+      }))
+    }
+
+    driverReviewMap.value[driverId] = summary
 
   } catch (err) {
-    console.error(err)
+    console.error("FETCH REVIEW ERROR:", err)
     driverReviewMap.value[driverId] = null
   }
 }
 
 const parsedImages = (review) => {
   if (!review.images) return []
-
-  if (Array.isArray(review.images)) {
-    return review.images
+  
+  if (typeof review.images === 'string') {
+    try {
+      return JSON.parse(review.images)
+    } catch {
+      return [review.images].filter(Boolean)
+    }
   }
-
-  try {
-    return JSON.parse(review.images)
-  } catch (e) {
-    return []
-  }
+  
+  return Array.isArray(review.images) ? review.images : []
 }
+
+// parse videos from review – handles string/json and object forms
+const parsedVideos = (review) => {
+  if (!review.videos) return []
+
+  if (typeof review.videos === 'string') {
+    try {
+      return JSON.parse(review.videos)
+    } catch {
+      return [review.videos]
+    }
+  }
+
+  if (Array.isArray(review.videos)) {
+    return review.videos.map(v => {
+      if (typeof v === 'string') return v
+      if (v.url) return v.url
+      if (v.secure_url) return v.secure_url
+      return null
+    }).filter(Boolean)
+  }
+
+  if (review.videos.url) return [review.videos.url]
+  if (review.videos.secure_url) return [review.videos.secure_url]
+
+  return []
+}
+
+/*const parsedVideos = (review) => {
+  if (!review.videos) return []
+  
+  if (typeof review.videos === 'string') {
+    try {
+      return JSON.parse(review.videos)
+    } catch {
+      return [review.videos].filter(Boolean)
+    }
+  }
+  
+  return Array.isArray(review.videos) ? review.videos : []
+}*/
 
 
 

@@ -1,34 +1,174 @@
-const reportService = require("../services/report.service")
+const reportService = require('../services/report.service');
+const ApiError = require('../utils/ApiError');
+const asyncHandler = require('express-async-handler');
+const { uploadToCloudinary } = require('../utils/cloudinary');
 
-const createReport = async (req, res, next) => {
+/**
+ * @desc    Create report
+ * @route   POST /reports
+ */
+const createReport = asyncHandler(async (req, res) => {
+
+  const { type, category, description, routeId, bookingId, targetUserId } = req.body;
+
+  let imageUrls = [];
+  let videoUrls = [];
+  if (req.files) {
+    if (req.files.images) {
+      const uploads = req.files.images.map(file =>
+        uploadToCloudinary(file.buffer, 'reports')
+      );
+      const results = await Promise.all(uploads);
+      imageUrls = results.map(r => r.url);
+    }
+    if (req.files.videos) {
+      const uploads = req.files.videos.map(file =>
+        uploadToCloudinary(file.buffer, 'reports', { resource_type: 'video' })
+      );
+      const results = await Promise.all(uploads);
+      videoUrls = results.map(r => r.url);
+    }
+  }
+
+  const reportData = {
+    reporterId: req.user.sub,
+    type,
+    category,
+    description,
+    images: imageUrls.length > 0 ? imageUrls : null,
+    videos: videoUrls.length > 0 ? videoUrls : null,
+    routeId: routeId || null,
+    bookingId: bookingId || null,
+    targetUserId: targetUserId || null,
+  };
+
+  const newReport = await reportService.createReport(reportData);
+
+  res.status(201).json({
+    success: true,
+    message: "Report created successfully",
+    data: newReport
+  });
+});
+
+/**
+ * @desc    Get report by id
+ * @route   GET /reports/:id
+ */
+const getReportById = async (req, res, next) => {
   try {
-    const reporterId = req.user?.sub
-    const { reportedUserId, type, description } = req.body
+    const report = await reportService.getReportById(req.params.id);
 
-    if (!reporterId || !reportedUserId || !type || !description) {
-      return res.status(400).json({
-        success: false,
-        message: "ข้อมูลส่งมาไม่ครบหรือไม่ถูกต้อง",
-        data: null
-      })
+    if (!report) {
+      throw new ApiError(404, 'Report not found');
     }
 
-    const report = await reportService.createReport({
-      reporterId,
-      reportedUserId,
-      type,
-      description,
-    })
-
-
-    res.status(201).json({
-      success: true,
-      message: "Report Created",
-      data: report
-    })
-  } catch (error) {
-    next(error)
+    res.json({ data: report });
+  } catch (err) {
+    next(err);
   }
-}
+};
 
-module.exports = { createReport }
+/**
+ * @desc    Update report status (ADMIN)
+ * @route   PATCH /reports/:id/status
+ */
+const updateReportStatus = async (req, res, next) => {
+  try {
+    const adminId = req.user.id;
+    const { status, adminNotes } = req.body;
+
+    if (!status) {
+      throw new ApiError(400, 'Status is required');
+    }
+
+    const report = await reportService.updateReportStatus(
+      req.params.id,
+      status,
+      adminNotes,
+      adminId
+    );
+
+    res.json({
+      message: 'Report status updated',
+      data: report,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**
+ * @desc    Delete report (ADMIN)
+ * @route   DELETE /reports/:id
+ */
+const deleteReport = async (req, res, next) => {
+  try {
+    await reportService.deleteReport(req.params.id);
+
+    res.json({
+      message: 'Report deleted successfully',
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**
+ * @desc    Get my reports
+ * @route   GET /reports/me
+ */
+const getMyReports = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+
+    const reports = await reportService.getReportsByUser(userId);
+
+    res.json({ data: reports });
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**
+ * @desc    Get report by booking id
+ * @route   GET /reports/booking/:bookingId
+ */
+const getReportByBookingId = async (req, res, next) => {
+  try {
+    const reporterId = req.user.sub;
+
+    const report = await reportService.getReportByBookingId(
+      req.params.bookingId,
+      reporterId
+    );
+
+    res.json({ data: report });
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**
+ * @desc    Search reports (ADMIN)
+ * @route   GET /reports
+ */
+const searchReports = async (req, res, next) => {
+  try {
+    const result = await reportService.searchReports(req.query);
+
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = {
+  createReport,
+  getReportById,
+  updateReportStatus,
+  deleteReport,
+  getMyReports,
+  getReportByBookingId,
+  searchReports,
+};

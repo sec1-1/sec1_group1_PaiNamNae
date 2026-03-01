@@ -3,6 +3,7 @@ const userService = require("../services/user.service");
 const ApiError = require('../utils/ApiError');
 const { uploadToCloudinary } = require('../utils/cloudinary');
 const notifService = require('../services/notification.service');
+const blacklistService = require('../services/blacklist.service');
 
 const adminListUsers = asyncHandler(async (req, res) => {
     const result = await userService.searchUsers(req.query);
@@ -57,7 +58,25 @@ const getMyUser = asyncHandler(async (req, res) => {
 
 })
 const createUser = asyncHandler(async (req, res) => {
+
     const userData = req.body;
+
+    // 🚫 CHECK BLACKLIST BEFORE REGISTER
+    const activeBan = await blacklistService.checkBlacklistBeforeRegister({
+        email: userData.email,
+        nationalIdNumber: userData.nationalIdNumber,
+        phoneNumber: userData.phoneNumber
+    })
+
+    if (activeBan) {
+        throw new ApiError(
+            403,
+            activeBan.type === 'PERMANENT'
+                ? `คุณถูกระงับการใช้งาน: ${activeBan.reason}`
+                : `คุณถูกระงับถึง ${activeBan.expiresAt}: ${activeBan.reason}`
+        )
+    }
+
 
     if (!req.files || !req.files.nationalIdPhotoUrl || !req.files.selfiePhotoUrl) {
         throw new ApiError(400, "National ID photo and selfie photo are required.");
