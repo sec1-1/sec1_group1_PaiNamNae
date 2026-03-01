@@ -185,6 +185,11 @@
                                             class="px-4 py-2 text-sm text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700">
                                             แชทกับผู้ขับ
                                         </button>
+                                        <button @click.stop="trip.hasReport ? openProgressForTrip(trip) : openReportModal(trip)"
+                                                class="px-4 py-2 ml-2 text-sm text-white transition duration-200 rounded-md"
+                                                :class="trip.hasReport ? 'bg-orange-500 hover:bg-orange-600' : 'bg-red-600 hover:bg-red-700'">
+                                                {{ trip.hasReport ? 'ติดตามสถานะ' : 'รายงาน' }}
+                                        </button>
                                     </template>
 
 <template v-if="trip.routeStatus === 'completed'">
@@ -192,6 +197,11 @@
     @click.stop="openReviewModal(trip)"
     class="px-4 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700">
     รีวิวผู้ขับ
+  </button>
+  <button @click.stop="trip.hasReport ? openProgressForTrip(trip) : openReportModal(trip)"
+    class="px-4 py-2 ml-2 text-sm text-white transition duration-200 rounded-md"
+    :class="trip.hasReport ? 'bg-orange-500 hover:bg-orange-600' : 'bg-red-600 hover:bg-red-700'">
+    {{ trip.hasReport ? 'ติดตามสถานะ' : 'รายงาน' }}
   </button>
 </template>
 
@@ -581,6 +591,229 @@
   </div>
 </transition>
 
+  <div
+    v-if="showReportModal"
+    class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
+    @click.self="closeReportModal"
+  >
+    <div 
+      class="w-full max-w-lg overflow-hidden transition-all transform bg-white shadow-2xl rounded-3xl animate-in fade-in zoom-in duration-300"
+    >
+      <div class="relative p-6 pb-0">
+        <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-red-500 via-orange-500 to-red-600"></div>
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-2xl font-bold text-gray-800">
+            รายงานปัญหา
+          </h3>
+          <button @click="closeReportModal" class="p-2 transition-colors rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+        <p class="text-sm text-gray-500">ความปลอดภัยของคุณคือสิ่งสำคัญ โปรดแจ้งให้เราทราบ</p>
+      </div>
+
+      <div class="p-6 space-y-5">
+        <div>
+          <label class="block mb-2 text-sm font-semibold text-gray-700">
+            หัวข้อปัญหา
+          </label>
+          <div class="relative group">
+            <select
+              v-model="passengerReportCategory"
+              class="w-full px-4 py-3 transition-all border-2 border-gray-100 appearance-none rounded-xl focus:border-red-500 focus:ring-0 bg-gray-50/50"
+            >
+              <option disabled value="">-- เลือกหัวข้อที่เกี่ยวข้อง --</option>
+              <option value="SAFETY_ISSUE">🚨 ความปลอดภัย</option>
+              <option value="BEHAVIOR">👤 พฤติกรรมคนขับ</option>
+              <option value="PAYMENT">💰 ปัญหาการชำระเงิน</option>
+              <option value="OTHER">📁 อื่น ๆ</option>
+            </select>
+            <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-400">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block mb-2 text-sm font-semibold text-gray-700">
+            รายละเอียดเหตุการณ์
+          </label>
+          <textarea
+            v-model="reportText"
+            rows="4"
+            class="w-full p-4 transition-all border-2 border-gray-100 rounded-xl focus:border-red-500 focus:ring-0 bg-gray-50/50 placeholder:text-gray-400"
+            placeholder="รบกวนระบุรายละเอียดเพื่อให้เราตรวจสอบได้รวดเร็วขึ้น..."
+          ></textarea>
+        </div>
+
+        <div>
+          <label class="block mb-2 text-sm font-semibold text-gray-700">
+            หลักฐานรูปภาพ <span class="font-normal text-gray-400">(สูงสุด 2 รูป)</span>
+          </label>
+          
+          <div class="flex flex-wrap gap-4">
+            <label v-if="reportImages.length < 2" class="flex flex-col items-center justify-center w-24 h-24 transition-all border-2 border-dashed border-gray-200 cursor-pointer rounded-2xl hover:border-red-400 hover:bg-red-50 group">
+              <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                <svg class="w-8 h-8 mb-1 text-gray-400 group-hover:text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                <span class="text-[10px] text-gray-400 group-hover:text-red-500 uppercase font-bold">เพิ่มรูป</span>
+              </div>
+              <input type="file" class="hidden" multiple @change="handleReportFiles" accept="image/*" />
+            </label>
+
+            <div
+              v-for="(img, i) in reportImages"
+              :key="i"
+              class="relative group animate-in zoom-in duration-200"
+            >
+              <img
+                :src="img.url"
+                class="object-cover w-24 h-24 shadow-md rounded-2xl ring-2 ring-white"
+              />
+              <button
+                @click="removeReportImage(i)"
+                class="absolute flex items-center justify-center w-6 h-6 text-white transition-transform bg-red-500 rounded-full shadow-lg -top-2 -right-2 hover:scale-110 active:scale-95"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 p-6 pt-2">
+        <button
+          @click="closeReportModal"
+          class="flex-1 py-3 font-semibold text-gray-600 transition-all rounded-xl hover:bg-gray-100 active:scale-95"
+        >
+          ยกเลิก
+        </button>
+
+        <button
+          @click="submitReport"
+          :disabled="!passengerReportCategory || !reportText"
+          class="flex-[2] py-3 font-semibold text-white transition-all bg-red-600 rounded-xl hover:bg-red-700 shadow-lg shadow-red-200 active:scale-95 disabled:opacity-50 disabled:grayscale disabled:pointer-events-none"
+        >
+          ส่งรายงานความปลอดภัย
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+        <!-- Progress Modal -->
+        <div v-if="isProgressModalVisible" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+            @click.self="isProgressModalVisible = false">
+            <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 overflow-hidden animate-in">
+                <!-- Header -->
+                <div class="bg-gradient-to-r from-red-500 to-red-600 p-6 text-white">
+                    <div class="flex items-center justify-between mb-2">
+                        <h2 class="text-xl font-bold">ติดตามสถานะรายงาน</h2>
+                        <button @click="isProgressModalVisible = false" class="text-white/80 hover:text-white transition">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <p v-if="selectedTrip" class="text-sm text-white/90">{{ selectedTrip.origin }} → {{ selectedTrip.destination }}</p>
+                </div>
+
+                <!-- Content -->
+                <div class="p-0 overflow-y-auto max-h-[70vh]">
+                    <div v-if="selectedTrip" class="p-6 space-y-6">
+                        <!-- Report View (Only show if hasReport is true) -->
+                        <div v-if="selectedTrip.hasReport" class="space-y-6 animate-in slide-in-from-top duration-300">
+                            <!-- Progress Steps -->
+                            
+                            <!-- ✅ Report Status Card -->
+                            <ReportStatusCard
+                                v-if="selectedTrip?.reportData"
+                                :status="selectedTrip.reportData.status"
+                            />
+                            <!-- Summary Block -->
+                            <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 shadow-sm">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h4 class="font-bold text-blue-900">สรุปการรายงาน</h4>
+                                    <span 
+                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold shadow-sm"
+                                        :class="{
+                                            'bg-yellow-100 text-yellow-800 border border-yellow-200': selectedTrip.reportData?.status === 'PENDING',
+                                            'bg-green-100 text-green-800 border border-green-200': ['APPROVED', 'RESOLVED'].includes(selectedTrip.reportData?.status),
+                                            'bg-red-100 text-red-800 border border-red-200': selectedTrip.reportData?.status === 'REJECTED'
+                                        }"
+                                    >
+                                        {{ getReportStatusText(selectedTrip.reportData?.status) }}
+                                    </span>
+                                </div>
+
+                                <div class="space-y-3 text-sm text-blue-800">
+                                    <div class="flex justify-between border-b border-blue-100 pb-2">
+                                        <span class="opacity-75">หัวข้อข้อปัญหา:</span>
+                                        <span class="font-semibold">{{ getCategoryText(selectedTrip.reportData?.category) }}</span>
+                                    </div>
+                                    <div class="flex justify-between border-b border-blue-100 pb-2">
+                                        <span class="opacity-75">วันที่แจ้ง:</span>
+                                        <span class="font-semibold text-right">{{ selectedTrip.reportData?.createdAt ? dayjs(selectedTrip.reportData.createdAt).format('D MMM BBBB HH:mm น.') : '-' }}</span>
+                                    </div>
+                                    <div class="pt-1">
+                                        <span class="opacity-75 block mb-1 font-medium">รายละเอียดที่แจ้ง:</span>
+                                        <p class="text-gray-700 bg-white/60 p-3 rounded-lg border border-blue-100 italic leading-relaxed">
+                                            "{{ selectedTrip.reportData?.description }}"
+                                        </p>
+                                    </div>
+                                    <div v-if="selectedTrip.reportData?.images?.length" class="pt-2">
+                                        <span class="opacity-75 block mb-2 font-medium">รูปภาพประกอบ:</span>
+                                        <div class="flex flex-wrap gap-2">
+                                            <img v-for="(img, idx) in selectedTrip.reportData.images" :key="idx" :src="img" 
+                                                class="w-20 h-20 object-cover rounded-lg border-2 border-white shadow-sm hover:scale-105 transition-transform cursor-pointer" 
+                                                @click="window.open(img, '_blank')"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Admin Response -->
+                            <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+                                <h4 class="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 013 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                    </svg>
+                                    การตอบรับจากทีมงาน
+                                </h4>
+                                <div v-if="selectedTrip.reportData?.status !== 'PENDING'" class="p-4 bg-gray-50 rounded-lg border border-gray-100">
+                                    <p class="text-sm text-gray-700 leading-relaxed italic">
+                                        "{{ selectedTrip.reportData?.adminNotes || 'ได้รับการตรวจสอบเรียบร้อยแล้ว' }}"
+                                    </p>
+                                    <div v-if="selectedTrip.reportData?.resolvedAt" class="mt-3 pt-3 border-t border-gray-200 flex justify-between items-center text-[10px] text-gray-400">
+                                        <span>ตรวจสอบเมื่อ: {{ dayjs(selectedTrip.reportData.resolvedAt).format('D MMM BBBB HH:mm') }}</span>
+                                        <span class="text-green-600 font-bold tracking-wider">VERIFIED BY TEAM</span>
+                                    </div>
+                                </div>
+                                <div v-else class="flex flex-col items-center py-6 text-center">
+                                    <div class="w-12 h-12 bg-yellow-50 rounded-full flex items-center justify-center mb-3">
+                                        <svg class="w-6 h-6 text-yellow-500 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                    <p class="text-sm text-gray-500">รายงานของคุณกำลังรอการตรวจสอบ<br>เราจะเร่งดำเนินการให้เร็วที่สุด</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
+                    <button @click="isProgressModalVisible = false"
+                        class="w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all shadow-md active:scale-95">
+                        ปิด
+                    </button>
+                </div>
+            </div>
+        </div>
+
 </template>
 
 <script setup>
@@ -590,6 +823,7 @@ import 'dayjs/locale/th'
 import buddhistEra from 'dayjs/plugin/buddhistEra'
 import ConfirmModal from '~/components/ConfirmModal.vue'
 import { useToast } from '~/composables/useToast'
+import ReportStatusCard from '@/components/ReportStatusCard.vue'
 
 // Setup dayjs for Thai locale
 dayjs.locale('th')
@@ -605,8 +839,11 @@ const comment = ref('')
 // --- State Management ---
 const activeTab = ref('pending')
 const selectedTripId = ref(null)
+const isProgressModalVisible = ref(false)
 const isLoading = ref(false)
 const mapContainer = ref(null)
+const passengerReportCategory = ref('')
+const modalTab = ref('trip')
 let map = null
 let currentPolyline = null
 let currentMarkers = []
@@ -970,12 +1207,14 @@ async function fetchMyTrips() {
                     (typeof b.route.durationSeconds === 'number' ? `${Math.round(b.route.durationSeconds / 60)} นาที` : '-'),
                 distanceText:
                     (typeof b.route.distance === 'string' ? formatDistance(b.route.distance) : b.route.distance) ||
-                    (typeof b.route.distanceMeters === 'number' ? `${(b.route.distanceMeters / 1000).toFixed(1)} กม.` : '-')
+                    (typeof b.route.distanceMeters === 'number' ? `${(b.route.distanceMeters / 1000).toFixed(1)} กม.` : '-') ,
+                hasReport: false ,
+                reportData: null
             }
         })
 
         allTrips.value = formatted
-
+        await checkReportsForTrips()
         await Promise.all(
             allTrips.value.map((t, i) =>
                 loadDriverReviews(t.driver.id, i)
@@ -1005,6 +1244,8 @@ async function fetchMyTrips() {
     } finally {
         isLoading.value = false
     }
+    
+    
 }
 
 //review driver
@@ -1361,6 +1602,63 @@ function formatDuration(input) {
     return h ? (m ? `${h} ชม. ${m} นาที` : `${h} ชม.`) : `${m} นาที`
 }
 
+// --- Status Helper Methods ---
+function getStatusDotClass(status) {
+    const classMap = {
+        pending: 'bg-yellow-400',
+        confirmed: 'bg-blue-500',
+        completed: 'bg-green-500',
+        rejected: 'bg-red-500',
+        cancelled: 'bg-gray-400'
+    }
+    return classMap[status] || 'bg-gray-300'
+}
+
+function getStatusText(status) {
+    const textMap = {
+        pending: 'รอดำเนินการ',
+        confirmed: 'ยืนยันแล้ว',
+        completed: 'เสร็จสิ้น',
+        rejected: 'ปฏิเสธ',
+        cancelled: 'ยกเลิกโดยผู้โดยสาร'
+    }
+    return textMap[status] || '-'
+}
+
+function getStatusDescription(status) {
+    const descMap = {
+        pending: 'กำลังรอให้คนขับยืนยันการเดินทาง',
+        confirmed: 'คนขับยืนยันแล้ว พร้อมเดินทาง',
+        completed: 'การเดินทางเสร็จสิ้นแล้ว',
+        rejected: 'คนขับปฏิเสธการเดินทาง',
+        cancelled: 'คุณยกเลิกการจอง'
+    }
+    return descMap[status] || '-'
+}
+
+function getReportStatusText(status) {
+    const reportStatus = {
+        PENDING: 'รอการตรวจสอบ',
+        APPROVED: 'รับเรื่องแล้ว',
+        REJECTED: 'ไม่พบปัญหา',
+        RESOLVED: 'ดำเนินการแก้ไขแล้ว'
+    }
+    return reportStatus[status] || 'ไม่ทราบสถานะ'
+}
+
+function getCategoryText(cat) {
+    const cats = {
+        VEHICLE_ISSUE: 'ปัญหาสภาพรถ/ข้อมูลรถไม่ตรง',
+        PASSENGER_ISSUE: 'พฤติกรรมผู้โดยสารร่วมทริปที่ไม่เหมาะสม',
+        ROAD_ISSUE: 'ปัญหาระหว่างเส้นทาง',
+        SAFETY_ISSUE: 'พฤติกรรมการขับขี่ที่ไม่ปลอดภัย',
+        PAYMENT_ISSUE: 'ปัญหาการชำระเงิน',
+        NO_SHOW: 'ไม่มาพบตามจุดนัดหมาย',
+        OTHER: 'อื่น ๆ'
+    }
+    return cats[cat] || cat || 'ทั่วไป'
+}
+
 // --- Lifecycle and Watchers ---
 useHead({
     title: 'การเดินทางของฉัน - ไปนำแหน่',
@@ -1421,6 +1719,138 @@ function initializeMap() {
     geocoder = new google.maps.Geocoder()
     placesService = new google.maps.places.PlacesService(gmap)
     mapReady.value = true
+}
+
+// --- Report Modal State
+const showReportModal = ref(false)
+const reportTrip = ref(null)
+const reportText = ref('')
+const reportImages = ref([])
+
+function openReportModal(trip) {
+    reportTrip.value = trip
+    passengerReportCategory.value = ''
+    reportText.value = ''
+    reportImages.value.forEach(it => it.url && URL.revokeObjectURL(it.url))
+    reportImages.value = []
+    showReportModal.value = true
+}
+
+function openProgressForTrip(trip) {
+    selectedTripId.value = trip.id
+    modalTab.value = 'report' // Open to report tab by default when tracking
+    isProgressModalVisible.value = true
+}
+
+function closeReportModal() {
+    showReportModal.value = false
+    setTimeout(() => {
+        reportTrip.value = null
+    }, 200)
+}
+
+function handleReportFiles(e) {
+    const files = Array.from(e.target.files || [])
+    const remaining = 2 - reportImages.value.length
+    files.slice(0, remaining).forEach(f => {
+        reportImages.value.push({ file: f, url: URL.createObjectURL(f) })
+    })
+    e.target.value = ''
+}
+
+function removeReportImage(idx) {
+    const it = reportImages.value[idx]
+    if (it?.url) URL.revokeObjectURL(it.url)
+    reportImages.value.splice(idx, 1)
+}
+
+async function submitReport() {
+    if (!reportTrip.value) return
+
+    if (!passengerReportCategory.value) {
+        toast.error('กรุณาเลือกหัวข้อปัญหา', 'กรุณาเลือกหัวข้อปัญหาที่พบ')
+        return
+    }
+
+    try {
+        const fd = new FormData()
+
+        fd.append('type', 'PASSENGER')
+        fd.append('category', passengerReportCategory.value)
+        fd.append('description', reportText.value || 'ไม่ได้ระบุรายละเอียด')
+
+        // ✅ append เฉพาะตอนมีค่าเท่านั้น
+        if (reportTrip.value?.routeId) {
+            fd.append('routeId', reportTrip.value.routeId)
+        }
+
+        if (reportTrip.value?.id) {
+            fd.append('bookingId', reportTrip.value.id)
+        }
+
+        if (reportTrip.value?.driver?.id) {
+            fd.append('targetUserId', reportTrip.value.driver.id)
+        }
+
+        // ✅ images
+        reportImages.value.forEach((it) => {
+            if (it?.file) {
+                fd.append('images', it.file)
+            }
+        })
+
+        await $api('/reports', {
+            method: 'POST',
+            body: fd
+        })
+
+        toast.success('ขอบคุณที่แจ้งรายงาน', 'ทีมงานจะตรวจสอบในเร็วๆ นี้')
+
+        // update trip in place
+        const tripInList = allTrips.value.find(
+            t => t.id === reportTrip.value.id
+        )
+
+        if (tripInList) {
+            tripInList.hasReport = true
+            tripInList.reportData = {
+                status: 'PENDING',
+                category: passengerReportCategory.value,
+                description: reportText.value || 'ไม่ได้ระบุรายละเอียด',
+                createdAt: new Date(),
+                adminNotes: null
+            }
+        }
+
+        closeReportModal()
+        checkReportsForTrips()
+
+    } catch (err) {
+        console.error('Failed to submit report', err)
+        toast.error(
+            'ไม่สามารถส่งรายงานได้',
+            err?.data?.message || 'โปรดลองอีกครั้ง'
+        )
+    }
+}
+
+async function checkReportsForTrips() {
+    try {
+        // Fetch all reports made by the current user
+        const res = await $api('/reports/me')
+        const reports = res.data || res || []
+        
+        // Match reports with trips by bookingId
+        allTrips.value.forEach(trip => {
+            const report = reports.find(r => r.bookingId === trip.id && r.type === 'PASSENGER')
+            if (report) {
+                trip.hasReport = true
+                trip.reportData = report
+            }
+        })
+    } catch (e) {
+        console.error('Failed to check reports for trips', e)
+    }
 }
 </script>
 
