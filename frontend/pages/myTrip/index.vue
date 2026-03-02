@@ -671,9 +671,11 @@
           <textarea
             v-model="reportText"
             rows="4"
+            maxlength="501"
             class="w-full p-4 transition-all border-2 border-gray-100 rounded-xl focus:border-red-500 focus:ring-0 bg-gray-50/50 placeholder:text-gray-400"
             placeholder="รบกวนระบุรายละเอียดเพื่อให้เราตรวจสอบได้รวดเร็วขึ้น..."
           ></textarea>
+          <div class="text-right text-xs text-gray-500 mt-1">{{ reportText.length }} / 501</div>
         </div>
 
         <div>
@@ -1918,6 +1920,12 @@ async function submitReport() {
         toast.error('กรุณาเลือกหัวข้อปัญหา', 'กรุณาเลือกหัวข้อปัญหาที่พบ')
         return
     }
+
+  // Enforce max comment length
+  if (reportText.value && reportText.value.length > 501) {
+    toast.error('ข้อความต้องไม่เกิน 501 ตัวอักษร')
+    return
+  }
 
     try {
         const fd = new FormData()
