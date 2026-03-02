@@ -208,6 +208,27 @@ const countUnread = async (ownerId) => {
     return { unread: total };
 };
 
+const createSystemNotification = async ({
+    userId,
+    type,
+    title,
+    body,
+    link = null,
+    metadata = null,
+}) => {
+    return prisma.notification.create({
+        data: {
+            userId,
+            type,
+            title,
+            body,
+            link,
+            metadata,
+        },
+        select: baseSelect,
+    });
+};
+
 module.exports = {
     listMyNotifications,
     listNotificationsAdmin,
@@ -220,4 +241,5 @@ module.exports = {
     deleteNotificationByAdmin,
     countUnread,
     adminMarkRead,
+    createSystemNotification,
 };
