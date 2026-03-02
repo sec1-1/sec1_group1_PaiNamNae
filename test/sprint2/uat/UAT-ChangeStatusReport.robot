@@ -5,22 +5,50 @@
 Resource       ../resources/keywords/auth_keywords.robot
 
 *** Test Cases ***
-UAT-ReportFail-010  : Admin change report status from ... to ...
+UAT-ReportFail-010  : Admin change report status from In process to Inspecting
     #==== หน้าจอฝั่ง Admin =====
     Open Browser                    ${URL}    edge
     Admin Login
     Dashboard Admin Should Be Visible
     Go To User Management Page
-    # ไปหน้า Report Management
-    # กดเลือกรายการรีพอร์ต
-    # เปลี่ยนสถานะจาก ... เป็น ...
-    # กดยืนยัน
+    Go To Check Report
+    Click Element                   xpath=(//button[normalize-space()="ตรวจสอบรายงาน"])[1]
+    Click Element                   xpath=(//button[normalize-space()="กำลังตรวจสอบ"])
+    Wait Until Element Is Visible    xpath=//*[contains(text(),"อัปเดตสถานะสำเร็จ")]    10s
+    Wait Until Element Is Visible    xpath=//*[contains(text(),"สถานะรายงานเปลี่ยนเป็น กำลังตรวจสอบ")]    10s
 
     #==== หน้าจอฝั่ง Passenger ====
     Open Browser                    ${URL}    edge
     Passenger Login
     Dashboard User Should Be Visible
-    # กดดู Notification และเห็นการแจ้งเตือนสถานะ
+    View Notification
+    Page Should Contain             สถานะการรายงานของคุณถูกเปลี่ยนจาก "รอดำเนินการ" เป็น "กำลังตรวจสอบ"
+    # กดดูโปรไฟล์ตัวเอง
+    # กดเข้าหน้า "การรายงานของคุณ"
+
+
+    # ==== Expected Results ====
+    # ผู้โดยสารอยู่ในหน้าดูทริป
+    # เห็นผลการรายงานเป็น
+
+UAT-ReportFail-011  : Admin change report status from Inspecting to Respond to reports
+    #==== หน้าจอฝั่ง Admin =====
+    Open Browser                    ${URL}    edge
+    Admin Login
+    Dashboard Admin Should Be Visible
+    Go To User Management Page
+    Go To Check Report
+    Click Element                   xpath=(//button[normalize-space()="ตรวจสอบรายงาน"])[1]
+    Click Element                   xpath=(//button[normalize-space()="ตอบรับการรายงาน"])
+    Wait Until Element Is Visible    xpath=//*[contains(text(),"อัปเดตสถานะสำเร็จ")]    10s
+    Wait Until Element Is Visible    xpath=//*[contains(text(),"สถานะรายงานเปลี่ยนเป็น กำลังตรวจสอบ")]    10s
+
+    #==== หน้าจอฝั่ง Passenger ====
+    Open Browser                    ${URL}    edge
+    Passenger Login
+    Dashboard User Should Be Visible
+    View Notification
+    Page Should Contain             สถานะการรายงานของคุณถูกเปลี่ยนจาก "กำลังตรวจสอบ" เป็น "ตอบรับการรายงาน"
     # กดดูโปรไฟล์ตัวเอง
     # กดเข้าหน้า "การรายงานของคุณ"
 
@@ -28,94 +56,27 @@ UAT-ReportFail-010  : Admin change report status from ... to ...
     # ผู้โดยสารอยู่ในหน้าดูทริป
     # เห็นผลการรายงานเป็น
 
-UAT-ReportFail-011  : Admin change report status from ... to ...
+UAT-ReportFail-012  : Admin change report status from In process to Reject
     #==== หน้าจอฝั่ง Admin =====
     Open Browser                    ${URL}    edge
     Admin Login
     Dashboard Admin Should Be Visible
     Go To User Management Page
-    # ไปหน้า Report Management
-    # กดเลือกรายการรีพอร์ต
-    # เปลี่ยนสถานะจาก ... เป็น ...
-    # กดยืนยัน
+    Go To Check Report
+    Click Element                   xpath=(//button[normalize-space()="ตรวจสอบรายงาน"])[1]
+    Click Element                   xpath=(//button[normalize-space()="ปฎิเสธ"])
+    Wait Until Element Is Visible    xpath=//*[contains(text(),"อัปเดตสถานะสำเร็จ")]    10s
+    Wait Until Element Is Visible    xpath=//*[contains(text(),"สถานะรายงานเปลี่ยนเป็น กำลังตรวจสอบ")]    10s
 
     #==== หน้าจอฝั่ง Passenger ====
     Open Browser                    ${URL}    edge
     Passenger Login
     Dashboard User Should Be Visible
-    # กดดู Notification และเห็นการแจ้งเตือนสถานะ
-    # กดดูโปรไฟล์ตัวเอง
-    # กดเข้าหน้า "การรายงานของคุณ"
-
-    # ==== Expected Results ====
-    # ผู้โดยสารอยู่ในหน้าดูทริป
-    # เห็นผลการรายงานเป็น
-
-UAT-ReportFail-012  : Admin change report status from ... to reject
-    #==== หน้าจอฝั่ง Admin =====
-    Open Browser                    ${URL}    edge
-    Admin Login
-    Dashboard Admin Should Be Visible
-    Go To User Management Page
-    # ไปหน้า Report Management
-    # กดเลือกรายการรีพอร์ต
-    # เปลี่ยนสถานะจาก ... เป็น reject
-    # กดยืนยัน
-
-    #==== หน้าจอฝั่ง Passenger ====
-    Open Browser                    ${URL}    edge
-    Passenger Login
-    Dashboard User Should Be Visible
-    # กดดู Notification และเห็นการแจ้งเตือนสถานะ
+    View Notification
+    Page Should Contain             สถานะการรายงานของคุณถูกเปลี่ยนจาก "รอดำเนินการ" เป็น "ปฏิเสธ"
     # กดดูโปรไฟล์ตัวเอง
     # กดเข้าหน้า "การรายงานของคุณ"
     
     # ==== Expected Results ====
     # ผู้โดยสารอยู่ในหน้าดูทริป
     # เห็นผลการรายงานเป็น
-
-UAT-ReportFail-013  : Admin change report status from ... to Need More Info
-    #==== หน้าจอฝั่ง Admin =====
-    Open Browser                    ${URL}    edge
-    Admin Login
-    Dashboard Admin Should Be Visible
-    Go To User Management Page
-    # ไปหน้า Report Management
-    # กดเลือกรายการรีพอร์ต
-    # เปลี่ยนสถานะจาก ... เป็น Need More Info
-    # ทำอะไรสักอย่างที่เกี่ยวกับการขอข้อมูล ผู้ใช้
-    # กดยืนยัน
-
-    #==== หน้าจอฝั่ง Passenger ====
-    Open Browser                    ${URL}    edge
-    Passenger Login
-    Dashboard User Should Be Visible
-    # กดดู Notification และเห็นการแจ้งเตือนสถานะ
-    # กดดูโปรไฟล์ตัวเอง
-    # กดเข้าหน้า "การรายงานของคุณ"
-    
-    # ==== Expected Results ====
-    # ผู้โดยสารอยู่ในหน้าดูทริป
-    # เห็นผลการรายงานเป็น
-
-UAT-ReportFail-014  : Passenger sent info to admin 
-    #==== หน้าจอฝั่ง Passenger ====
-    Open Browser                    ${URL}    edge
-    Passenger Login
-    Dashboard User Should Be Visible
-    # กดดูโปรไฟล์ตัวเอง
-    # กดเข้าหน้า "การรายงานของคุณ"
-    # ใส่ข้อมูลเพิ่มเติม
-    # ยืนยัน
-    
-    #==== หน้าจอฝั่ง Admin =====
-    Open Browser                    ${URL}    edge
-    Admin Login
-    Dashboard Admin Should Be Visible
-    # กดดู Notification และเห็นการแจ้งเตือนสถานะ
-    Go To User Management Page
-    # ไปหน้า Report Management
-    # กดเลือกรายการรีพอร์ตที่ผู้ใช้กรอกข้อมูลเข้ามาแล้ว
-
-    # ==== Expected Results ====
-    # เห็นข้อความที่ผู้ใช้กรอกเข้ามา

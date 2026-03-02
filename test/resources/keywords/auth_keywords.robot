@@ -60,16 +60,17 @@ ${IMAGE01_PATH}             ${EXECDIR}${/}image${/}pexels-hazardos-804.jpg
 ${IMAGE02_PATH}             ${EXECDIR}${/}image${/}pexels-hazardos-8041.jpg
 ${IMAGE03_PATH}             ${EXECDIR}${/}image${/}pexels-hazardos-80412.jpg
 ${IMAGE04_PATH}             ${EXECDIR}${/}image${/}pexels-hazardos-804129.jpg
+${VIDEO01_PATH}             ${EXECDIR}${/}image${/}3785380-hd_1920_1080_25fps.mp4
 
 
 # ตัวแปรที่ใช้บนเว็บที่ Deploy แล้ว
-${PASSENGER_REVIEW_USER}
+${PASSENGER_REVIEW_USER}        
 ${PASSENGER_REVIEW_SURNAME}
 ${PASSENGER_REVIEW_PASS}
 
-${PASSENGER_VIEW_USER}
-${PASSENGER_VIEW_SURNAME}
-${PASSENGER_VIEW_PASS}
+${PASSENGER_VIEW_USER}      Ayanokoji
+${PASSENGER_VIEW_SURNAME}   Kiyotaka
+${PASSENGER_VIEW_PASS}      asdfjkl;123
 
 # ตัวแปรที่ใช้ได้ทั้ง Localhost และ Deploy 
 ${REVIEW_TEXT}              ขับเร็วทันใจ คนขับสุภาพ รถสะอาด ตรงเวลา
@@ -91,8 +92,8 @@ Admin Login
     Click Element                   xpath=//a[@href='/login']
     Wait Until Location Contains    /login    10s
     Location Should Contain         /login
-    Input Text                      id=identifier       ${ADMIN_USER}
-    Input Text                      id=password         ${ADMIN_PASS}
+    Input Text                      //input[@placeholder="กรอกชื่อผู้ใช้หรืออีเมล"]       ${ADMIN_USER}
+    Input Text                      //input[@placeholder="กรอกรหัสผ่าน"]         ${ADMIN_PASS}
     Click Button                    xpath=//button[@type='submit']
 
 Passenger Login
@@ -121,8 +122,8 @@ Passenger View Review Login
     Click Element                   xpath=//a[@href='/login']
     Wait Until Location Contains    /login                          10s
     Location Should Contain         /login
-    Input Text                      id=identifier                   ${PASSENGER_VIEW_USER}
-    Input Text                      id=password                     ${PASSENGER_VIEW_USER}
+    Input Text                      //input[@placeholder="กรอกชื่อผู้ใช้หรืออีเมล"]                ${PASSENGER_VIEW_USER}
+    Input Text                      //input[@placeholder="กรอกรหัสผ่าน"]                      ${PASSENGER_VIEW_PASS}
     Click Button                    xpath=//button[@type='submit']
 
     # ==== Expected Results ====
@@ -149,6 +150,9 @@ Go To User Management Page
     Click Element                       xpath=//a[@href='/admin/users']
     Page Should Contain                 User Management   
 
+Go To Check Report
+    Click Element                   xpath=(//button[normalize-space()="Check Report"])
+
 View All Route
     Click Element                   xpath=//a[@href='/findTrip']
 
@@ -161,6 +165,9 @@ View Passenger Info
     Wait Until Element Is Visible    xpath=//h4[normalize-space()="Takumi Fujiwara"]    10s
     Click Element                    xpath=//h4[normalize-space()="Takumi Fujiwara"]
 
+View Notification
+    Wait Until Element Is Visible    xpath=//button[@aria-haspopup="true"]    10s
+    Click Element                    xpath=//button[@aria-haspopup="true"]
 # -----------------------------
 # กลุ่ม: Checkbox Review
 # -----------------------------

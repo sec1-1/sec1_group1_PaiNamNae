@@ -2,21 +2,23 @@
 # คนเขียน Test: วีรภัทร วิเศษสมบัติ 663380025-7
 
 *** Settings ***
-Resource       ../resources/keywords/auth_keywords.robot
+Resource       ../../resources/keywords/auth_keywords.robot
 
 *** Test Cases ***
-UAT-ViewReview-014  : Passenger view review
+UAT-ViewReview-014 Passenger view review
     # ==== Passenger create review ====
+    Setup Delay Selenium
     Open Browser                    ${URL}    edge
-    Passenger Create Review Login
+    Passenger Login
     View My Trip
+    Execute JavaScript                  window.scrollBy(0,150)
     Click Element                       xpath=(//button[normalize-space()="รีวิวผู้ขับ"])[2]
     Click Element                       xpath=(//button[@type="button"][.//span[contains(normalize-space(),"★")]])[5]
     Select All Checkboxes
     Input Text                          xpath=//textarea[@placeholder="เขียนรีวิวของคุณ... (สูงสุด 501 ตัวอักษร)"]    ${REVIEW_TEXT}
     Upload 2 Image and 1 Video
     Click Element                       xpath=//button[normalize-space()="ส่งรีวิว"]
-    Wait Until Element Is Visible       xpath=//*[contains(text(),"รีวิวสำเร็จ")]    10s
+    Wait Until Element Is Visible       xpath=//*[contains(text(),"รีวิวสำเร็จ")]    60s
 
     # ==== Another passenger view Review ====
     Open Browser                    ${URL}    edge
@@ -33,19 +35,19 @@ UAT-ViewReview-014  : Passenger view review
     Page Should Contain     ขับปลอดภัย
     Page Should Contain     บริการเป็นกันเอง
 
-UAT-ViewReview-015  : Passenger Upload 4 File
+UAT-ViewReview-015 Passenger Upload 4 File
     # ==== Passenger create review ====
+    Setup Delay Selenium
     Open Browser                    ${URL}    edge
-    Passenger Create Review Login
+    Passenger Login
     View My Trip
-    Click Element                       xpath=(//button[normalize-space()="รีวิวผู้ขับ"])[2]
+    Execute JavaScript                  window.scrollBy(0,150)
+    Click Element                       xpath=(//button[normalize-space()="รีวิวผู้ขับ"])[3]
     Click Element                       xpath=(//button[@type="button"][.//span[contains(normalize-space(),"★")]])[5]
     Select All Checkboxes
     Input Text                          xpath=//textarea[@placeholder="เขียนรีวิวของคุณ... (สูงสุด 501 ตัวอักษร)"]    ${REVIEW_TEXT}
-    Upload 2 Image and 1 Video
-    Choose File                         xpath=//input[@type="file"]    ${VIDEO02_PATH}
-    Click Element                       xpath=//button[normalize-space()="ส่งรีวิว"]
+    Upload 4 Images
 
     # ==== Expected Results ====
-    Page Should Contain             รีวิวผู้ขับ
-    # ต้องมีข้อความอะไรสักอย่างบอกว่า มีปัญหา
+    Page Should Contain                 รีวิวผู้ขับ
+    Wait Until Element Is Visible       xpath=//*[contains(text(),"เพิ่มรูปได้สูงสุด 3 รูป")]    10s
