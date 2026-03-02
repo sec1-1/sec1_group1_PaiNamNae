@@ -1,5 +1,6 @@
 const prisma = require('../utils/prisma');
 const ApiError = require('../utils/ApiError');
+const { createSystemNotification } = require('./notification.service');
 
 const reportInclude = {
   reporter: {
@@ -45,19 +46,39 @@ const reportInclude = {
 };
 
 const createReport = async (reportData) => {
-  return prisma.report.create({
-    data: {
-      reporterId: reportData.reporterId,
-      type: reportData.type,
-      category: reportData.category,
-      description: reportData.description,
-      images: reportData.images || null,
-      videos: reportData.videos || null,
-      routeId: reportData.routeId || null,
-      bookingId: reportData.bookingId || null,
-      targetUserId: reportData.targetUserId || null,
-    },
-    include: reportInclude
+  return prisma.$transaction(async (tx) => {
+
+    const report = await tx.report.create({
+      data: {
+        reporterId: reportData.reporterId,
+        type: reportData.type,
+        category: reportData.category,
+        description: reportData.description,
+        images: reportData.images || null,
+        videos: reportData.videos || null,
+        routeId: reportData.routeId || null,
+        bookingId: reportData.bookingId || null,
+        targetUserId: reportData.targetUserId || null,
+      },
+      include: reportInclude
+    })
+
+    // 🔔 แจ้งเตือนผู้ใช้ว่าส่งรีพอร์ตสำเร็จ
+    await tx.notification.create({
+      data: {
+        userId: report.reporterId,
+        type: 'SYSTEM',
+        title: 'ส่งการรายงานสำเร็จ',
+        body: 'เราได้รับการรายงานของคุณแล้ว และจะดำเนินการตรวจสอบโดยเร็วที่สุด',
+        link: `/reports/${report.id}`,
+        metadata: {
+          reportId: report.id,
+          status: report.status
+        }
+      }
+    })
+
+    return report
   })
 }
 
@@ -67,28 +88,64 @@ const getReportById = async (id) => {
     include: reportInclude
   })
 }
-
 const updateReportStatus = async (id, status, adminNotes, adminId) => {
-  const report = await prisma.report.findUnique({ where: { id } })
+  return prisma.$transaction(async (tx) => {
 
-  if (!report) {
-    throw new ApiError(404, 'Report not found')
-  }
+    const report = await tx.report.findUnique({ where: { id } })
 
-  const updateData = {
-    status,
-    adminNotes: adminNotes || report.adminNotes
-  }
+    if (!report) {
+      throw new ApiError(404, 'ไม่พบรีพอร์ต')
+    }
 
-  if (status === 'RESOLVED' || status === 'APPROVED' || status === 'REJECTED') {
-    updateData.resolvedAt = new Date(),
+    const statusChanged = report.status !== status
+
+    const updateData = {
+      status,
+      adminNotes: adminNotes ?? report.adminNotes,
+    }
+
+    if (['RESOLVED', 'APPROVED', 'REJECTED'].includes(status)) {
+      updateData.resolvedAt = new Date()
       updateData.resolvedById = adminId
-  }
+    }
 
-  return prisma.report.update({
-    where: { id },
-    data: updateData,
-    include: reportInclude
+    const updatedReport = await tx.report.update({
+      where: { id },
+      data: updateData,
+      include: reportInclude
+    })
+
+    // 🔔 สร้าง notification เมื่อสถานะเปลี่ยนจริง
+    if (statusChanged) {
+
+      // แปลงสถานะเป็นภาษาไทย
+      const statusTextMap = {
+        PENDING: 'รอดำเนินการ',
+        APPROVED: 'กำลังตรวจสอบ',
+        REJECTED: 'ปฏิเสธ',
+        RESOLVED: 'ดำเนินการเสร็จสิ้น'
+      }
+
+      const oldStatusText = statusTextMap[report.status] || report.status
+      const newStatusText = statusTextMap[status] || status
+
+      await tx.notification.create({
+        data: {
+          userId: report.reporterId,
+          type: 'SYSTEM',
+          title: 'อัปเดตสถานะการรายงานของคุณ',
+          body: `สถานะการรายงานของคุณถูกเปลี่ยนจาก "${oldStatusText}" เป็น "${newStatusText}"`,
+          link: `/reports/${report.id}`,
+          metadata: {
+            reportId: report.id,
+            oldStatus: report.status,
+            newStatus: status,
+          }
+        }
+      })
+    }
+
+    return updatedReport
   })
 }
 
