@@ -144,6 +144,9 @@
                                 </div>
                                 <p class="text-sm text-gray-500">รายงานของคุณกำลังรอการตรวจสอบ<br>เราจะเร่งดำเนินการให้เร็วที่สุด</p>
                             </div>
+                            <div class="mt-4 p-3 bg-blue-50 border border-blue-100 rounded-lg text-xs text-blue-800 text-center">
+                                หากปัญหานี้ได้รับการแก้ไขแล้ว หรือต้องการให้ข้อมูลเพิ่มเติม<br>สามารถติดต่อแอดมินได้ที่ <strong>admin@example.com</strong>
+                            </div>
                         </div>
                     </div>
                 </div>
