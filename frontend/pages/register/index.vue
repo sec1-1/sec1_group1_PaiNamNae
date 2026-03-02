@@ -457,22 +457,25 @@ const handleRegister = async () => {
   fd.append('selfiePhotoUrl', formData.selfieFile);
   // ผู้ใช้ทั่วไป: บังคับ role เป็น PASSENGER (สอดคล้องฝั่ง backend/แอดมิน)
   fd.append('role', 'PASSENGER');
-
   try {
-    // เรียก endpoint เดียวกับหน้าแอดมิน
     await postForm(`${apiBase}/users`, fd);
     router.push('/register/success');
   } catch (err) {
     console.error('Registration failed:', err);
+
     const status = err?.status;
     const msg = err?.message || 'สมัครสมาชิกไม่สำเร็จ กรุณาลองใหม่อีกครั้ง';
-    // แจ้งผ่าน toast และคงข้อความจาก backend ถ้ามี
-    if (status === 409) {
-      toast.error('ข้อมูลซ้ำ', msg); // เช่น อีเมล/เลขบัตรซ้ำ
+
+    if (status === 403) {
+      // 🚫 โดน blacklist
+      toast.error('ไม่สามารถสมัครได้', msg);
+    } else if (status === 409) {
+      // 🔁 ข้อมูลซ้ำ
+      toast.error('ข้อมูลซ้ำ', msg);
     } else {
       toast.error('เกิดข้อผิดพลาด', msg);
     }
-  } finally {
+  }finally {
     isLoading.value = false;
   }
 };

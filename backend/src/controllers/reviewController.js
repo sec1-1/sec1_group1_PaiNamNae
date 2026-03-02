@@ -1,4 +1,5 @@
 const prisma = require("../../prisma")
+const { uploadToCloudinary } = require('../utils/cloudinary')
 
 const allowedPositiveTags = [
   'CLEAN',
@@ -19,7 +20,31 @@ const allowedNegativeTags = [
 exports.createReview = async (req, res) => {
   try {
     const userId = req.user.sub
-    const { bookingId, rating, comment, tags, images } = req.body
+    const { bookingId, rating, comment, tags, images, videos } = req.body
+
+    // Upload images if provided
+    let imageUrls = []
+    let videoUrls = []
+    if (req.files) {
+      if (req.files.images) {
+        const uploads = req.files.images.map(file =>
+          uploadToCloudinary(file.buffer, 'reviews')
+        )
+        const results = await Promise.all(uploads)
+        imageUrls = results.map(r => r.url)
+      }
+      if (req.files.videos) {
+        const uploads = req.files.videos.map(file =>
+          uploadToCloudinary(file.buffer, 'reviews', { resource_type: 'video' })
+        )
+        const results = await Promise.all(uploads)
+        videoUrls = results.map(r => r.url)
+      }
+    }
+
+    // Combine with images/videos from body if present
+    const finalImages = imageUrls.length > 0 ? imageUrls : (images || [])
+    const finalVideos = videoUrls.length > 0 ? videoUrls : (videos || [])
 
     // หา booking
     const booking = await prisma.booking.findUnique({
@@ -74,7 +99,8 @@ exports.createReview = async (req, res) => {
         rating: Number(rating),
         comment: comment || null,
         tags: tags || [],
-        images: images || []
+        images: finalImages.length > 0 ? finalImages : [],
+        videos: finalVideos.length > 0 ? finalVideos : []
     }
 })
 
