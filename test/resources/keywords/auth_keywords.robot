@@ -32,8 +32,6 @@
 *** Settings ***
 Library         SeleniumLibrary
 Library         String
-Resource       ../resources/keywords/auth_keywords.robot
-
 
 *** Variables ***
 # ตัวแปรที่ใช้บน Localhost
@@ -58,10 +56,11 @@ ${PASSENGER_PASS}           asdfjkl;123
 
 ${IMAGE_PATH}               D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/IMG-8206.jpg
 ${INVALID_PATH}             D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/This is pdf file.pdf
-${IMAGE01_PATH}             ..\..\..\image\pexels-hazardos-8041.jpg
-${IMAGE02_PATH}             ..\..\..\image\pexels-hazardos-80412.jpg
-${IMAGE03_PATH}             ..\..\..\image\pexels-hazardos-804129.jpg
-${VIDEO01_PATH}             ..\..\..\image\3785380-hd_1920_1080_25fps.mp4             
+${IMAGE01_PATH}             ${EXECDIR}${/}image${/}pexels-hazardos-804.jpg
+${IMAGE02_PATH}             ${EXECDIR}${/}image${/}pexels-hazardos-8041.jpg
+${IMAGE03_PATH}             ${EXECDIR}${/}image${/}pexels-hazardos-80412.jpg
+${IMAGE04_PATH}             ${EXECDIR}${/}image${/}pexels-hazardos-804129.jpg
+
 
 # ตัวแปรที่ใช้บนเว็บที่ Deploy แล้ว
 ${PASSENGER_REVIEW_USER}
@@ -79,6 +78,13 @@ ${REPORT_TEXT}              ขับรถแย่มาก ฝ่าไปแ
 # รวมฟังก์ชั่นทั้งหมด สามารถพิมพ์แค่ชื่อและนำไปใช้ได้เลยในไฟล์ UAT_Test
 *** Keywords ***
 # -----------------------------
+# กลุ่ม: Setup Delay
+# -----------------------------
+Setup Delay Selenium
+    Set Selenium Implicit Wait    5s
+    Set Selenium Speed            0.5s
+
+# -----------------------------
 # กลุ่ม: Login
 # -----------------------------
 Admin Login
@@ -93,8 +99,8 @@ Passenger Login
     Click Element                   xpath=//a[@href='/login']
     Wait Until Location Contains    /login                          10s
     Location Should Contain         /login
-    Input Text                      id=identifier                   ${PASSENGER_USER}
-    Input Text                      id=password                     ${PASSENGER_PASS}
+    Input Text                      //input[@placeholder="กรอกชื่อผู้ใช้หรืออีเมล"]               ${PASSENGER_USER}
+    Input Text                      //input[@placeholder="กรอกรหัสผ่าน"]                     ${PASSENGER_PASS}
     Click Button                    xpath=//button[@type='submit']
 
 # ฟังก์ชั่นนี้ ใช้ข้อมูลจาก Database จริง
@@ -177,12 +183,8 @@ Upload 2 Image and 1 Video
     Choose File         xpath=//input[@type="file"]    ${IMAGE02_PATH}
     Choose File         xpath=//input[@type="file"]    ${VIDEO01_PATH}
 
-Upload 3 Image and 1 Video
+Upload 4 Images
     Choose File         xpath=//input[@type="file"]    ${IMAGE01_PATH}
     Choose File         xpath=//input[@type="file"]    ${IMAGE02_PATH}
     Choose File         xpath=//input[@type="file"]    ${IMAGE03_PATH}
-    Choose File         xpath=//input[@type="file"]    ${VIDEO01_PATH}
-
-# -----------------------------
-# กลุ่ม: Report
-# -----------------------------
+    Choose File         xpath=//input[@type="file"]    ${IMAGE04_PATH}
