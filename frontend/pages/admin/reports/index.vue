@@ -208,6 +208,18 @@
                             </a>
                         </div>
                     </div>
+
+                    <div v-if="viewingReport.videos && viewingReport.videos.length > 0" class="mt-6">
+                        <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">วิดีโอแนบ</h4>
+                        <div class="flex flex-wrap gap-4">
+                            <div v-for="(vid, idx) in viewingReport.videos" :key="'vid'+idx" class="relative group">
+                                <video :src="vid" controls class="h-40 w-auto rounded border border-gray-200 bg-black"></video>
+                                <a :href="vid" target="_blank" class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded">
+                                    <span class="text-white text-sm px-3 py-1 bg-black/60 rounded-full"><i class="fas fa-external-link-alt mr-2"></i>เปิดดูเต็มจอ</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Footer Actions -->
