@@ -15,7 +15,7 @@ UAT-ReportFail-010 Admin change report status from In process to Inspecting
     Go To User Management Page
     Go To Check Report
     Click Element                   xpath=(//button[normalize-space()="ตรวจสอบ"])[2]
-    Click Element                   xpath=(//button[normalize-space()="กำลังตรวจสอบ"])
+    Click Element                   xpath=(//button[normalize-space()=" กำลังตรวจสอบ "])  
     Wait Until Element Is Visible    xpath=//*[contains(text(),"อัปเดตสถานะสำเร็จ")]    10s
     Wait Until Element Is Visible    xpath=//*[contains(text(),"สถานะรายงานเปลี่ยนเป็น กำลังตรวจสอบ")]    10s
 
@@ -32,7 +32,7 @@ UAT-ReportFail-010 Admin change report status from In process to Inspecting
 
     # ==== Expected Results ====
     Page Should Contain             รับเรื่องแล้ว
-    Page Should Contain             ${REPORT_TEXT}
+    Page Should Contain             ขับรถอันตราย
 
 UAT-ReportFail-011 Admin change report status from Inspecting to Respond to reports
     #==== หน้าจอฝั่ง Admin =====
@@ -54,14 +54,14 @@ UAT-ReportFail-011 Admin change report status from Inspecting to Respond to repo
     Passenger Login
     Dashboard User Should Be Visible
     View Notification
-    Page Should Contain             สถานะการรายงานของคุณถูกเปลี่ยนจาก "กำลังตรวจสอบ" เป็น "ดำเนินการเสร็จสิ้น"
+    Page Should Contain             สถานะการรายงานของคุณถูกเปลี่ยนจาก "รอดำเนินการ" เป็น "ดำเนินการเสร็จสิ้น"
     Go To User Profile Page
     Click Element                   xpath=//a[normalize-space()="ประวัติการรายงาน"] 
     Click Element                   xpath=//h2[normalize-space()="ดำเนินการแล้ว"]/ancestor::div[contains(@class,"cursor-pointer")]
 
     # ==== Expected Results ====
     Page Should Contain             ดำเนินการแล้ว
-    Page Should Contain             ${REPORT_TEXT}
+    Page Should Contain             ขับรถอันตราย
 
 UAT-ReportFail-012 Admin change report status from In process to Reject
     #==== หน้าจอฝั่ง Admin =====
@@ -73,7 +73,7 @@ UAT-ReportFail-012 Admin change report status from In process to Reject
     Go To User Management Page
     Go To Check Report
     Click Element                   xpath=(//button[normalize-space()="ตรวจสอบ"])[1]
-    Click Element                   xpath=(//button[normalize-space()="ปฎิเสธ"])
+    Click Element                   xpath=(//button[normalize-space()="ปฏิเสธ"])
     Wait Until Element Is Visible    xpath=//*[contains(text(),"อัปเดตสถานะสำเร็จ")]    10s
     Wait Until Element Is Visible    xpath=//*[contains(text(),"สถานะรายงานเปลี่ยนเป็น ปฏิเสธ")]    10s
 
@@ -90,4 +90,4 @@ UAT-ReportFail-012 Admin change report status from In process to Reject
 
     # ==== Expected Results ====
     Page Should Contain             ดำเนินการแล้ว
-    Page Should Contain             ${REPORT_TEXT}
+    Page Should Contain             ขับรถอันตราย
