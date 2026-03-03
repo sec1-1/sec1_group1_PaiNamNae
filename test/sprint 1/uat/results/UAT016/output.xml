@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.4.1 (Python 3.11.9 on win32)" generated="2026-02-17T23:32:49.746057" rpa="false" schemaversion="5">
+<suite id="s1" name="UAT016 BlacklistRegister" source="D:\Coding Project\Github Project\Software Engineering\My Branch\sec1_group1_PaiNamNae\test\uat\UAT016_BlacklistRegister.robot">
+<test id="s1-t1" name="UAT-015: Blacklist Register" line="6">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-02-17T23:32:50.013477" level="INFO">Opening browser 'chrome' to base url 'http://localhost:3001/'.</msg>
+<arg>${URL}</arg>
+<arg>chrome</arg>
+<arg>options=add_argument("--disable-extensions")</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-02-17T23:32:50.013477" elapsed="3.407545"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-02-17T23:32:53.423020" level="INFO">Clicking element 'xpath=//a[@href='/register']'.</msg>
+<arg>xpath=//a[@href='/register']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-02-17T23:32:53.422021" elapsed="0.196270"/>
+</kw>
+<kw name="Wait Until Location Contains" owner="SeleniumLibrary">
+<arg>/register</arg>
+<arg>10s</arg>
+<doc>Waits until the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-02-17T23:32:53.620487" elapsed="0.016123"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-02-17T23:32:53.638611" level="INFO">Typing text 'goodboy' into text field 'id=username'.</msg>
+<arg>id=username</arg>
+<arg>${BLACKLIST_USER}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-02-17T23:32:53.637610" elapsed="0.150269"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-02-17T23:32:53.788890" level="INFO">Typing text 'good@mail.com' into text field 'id=email'.</msg>
+<arg>id=email</arg>
+<arg>${BLACKLIST_EMAIL}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-02-17T23:32:53.787879" elapsed="0.182600"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-02-17T23:32:53.971481" level="INFO">Typing text 'asdfjkl;123' into text field 'id=password'.</msg>
+<arg>id=password</arg>
+<arg>${BLACKLIST_PASS}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-02-17T23:32:53.971481" elapsed="0.188381"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-02-17T23:32:54.161372" level="INFO">Typing text 'asdfjkl;123' into text field 'id=confirmPassword'.</msg>
+<arg>id=confirmPassword</arg>
+<arg>${BLACKLIST_PASS}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-02-17T23:32:54.159862" elapsed="0.099895"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-02-17T23:32:54.261759" level="INFO">Executing JavaScript:
+window.scrollBy(0,500)
+Without any arguments.</msg>
+<arg>window.scrollBy(0,500)</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-02-17T23:32:54.260758" elapsed="0.007883"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-02-17T23:32:54.269656" level="INFO">Clicking element 'xpath=//button[normalize-space()="ถัดไป"]'.</msg>
+<arg>xpath=//button[normalize-space()="ถัดไป"]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-02-17T23:32:54.269656" elapsed="0.082089"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-02-17T23:32:54.353746" level="INFO">Typing text 'goodboy' into text field 'id=firstName'.</msg>
+<arg>id=firstName</arg>
+<arg>${BLACKLIST_USER}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-02-17T23:32:54.352748" elapsed="0.163929"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-02-17T23:32:54.516677" level="INFO">Typing text 'good@mail.com' into text field 'id=lastName'.</msg>
+<arg>id=lastName</arg>
+<arg>${BLACKLIST_EMAIL}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-02-17T23:32:54.516677" elapsed="0.110462"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-02-17T23:32:54.628140" level="INFO">Typing text '0987654333' into text field 'id=phoneNumber'.</msg>
+<arg>id=phoneNumber</arg>
+<arg>${BLACKLIST_TEL}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-02-17T23:32:54.628140" elapsed="0.133361"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-02-17T23:32:56.762686" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-02-17T23:32:54.762507" elapsed="2.000179"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-02-17T23:32:56.763692" level="INFO">Clicking element 'xpath=//label[normalize-space()="ชาย"]/input'.</msg>
+<arg>xpath=//label[normalize-space()="ชาย"]/input</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-02-17T23:32:56.762686" elapsed="0.058457"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//button[normalize-space()="ถัดไป"]</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-02-17T23:32:56.821143" elapsed="0.019710"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-02-17T23:32:56.841852" level="INFO">Clicking element 'xpath=//button[normalize-space()="ถัดไป"]'.</msg>
+<arg>xpath=//button[normalize-space()="ถัดไป"]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-02-17T23:32:56.841852" elapsed="0.099791"/>
+</kw>
+<kw name="Choose File" owner="SeleniumLibrary">
+<msg time="2026-02-17T23:32:56.942640" level="INFO">Sending D:\Coding Project\Github Project\Software Engineering\My Branch\sec1_group1_PaiNamNae\test\resources\IDCard.jpg to browser.</msg>
+<arg>id=idCardFile</arg>
+<arg>${BLACKLIST_ID_PATH}</arg>
+<doc>Inputs the ``file_path`` into the file input field ``locator``.</doc>
+<status status="PASS" start="2026-02-17T23:32:56.941643" elapsed="0.048857"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-02-17T23:32:56.991501" level="INFO">Typing text '1234567890987' into text field 'id=idNumber'.</msg>
+<arg>id=idNumber</arg>
+<arg>${BLACKLIST_ID}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-02-17T23:32:56.991501" elapsed="0.101158"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-02-17T23:32:57.094168" level="INFO">Typing text '02022030' into text field 'id=expiryDate'.</msg>
+<arg>id=expiryDate</arg>
+<arg>${EXPID_DATE}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-02-17T23:32:57.093658" elapsed="0.098548"/>
+</kw>
+<kw name="Choose File" owner="SeleniumLibrary">
+<msg time="2026-02-17T23:32:57.193718" level="INFO">Sending D:\Coding Project\Github Project\Software Engineering\My Branch\sec1_group1_PaiNamNae\test\resources\Selfies.jpg to browser.</msg>
+<arg>id=selfieFile</arg>
+<arg>${BLACKLIST_SELF_PATH}</arg>
+<doc>Inputs the ``file_path`` into the file input field ``locator``.</doc>
+<status status="PASS" start="2026-02-17T23:32:57.193718" elapsed="0.031912"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-02-17T23:32:57.225630" level="INFO">Clicking element 'xpath=//input[@type="checkbox"]'.</msg>
+<arg>xpath=//input[@type="checkbox"]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-02-17T23:32:57.225630" elapsed="0.082070"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-02-17T23:32:57.307700" level="INFO">Clicking element 'xpath=//button[starts-with(normalize-space(), "สมัครสมาชิก")]'.</msg>
+<arg>xpath=//button[starts-with(normalize-space(), "สมัครสมาชิก")]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-02-17T23:32:57.307700" elapsed="0.083678"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//*[contains(text(),"ข้อมูลซ้ำ")]</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-02-17T23:32:57.393139" elapsed="3.437860"/>
+</kw>
+<status status="PASS" start="2026-02-17T23:32:50.012478" elapsed="10.819522"/>
+</test>
+<status status="PASS" start="2026-02-17T23:32:49.748568" elapsed="11.085154"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="UAT016 BlacklistRegister" id="s1" pass="1" fail="0" skip="0">UAT016 BlacklistRegister</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

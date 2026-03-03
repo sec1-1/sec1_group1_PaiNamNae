@@ -1,0 +1,26 @@
+meta {
+  name: blacklist user ที่ไม่มีอยู่จริง
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{base_url}}/api/admin/users/d001/blacklist
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{admin_token}}
+}
+
+tests {
+  test("Status code should be 404", () => {
+    expect(res.status).to.equal(404);
+  });
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

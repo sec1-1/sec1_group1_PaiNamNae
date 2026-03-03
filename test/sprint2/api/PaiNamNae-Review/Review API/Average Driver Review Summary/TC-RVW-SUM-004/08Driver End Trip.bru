@@ -1,0 +1,27 @@
+meta {
+  name: 08Driver End Trip
+  type: http
+  seq: 6
+}
+
+patch {
+  url: {{base_url}}/api/routes/{{routeId}}/complete
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{driver2_token}}
+}
+
+tests {
+  test("End trip: status 200", () => {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

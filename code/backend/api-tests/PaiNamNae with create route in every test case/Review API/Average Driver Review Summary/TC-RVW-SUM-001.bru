@@ -1,0 +1,39 @@
+meta {
+  name: TC-RVW-SUM-001
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/drivers/{{driver_id}}/review-summary
+  body: none
+  auth: inherit
+}
+
+tests {
+  const json = res.getBody();
+  
+  test("Status code ต้องเป็น 200", () => {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Response ต้องมี average และ totalReviews", () => {
+    expect(json).to.have.property("average");
+    expect(json).to.have.property("totalReviews");
+  });
+  
+  test("totalReviews ต้องมากกว่าหรือเท่ากับ 1", () => {
+    expect(json.totalReviews).to.be.at.least(1);
+  });
+  
+  test("average ต้องอยู่ในช่วง 1 ถึง 5", () => {
+    const avg = Number(json.average);
+    expect(avg).to.be.within(1, 5);
+  });
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

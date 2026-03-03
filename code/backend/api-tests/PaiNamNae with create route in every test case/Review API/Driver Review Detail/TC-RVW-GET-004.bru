@@ -1,0 +1,23 @@
+meta {
+  name: TC-RVW-GET-004
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{base_url}}/api/reviews/driver/d001
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("Status code ต้องเป็น 404", () => {
+    expect(res.getStatus()).to.equal(404);
+  });
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

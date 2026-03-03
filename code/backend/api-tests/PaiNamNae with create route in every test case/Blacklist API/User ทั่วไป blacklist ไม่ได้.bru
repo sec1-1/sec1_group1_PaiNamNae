@@ -1,0 +1,26 @@
+meta {
+  name: User ทั่วไป blacklist ไม่ได้
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/api/admin/users/{{driver_id}}/blacklist
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{driver_token}}
+}
+
+tests {
+  test("Status code should be 403", () => {
+    expect(res.status).to.equal(403);
+  });
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

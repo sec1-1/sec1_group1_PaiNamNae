@@ -1,0 +1,29 @@
+meta {
+  name: unblacklist user ที่ไม่ได้ blacklist
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{base_url}}/api/admin/users/{{driver_id}}/unblacklist
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("Status code should be 200", () => {
+    expect(res.status).to.equal(200);
+  });
+  
+  test("Data message should be correct", () => {
+    expect(res.body).to.have.property("data");
+    expect(res.body.data).to.have.property("message");
+    expect(res.body.data.message).to.equal("User is not blacklisted");
+  });
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

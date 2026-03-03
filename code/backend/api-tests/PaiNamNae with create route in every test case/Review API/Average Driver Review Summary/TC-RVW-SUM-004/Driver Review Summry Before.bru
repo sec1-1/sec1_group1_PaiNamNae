@@ -1,0 +1,50 @@
+meta {
+  name: Driver Review Summry Before
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/drivers/{{driver2_id}}/review-summary
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{driver2_token}}
+}
+
+script:post-response {
+  const json = res.getBody();
+  bru.setVar("avgRating",json.average);
+  bru.setVar("totalReviews",json.totalReviews);
+  
+}
+
+tests {
+  const json = res.getBody();
+  
+  test("Status code ต้องเป็น 200", () => {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Response ต้องมี average และ totalReviews", () => {
+    expect(json).to.have.property("average");
+    expect(json).to.have.property("totalReviews");
+  });
+  
+  test("AverageRating ต้องเท่ากับ 0", () => {
+    expect(Number(json.AverageRating)).to.equal(0);
+  });
+  
+  test("AverageRating ต้องเท่ากับ 0", () => {
+    expect(json.average).to.equal(0);
+  });
+  
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
