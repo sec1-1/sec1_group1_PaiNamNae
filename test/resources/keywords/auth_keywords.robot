@@ -159,7 +159,7 @@ Go To User Profile Page
     Page Should Contain                 โปรไฟล์ของฉัน   
 
 Go To Check Report
-    Click Element                   xpath=(//button[normalize-space()="Check Report"])
+    Click Element                   xpath=//a[.//span[normalize-space()="Check Report"]]
 
 View All Route
     Click Element                   xpath=//a[@href='/findTrip']
