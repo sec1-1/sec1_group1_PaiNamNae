@@ -130,3 +130,5 @@ Parts of this changelog were drafted with the assistance of an AI language model
 
 #### API Test
 - Add test case for "Passenger Report Drivery System" include valid case(successful report) and invallid case(invalid input)
+- Add test design for Report & Review System, covering scenarios such as successful submission, send report without some field, invalid input, get report detail
+  
