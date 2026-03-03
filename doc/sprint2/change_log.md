@@ -120,3 +120,10 @@ Parts of this changelog were drafted with the assistance of an AI language model
 - Replaced invalid status `IN_PROGRESS` with `APPROVED` to align with Prisma enum schema.
 - Removed duplicate `statusBadge` function causing Vite compilation failure.
 - Increased modal `z-index` to `z-[1050]` to ensure proper overlay above sidebar and header.
+
+
+### Test
+
+#### UAT Test
+- Add test cases for the “Report System” (report), covering scenarios such as successful submission, failed submission, cancellation, file size limit, invalid file format, and status changes by the administrator.
+- Add test cases reviewed from Sprint 1 for further development, and refactor the code related to Checkbox, Comment, Rating, UploadImage, CloseReview, DoubleReview, and ViewReview.
