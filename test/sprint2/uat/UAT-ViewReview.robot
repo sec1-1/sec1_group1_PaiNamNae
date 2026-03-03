@@ -5,7 +5,7 @@
 Resource       ../../resources/keywords/auth_keywords.robot
 
 *** Test Cases ***
-UAT-ViewReview-014 Passenger view review
+UAT-ViewReview-015 Passenger view review
     # ==== Passenger create review ====
     Setup Delay Selenium
     Open Browser                    ${URL}    edge
@@ -35,7 +35,7 @@ UAT-ViewReview-014 Passenger view review
     Page Should Contain     ขับปลอดภัย
     Page Should Contain     บริการเป็นกันเอง
 
-UAT-ViewReview-015 Passenger Upload 4 File
+UAT-ViewReview-016 Passenger Upload 4 File
     # ==== Passenger create review ====
     Setup Delay Selenium
     Open Browser                    ${URL}    edge

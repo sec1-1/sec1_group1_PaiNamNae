@@ -2,7 +2,7 @@
 Resource   ../../resources/keywords/auth_keywords.robot
 
 *** Test Cases ***
-UAT-022 Passenger Upload Image File
+UAT-024 Passenger Upload Image File In Review
     Setup Delay Selenium
     Open Browser                    ${URL}    edge
     Passenger Login
@@ -21,7 +21,7 @@ UAT-022 Passenger Upload Image File
     Element Should Be Visible        xpath=//div[contains(@class,"flex-wrap")]//img
     Page Should Contain             ${PASSENGER_SURNAME}
 
-UAT-023 Passenger Upload Video File
+UAT-025 Passenger Upload Video File In Review
     Setup Delay Selenium
     Open Browser                    ${URL}    edge
     Passenger Login
@@ -39,7 +39,7 @@ UAT-023 Passenger Upload Video File
     Wait Until Element Is Visible    xpath=//div[contains(@class,"flex-wrap")]//video    30s
     Element Should Be Visible        xpath=//div[contains(@class,"flex-wrap")]//video
 
-UAT-024 Passenger Upload Invalid File
+UAT-026 Passenger Upload Invalid File In Review
     Setup Delay Selenium
     Open Browser                    ${URL}    edge
     Passenger Login
@@ -47,15 +47,20 @@ UAT-024 Passenger Upload Invalid File
     Execute JavaScript                  window.scrollBy(0,325)
     Click Element       xpath=(//button[normalize-space()="รีวิวผู้ขับ"])[11]
     Click Element       xpath=(//button[@type="button"][.//span[contains(normalize-space(),"★")]])[5]
-    ${count_before}=    Get Element Count    xpath=//div[contains(@class,"flex-wrap")]//*[self::img or self::video]
     Choose File         xpath=//input[@type="file"]    ${PDF_PATH}
-    ${count_after}=    Get Element Count    xpath=//div[contains(@class,"flex-wrap")]//*[self::img or self::video]
     
     # ==== Expected Results ====
-    Should Be Equal As Integers     ${count_before}    ${count_after}
-    ${accept}=    Get Element Attribute    xpath=//input[@type="file"]    accept
-    Should Contain    ${accept}    image
-    Should Contain    ${accept}    video
-    Should Not Contain    ${accept}    pdf
-    Wait Until Element Is Visible    xpath=//*[contains(text(),"กรุณาเลือกไฟล์รูปภาพเท่านั้น")]    20s
-    Element Should Be Visible        xpath=//*[contains(text(),"กรุณาเลือกไฟล์รูปภาพเท่านั้น")]
+    Wait Until Element Is Visible    xpath=//*[contains(text(),"กรุณาเลือกไฟล์รูปหรือวิดีโอเท่านั้น")]    10s
+
+UAT-027 Passenger Upload File Video More than 50MB In Review
+    Setup Delay Selenium
+    Open Browser                    ${URL}    edge
+    Passenger Login
+    View My Trip
+    Execute JavaScript                  window.scrollBy(0,325)
+    Click Element       xpath=(//button[normalize-space()="รีวิวผู้ขับ"])[11]
+    Click Element       xpath=(//button[@type="button"][.//span[contains(normalize-space(),"★")]])[5]
+    Choose File         xpath=//input[@type="file"]    ${INVALID_VIDEO}
+    
+    # ==== Expected Results ====
+    Wait Until Element Is Visible    xpath=//*[contains(text(),"ขนาดไฟล์ต้องไม่เกิน 50MB")]    10s

@@ -62,6 +62,7 @@ ${IMAGE03_PATH}             ${EXECDIR}${/}image${/}pexels-hazardos-80412.jpg
 ${IMAGE04_PATH}             ${EXECDIR}${/}image${/}pexels-hazardos-804129.jpg
 ${VIDEO01_PATH}             ${EXECDIR}${/}image${/}3785380-hd_1920_1080_25fps.mp4
 ${PDF_PATH}                 ${EXECDIR}${/}image${/}Thisispdffile.pdf
+${INVALID_VIDEO}            ${EXECDIR}${/}image${/}5275550-uhd_4096_2160_25fps.mp4
 
 # ตัวแปรที่ใช้บนเว็บที่ Deploy แล้ว
 ${PASSENGER_REVIEW_USER}        

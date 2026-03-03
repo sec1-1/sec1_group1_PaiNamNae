@@ -2,7 +2,7 @@
 Resource       ../../resources/keywords/auth_keywords.robot
 
 *** Test Cases ***
-UAT-018 Passenger Select Few Checkbox.
+UAT-020 Passenger Select Few Checkbox.
     Setup Delay Selenium
     Open Browser                    ${URL}    edge
     Passenger Login
@@ -21,7 +21,7 @@ UAT-018 Passenger Select Few Checkbox.
     Page Should Contain     สะอาด
     Page Should Contain     ตรงเวลา
 
-UAT-019 Passenger Select All Checkbox.
+UAT-021 Passenger Select All Checkbox.
     Setup Delay Selenium
     Open Browser                    ${URL}    edge
     Passenger Login
