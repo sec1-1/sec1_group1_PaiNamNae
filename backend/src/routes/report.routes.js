@@ -17,6 +17,14 @@ router.get(
     reportController.searchReports
 );
 
+// GET /api/reports/admin/stats
+router.get(
+    '/admin/stats',
+    protect,
+    requireAdmin,
+    reportController.getReportStats
+);
+
 // GET /api/reports/admin/:id
 router.get(
     '/admin/:id',
@@ -80,5 +88,6 @@ router.get(
     validate({ params: idParamSchema }),
     reportController.getReportById
 );
+
 
 module.exports = router;
