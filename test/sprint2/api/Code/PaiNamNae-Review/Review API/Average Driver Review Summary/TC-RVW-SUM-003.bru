@@ -1,0 +1,23 @@
+meta {
+  name: TC-RVW-SUM-003
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/api/drivers/d001/review-summary
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("Status code ต้องเป็น 404", () => {
+    expect(res.getStatus()).to.equal(404);
+  });
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

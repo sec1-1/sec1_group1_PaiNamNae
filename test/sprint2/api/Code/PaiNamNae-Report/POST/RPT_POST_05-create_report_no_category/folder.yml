@@ -1,0 +1,9 @@
+info:
+  name: RPT_POST_05-create_report_no_category
+  type: folder
+  seq: 2
+
+request:
+  auth:
+    type: bearer
+    token: "{{passenger_token}}"
