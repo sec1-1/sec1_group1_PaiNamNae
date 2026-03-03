@@ -1,0 +1,173 @@
+Authentication
+Passenger01
+username: passenger01
+password: 12345678
+
+Passenger02
+username: passenger02
+password: 12345678
+-----------------------------------------------
+Environment Variables
+base_url            : http://localhost:3000 or Your Backend Domain Name
+route_id            : from driver create route or database
+booking_id          : from passenger reserve route or database
+driver_id           : from driver login or database 
+passenger_token     : from passenger01 login
+passenger_02_token  : from passenger02 login
+
+=============================================== 
+Valid Case
+===============================================
+Test Case ID:   RPT_POST_01
+Description:    Create Report with Minimum Fields
+Token:          passenger_token
+Request:        POST {{base_url}}/api/reports
+Body:           {
+                  "type": "PASSENGER",
+                  "category": "PAYMENT_ISSUE",
+                  "description": "จ่ายเงินไม่ได้",
+                  "routeId": "{{routeId}}",
+                  "bookingId": "{{bookingId}}",
+                  "targetUserId": "{{driver_id}}"
+                }
+Expected Result: - response status= 201
+                 - report has id
+                 - show text "Report created successsfully"
+-----------------------------------------------
+Test Case ID:   RPT-POST-02
+Description:    Create Report with Image & Video
+Token:          passenger_token
+Request:        POST {{base_url}}/api/reports
+Body(Multipart Form):
+    type        : PASSENGER
+    category    : PAYMENT_ISSUE
+    description : จ่ายเงินไม่ได้
+    images      : [upload your image]
+    videos      : [upload your image]
+    routeId     : {{routeId}}
+    bookingId   : {{bookingId}}
+    targetUserId: {{driver_id}}
+Expected Result: - response status= 201
+                 - report has id
+                 - show text "Report created successsfully"
+                 - Videos & Images Field is an array and not null
+-----------------------------------------------
+Test Case ID:   RPT-POST-03
+Description:    Create Report with No Type Field
+Token:          passenger_token
+Request:        POST {{base_url}}/api/reports
+Body:
+    category    : PAYMENT_ISSUE
+    description : จ่ายเงินไม่ได้
+    routeId     : {{routeId}}
+    bookingId   : {{bookingId}}
+    targetUserId: {{driver_id}}
+Expected Result: - response status= 400
+-----------------------------------------------
+Test Case ID:   RPT-POST-04
+Description:    Create Report with No Description
+Token:          passenger_token
+Request:        POST {{base_url}}/api/reports
+Body:
+    type        : PASSENGER
+    category    : PAYMENT_ISSUE
+    routeId     : {{routeId}}
+    bookingId   : {{bookingId}}
+    targetUserId: {{driver_id}}
+Expected Result: - response status= 400
+-----------------------------------------------
+Test Case ID:   RPT-POST-05
+Description:    Create Report with No Category
+Token:          passenger_token
+Request:        POST {{base_url}}/api/reports
+Body:
+    type        : PASSENGER
+    description : จ่ายเงินไม่ได้
+    images      : "example.com/001.jpeg"
+    routeId     : {{routeId}}
+    bookingId   : {{bookingId}}
+    targetUserId: {{driver_id}}
+Expected Result: - response status= 400
+-----------------------------------------------
+Test Case ID:   RPT-POST-06
+Description:    Create Report Image URL is string instead of array
+Token:          passenger_token
+Request:        POST {{base_url}}/api/reports
+Body:
+    type        : PASSENGER
+    description : จ่ายเงินไม่ได้
+    images      : "example.com/001.jpeg"
+    routeId     : {{routeId}}
+    bookingId   : {{bookingId}}
+    targetUserId: {{driver_id}}
+Expected Result: - report created but images & video field are null
+-----------------------------------------------
+Test Case ID:   RPT-GET-01
+Description:    Get Report
+Token:          passenger_token
+Request:        GET {{base_url}}/api/reports/{{report_id}}
+-----------------------------------------------
+Test Case ID:   RPT-GET-03
+Description:    Get Report without Token
+Token:          No Token
+Request:        GET {{base_url}}/api/reports/{{report_id}}
+-----------------------------------------------
+Test Case ID:   RPT-GET-04
+Description:    Get Other Passenger Report
+Token:          passenger_02_token
+Request:        GET {{base_url}}/api/reports/{{report_id}}
+-----------------------------------------------
+Test Case ID:   RPT-GET-05
+Description:    Get Report List
+Token:          passenger_token
+Request:        GET {{base_url}}/api/reports/me
+-----------------------------------------------
+Test Case ID:   RPT-GET-06
+Description:    Admin Get Report List
+Token:          admin_token
+Request:        GET {{base_url}}/api/reports/admin/{{report_id}}
+-----------------------------------------------
+Test Case ID:   RPT-GET-07
+Description:    Get Report By Booking ID
+Token:          passenger_token
+Request:        GET {{base_url}}/api/reports/booking/{{bookingId}}
+
+
+===============================================
+Invalid Case
+===============================================
+Test Case ID:   RPT-POST-07
+Description:    Create Report with Over Limit Description (600 Characters)
+Token:          passenger_token
+Request:        POST {{base_url}}/api/reports
+Body:
+    type        : PASSENGER
+    category    : PAYMENT_ISSUE
+    description : กกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกก
+    routeId     : {{routeId}}
+    bookingId   : {{bookingId}}
+    targetUserId: {{driver_id}}
+-----------------------------------------------
+Test Case ID:   RPT_POST_08
+Description:    Create Report without Passenger Token
+Token:          No token
+Request:        POST {{base_url}}/api/reports
+Body:           {
+                  "type": "PASSENGER",
+                  "category": "PAYMENT_ISSUE",
+                  "description": "จ่ายเงินไม่ได้",
+                  "routeId": "{{routeId}}",
+                  "bookingId": "{{bookingId}}",
+                  "targetUserId": "{{driver_id}}"
+                }
+-----------------------------------------------
+Test Case ID:   RPT-GET-07
+Description:    Get Report By Invalid Booking ID
+Token:          passenger_token
+Request:        GET {{base_url}}/api/reports/booking/invalid_booking_id
+-----------------------------------------------
+Test Case ID:   RPT-GET-02
+Description:    Get Report with Fake Report Id
+Token:          passenger_token
+Request:        GET {{base_url}}/api/reports/invalid_report_id
+
