@@ -1,0 +1,9 @@
+info:
+  name: RPT_POST_06-create_report_image_string
+  type: folder
+  seq: 2
+
+request:
+  auth:
+    type: bearer
+    token: "{{passenger_token}}"

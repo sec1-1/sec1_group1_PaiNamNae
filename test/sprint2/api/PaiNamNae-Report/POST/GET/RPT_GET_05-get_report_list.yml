@@ -1,0 +1,38 @@
+info:
+  name: RPT_GET_05-get_report_list
+  type: http
+  seq: 5
+
+http:
+  method: GET
+  url: "{{base_url}}/api/reports/me"
+  auth:
+    type: bearer
+    token: "{{passenger_token}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        const body = res.getBody();
+        const report = typeof body === "string" ? JSON.parse(body) : body;
+
+        test("Get my reports: Status code : 200", function () {
+          expect(res.getStatus()).to.equal(200);
+        });
+
+        test("report data should be array", function () {
+          expect(report.data).to.be.an("array");
+        });
+
+        test("Each report should have ID", function () {
+          report.data.forEach(r => {
+            expect(r).to.have.property("reporterId");
+          });
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
