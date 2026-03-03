@@ -179,12 +179,14 @@ const getReportByBookingId = async (bookingId, reporterId) => {
 };
 
 const searchReports = async (opts = {}) => {
+  
   const {
     page = 1,
     limit = 20,
     q,
     type,
     status,
+    category,
     reporterId,
     reporterSearch,
     dateFrom,
@@ -197,7 +199,7 @@ const searchReports = async (opts = {}) => {
 
   if (type) where.type = type;
   if (status) where.status = status;
-
+  if (category) where.category = category;
   if (reporterSearch) {
     where.reporter = {
       OR: [
@@ -273,7 +275,32 @@ const searchReports = async (opts = {}) => {
     },
   };
 };
+const getReportStats = async () => {
+  const result = await prisma.report.groupBy({
+    by: ['category'],
+    _count: true
+  });
 
+  const allCategories = [
+    'VEHICLE_ISSUE',
+    'PASSENGER_ISSUE',
+    'ROAD_ISSUE',
+    'SAFETY_ISSUE',
+    'PAYMENT_ISSUE',
+    'NO_SHOW',
+    'OTHER'
+  ];
+
+  const stats = Object.fromEntries(
+    allCategories.map(cat => [cat, 0])
+  );
+
+  result.forEach(item => {
+    stats[item.category] = item._count;
+  });
+
+  return { stats };
+};
 
 module.exports = {
   createReport,
@@ -282,5 +309,6 @@ module.exports = {
   deleteReport,
   getReportsByUser,
   getReportByBookingId ,
-  searchReports
+  searchReports,
+  getReportStats
 }

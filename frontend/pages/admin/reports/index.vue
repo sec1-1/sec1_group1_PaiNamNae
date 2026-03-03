@@ -4,25 +4,32 @@
         <AdminSidebar />
 
         <!-- Main Content -->
-        <main id="main-content" class="main-content mt-16 ml-0 lg:ml-[280px] p-6">
+        <main id="main-content" class="main-content mt-2 ml-0 lg:ml-[280px] p-6">
             <div class="mx-auto max-w-8xl">
                 <!-- Title + Controls -->
                 <div class="flex flex-col gap-3 mb-6 sm:flex-row sm:items-center sm:justify-between">
                     <div class="flex items-center gap-3">
                         <h1 class="text-2xl font-semibold text-gray-800">Check Report</h1>
                     </div>
+</div>
+                    <!-- Report Statistics -->
+<!-- Report Statistics -->
+<div class="grid grid-cols-7 gap-4 mb-6">
+  <div
+  v-for="item in categories"
+  :key="item.key"
+  class="p-4 rounded-xl border bg-white border-gray-200"
+>
+    <div class="text-xs text-gray-500 font-medium truncate">
+      {{ item.label }}
+    </div>
+    <div class="text-xl font-bold text-gray-800 mt-1">
+      {{ reportStats?.[item.key] ?? 0 }}
+    </div>
+  </div>
+</div>
 
-                    <!-- Right: Quick Search -->
-                    <div class="flex items-center gap-2">
-                        <input v-model.trim="filters.q" @keyup.enter="applyFilters" type="text"
-                            placeholder="ค้นหา..."
-                            class="max-w-full px-3 py-2 border border-gray-300 rounded-md w-72 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                        <button @click="applyFilters"
-                            class="px-4 py-2 text-white bg-blue-600 rounded-md cursor-pointer hover:bg-blue-700">
-                            ค้นหา
-                        </button>
-                    </div>
-                </div>
+                
 
                 <!-- Card -->
                 <div class="bg-white border border-gray-300 rounded-lg shadow-sm">
@@ -30,6 +37,31 @@
                         <div class="text-sm text-gray-600">
                             หน้าที่ {{ pagination.page }} / {{ pagination.totalPages || 1 }} • ทั้งหมด {{ pagination.total }} รายงาน
                         </div>
+
+                         <!-- Right: Status Filter Buttons -->
+    <div class="flex flex-wrap gap-2">
+        <button
+            @click="filterByStatus('')"
+            class="px-3 py-1 text-xs rounded-full border transition"
+            :class="!filters.status
+                ? 'bg-blue-600 text-white border-blue-600'
+                : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'"
+        >
+            ทั้งหมด
+        </button>
+
+        <button
+            v-for="s in statuses"
+            :key="s.key"
+            @click="filterByStatus(s.key)"
+            class="px-3 py-1 text-xs rounded-full border transition"
+            :class="filters.status === s.key
+                ? 'bg-blue-600 text-white border-blue-600'
+                : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'"
+        >
+            {{ s.label }}
+        </button>
+    </div>
                     </div>
 
                     <!-- Loading / Error -->
@@ -41,7 +73,7 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-4 py-3 text-xs font-medium text-left text-gray-500 uppercase">ประเภท / หมวดหมู่</th>
+                                    <th class="px-4 py-3 text-xs font-medium text-left text-gray-500 uppercase">ประเภท / หมวดหมู่ </th>
                                     <th class="px-4 py-3 text-xs font-medium text-left text-gray-500 uppercase">รายละเอียด</th>
                                     <th class="px-4 py-3 text-xs font-medium text-left text-gray-500 uppercase">ผู้รายงาน</th>
                                     <th class="px-4 py-3 text-xs font-medium text-left text-gray-500 uppercase">ผู้ถูกรายงาน</th>
@@ -51,38 +83,75 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                <tr v-for="report in reports" :key="report.id" class="transition-opacity hover:bg-gray-50">
-                                    <td class="px-4 py-3 text-sm text-gray-900">
-                                        <div class="font-medium">{{ report.type || '-' }}</div>
-                                        <div class="text-xs text-gray-500">{{ report.category || '-' }}</div>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm text-gray-500 max-w-xs truncate" :title="report.description">
-                                        {{ report.description || '-' }}
-                                    </td>
-                                    <td class="px-4 py-3 text-sm text-gray-900">
-                                        {{ report.reporterName || '-' }}
-                                    </td>
-                                    <td class="px-4 py-3 text-sm text-gray-900">
-                                        {{ report.targetUser ? `${report.targetUser.firstName} ${report.targetUser.lastName}` : '-' }}
-                                    </td>
-                                    <td class="px-4 py-3 text-sm text-gray-500">
-                                        {{ formatDate(report.createdAt) }}
-                                    </td>
-                                    <td class="px-4 py-3 text-sm">
-                                        <span class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full" :class="statusBadge(report.status)">
-                                            {{ statusLabel(report.status) }}
-                                        </span>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm">
-                                        <button @click="openViewModal(report)" class="px-3 py-1 text-xs text-blue-600 bg-blue-50 border border-blue-200 rounded hover:bg-blue-100 shadow-sm" title="ตรวจสอบรายงาน">
-                                            ตรวจสอบรายงาน
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr v-if="!reports.length">
-                                    <td colspan="7" class="px-4 py-10 text-center text-gray-500">ไม่มีข้อมูลรายงาน</td>
-                                </tr>
-                            </tbody>
+  <tr
+    v-for="report in reports"
+    :key="report.id"
+    class="transition-opacity hover:bg-gray-50"
+  >
+    <!-- ประเภท / หมวดหมู่ -->
+    <td class="px-4 py-3 text-sm text-gray-900">
+      <div class="font-medium">
+        {{ categoryLabel(report.category) }}
+      </div>
+
+    </td>
+
+    <!-- รายละเอียด -->
+    <td
+      class="px-4 py-3 text-sm text-gray-500 max-w-xs truncate"
+      :title="report.description"
+    >
+      {{ report.description || 'ไม่มีรายละเอียด' }}
+    </td>
+
+    <!-- ผู้รายงาน -->
+    <td class="px-4 py-3 text-sm text-gray-900">
+      {{ report.reporterName || 'ไม่ระบุ' }}
+    </td>
+
+    <!-- ผู้ถูกรายงาน -->
+    <td class="px-4 py-3 text-sm text-gray-900">
+      {{
+        report.targetUser
+          ? `${report.targetUser.firstName} ${report.targetUser.lastName}`
+          : 'ไม่ระบุ'
+      }}
+    </td>
+
+    <!-- วันที่สร้าง -->
+    <td class="px-4 py-3 text-sm text-gray-500">
+      {{ formatDate(report.createdAt) || 'ไม่ระบุวันที่' }}
+    </td>
+
+    <!-- สถานะ -->
+    <td class="px-4 py-3 text-sm">
+      <span
+        class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full"
+        :class="statusBadge(report.status)"
+      >
+        {{ statusLabel(report.status) }}
+      </span>
+    </td>
+
+    <!-- การกระทำ -->
+    <td class="px-4 py-3 text-sm">
+      <button
+        @click="openViewModal(report)"
+        class="px-3 py-1 text-xs text-blue-600 bg-blue-50 border border-blue-200 rounded hover:bg-blue-100 shadow-sm"
+        title="ตรวจสอบรายงาน"
+      >
+        ตรวจสอบ
+      </button>
+    </td>
+  </tr>
+
+  <!-- ไม่มีข้อมูล -->
+  <tr v-if="!reports.length">
+    <td colspan="7" class="px-4 py-10 text-center text-gray-500">
+      ไม่พบข้อมูลรายงาน
+    </td>
+  </tr>
+</tbody>
                         </table>
                     </div>
 
@@ -147,10 +216,16 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Left Col -->
                         <div class="space-y-4">
-                            <div>
-                                <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">ประเภท / หมวดหมู่</h4>
-                                <div class="text-sm font-medium text-gray-900">{{ viewingReport.type || '-' }} / {{ viewingReport.category || '-' }}</div>
-                            </div>
+                          <div>
+  <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+    ประเภท / หมวดหมู่
+  </h4>
+
+  <div class="text-sm font-medium text-gray-900">
+    {{ typeLabel(viewingReport.type) }} / 
+    {{ categoryLabel(viewingReport.category) }}
+  </div>
+</div>
                             
                             <div>
                                 <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">ผู้รายงาน</h4>
@@ -208,15 +283,23 @@
                             </a>
                         </div>
                     </div>
+
+                    <div v-if="viewingReport.videos && viewingReport.videos.length > 0" class="mt-6">
+                        <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">วิดีโอแนบ</h4>
+                        <div class="flex flex-wrap gap-4">
+                            <div v-for="(vid, idx) in viewingReport.videos" :key="'vid'+idx" class="relative group">
+                                <video :src="vid" controls class="h-40 w-auto rounded border border-gray-200 bg-black"></video>
+                                <a :href="vid" target="_blank" class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded">
+                                    <span class="text-white text-sm px-3 py-1 bg-black/60 rounded-full"><i class="fas fa-external-link-alt mr-2"></i>เปิดดูเต็มจอ</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Footer Actions -->
                 <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex flex-wrap items-center justify-between gap-3">
-                    <div class="flex items-center gap-2">
-                         <button @click="askDelete(viewingReport)" class="px-4 py-2 text-sm font-medium text-red-600 bg-white border border-red-200 rounded-md hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 shadow-sm">
-                            ลบรายงานนี่
-                        </button>
-                    </div>
+                    
                     
                     <div class="flex items-center gap-2">
                         <button v-if="viewingReport.status !== 'RESOLVED' && viewingReport.status !== 'REJECTED'" @click="updateStatus(viewingReport, 'REJECTED')" class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
@@ -246,6 +329,7 @@
 </template>
 
 <script setup>
+
 import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 import { useCookie, useRuntimeConfig, navigateTo } from '#app'
 import dayjs from 'dayjs'
@@ -255,6 +339,8 @@ import AdminHeader from '~/components/admin/AdminHeader.vue'
 import AdminSidebar from '~/components/admin/AdminSidebar.vue'
 import ConfirmModal from '~/components/ConfirmModal.vue'
 import { useToast } from '~/composables/useToast'
+
+const reportStats = ref({})
 
 dayjs.locale('th')
 dayjs.extend(buddhistEra)
@@ -276,7 +362,8 @@ const pagination = reactive({
 })
 
 const filters = reactive({
-    q: ''
+  q: '',
+  status: ''
 })
 
 function formatDate(iso) {
@@ -300,30 +387,37 @@ const pageButtons = computed(() => {
     }
     return out
 })
-
 async function fetchReports() {
     isLoading.value = true
     loadError.value = ''
+
     try {
-        const token = useCookie('token').value || (process.client ? localStorage.getItem('token') : '')
-        
+        const token = useCookie('token').value || 
+            (process.client ? localStorage.getItem('token') : '')
+
         const params = new URLSearchParams()
         params.append('page', pagination.page)
         params.append('limit', pagination.limit)
-        if (filters.q) params.append('q', filters.q)
 
-        const res = await fetch(`${config.public.apiBase}/reports/admin?${params.toString()}`, {
-            headers: {
-                Accept: 'application/json',
-                ...(token ? { Authorization: `Bearer ${token}` } : {})
-            },
-            credentials: 'include'
-        })
+        if (filters.q) params.append('q', filters.q)
+        if (filters.status) params.append('status', filters.status)
+
+        const res = await fetch(
+            `${config.public.apiBase}/reports/admin?${params.toString()}`,
+            { 
+                headers: {
+                    Accept: 'application/json',
+                    ...(token ? { Authorization: `Bearer ${token}` } : {})
+                },
+                credentials: 'include'
+            }
+        )
+
         const body = await res.json()
         if (!res.ok) throw new Error(body?.message || `Request failed: ${res.status}`)
-        
+
         reports.value = Array.isArray(body?.data) ? body.data : []
-        
+
         if (body.pagination) {
             pagination.total = body.pagination.total
             pagination.totalPages = body.pagination.totalPages
@@ -332,13 +426,92 @@ async function fetchReports() {
             pagination.total = reports.value.length
             pagination.totalPages = 1
         }
+
     } catch (err) {
         console.error(err)
         loadError.value = err?.message || 'ไม่สามารถโหลดข้อมูลได้'
         toast.error('เกิดข้อผิดพลาด', loadError.value)
         reports.value = []
+        reportStats.value = {}
     } finally {
         isLoading.value = false
+    }
+}
+
+const categoryWithCount = computed(() => {
+    return categories.map(cat => ({
+        ...cat,
+        count: reportStats.value[cat.key] || 0
+    }))
+})
+
+const categories = [
+  { key: 'VEHICLE_ISSUE', label: 'ปัญหายานพาหนะ' },
+  { key: 'PASSENGER_ISSUE', label: 'ปัญหาผู้โดยสาร' },
+  { key: 'ROAD_ISSUE', label: 'ปัญหาเส้นทาง' },
+  { key: 'SAFETY_ISSUE', label: 'ความปลอดภัย' },
+  { key: 'PAYMENT_ISSUE', label: 'ปัญหาการชำระเงิน' },
+  { key: 'NO_SHOW', label: 'ไม่มาตามนัด' },
+  { key: 'OTHER', label: 'อื่น ๆ' }
+];
+
+const statuses = [
+  { key: 'PENDING', label: 'รอดำเนินการ' },
+  { key: 'APPROVED', label: 'กำลังตรวจสอบ' },
+  { key: 'RESOLVED', label: 'ตอบรับแล้ว' },
+  { key: 'REJECTED', label: 'ปฏิเสธแล้ว' }
+]
+function typeLabel(type) {
+  const map = {
+    USER_REPORT: 'รายงานผู้ใช้',
+    ROUTE_REPORT: 'รายงานเส้นทาง',
+    BOOKING_REPORT: 'รายงานการจอง'
+  }
+  return map[type] || type || '-'
+}
+
+function categoryLabel(category) {
+  const map = {
+    VEHICLE_ISSUE: 'ปัญหายานพาหนะ',
+    PASSENGER_ISSUE: 'ปัญหาผู้โดยสาร',
+    ROAD_ISSUE: 'ปัญหาเส้นทาง',
+    SAFETY_ISSUE: 'ความปลอดภัย',
+    PAYMENT_ISSUE: 'ปัญหาการชำระเงิน',
+    NO_SHOW: 'ไม่มาตามนัด',
+    OTHER: 'อื่น ๆ'
+  }
+  return map[category] || category || '-'
+}
+function filterByStatus(statusKey) {
+  filters.status = statusKey
+  pagination.page = 1
+  fetchReports()
+}
+
+async function fetchReportStats() {
+    try {
+        const token = useCookie('token').value || 
+            (process.client ? localStorage.getItem('token') : '')
+
+        const res = await fetch(
+            `${config.public.apiBase}/reports/admin/stats`,
+            {
+                headers: {
+                    Accept: 'application/json',
+                    ...(token ? { Authorization: `Bearer ${token}` } : {})
+                },
+                credentials: 'include'
+            }
+        )
+
+        const body = await res.json()
+        if (!res.ok) throw new Error(body?.message || `Request failed: ${res.status}`)
+
+        reportStats.value = body?.stats || {}
+
+    } catch (err) {
+        console.error(err)
+        reportStats.value = {}
     }
 }
 
@@ -552,6 +725,7 @@ onMounted(() => {
     defineGlobalScripts()
     if (typeof window.__adminResizeHandler__ === 'function') window.__adminResizeHandler__()
     fetchReports()
+    fetchReportStats()
 })
 
 onUnmounted(() => { cleanupGlobalScripts() })
@@ -633,4 +807,5 @@ onUnmounted(() => { cleanupGlobalScripts() })
     opacity: 0;
     transform: scale(0.9);
 }
+
 </style>

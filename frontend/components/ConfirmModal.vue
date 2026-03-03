@@ -90,7 +90,7 @@ const iconSvgClass = computed(() => {
 <style scoped>
 .modal-overlay {
     position: fixed;
-    z-index: 1000;
+    z-index: 1060;
     left: 0;
     top: 0;
     width: 100%;
