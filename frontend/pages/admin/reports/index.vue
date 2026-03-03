@@ -299,11 +299,7 @@
 
                 <!-- Footer Actions -->
                 <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex flex-wrap items-center justify-between gap-3">
-                    <div class="flex items-center gap-2">
-                         <button @click="askDelete(viewingReport)" class="px-4 py-2 text-sm font-medium text-red-600 bg-white border border-red-200 rounded-md hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 shadow-sm">
-                            ลบรายงาน
-                        </button>
-                    </div>
+                    
                     
                     <div class="flex items-center gap-2">
                         <button v-if="viewingReport.status !== 'RESOLVED' && viewingReport.status !== 'REJECTED'" @click="updateStatus(viewingReport, 'REJECTED')" class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
