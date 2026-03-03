@@ -31,6 +31,7 @@
 
 *** Settings ***
 Library         SeleniumLibrary
+Resource       ../resources/keywords/auth_keywords.robot
 
 
 *** Variables ***
@@ -48,17 +49,23 @@ ${BLACKLIST_LAST}           andgoodgirl
 ${BLACKLIST_TEL}            0987654333
 ${BLACKLIST_ID}             1234567890987
 ${EXPID_DATE}               02022030
-${BLACKLIST_ID_PATH}        /Users/fandy/KKU 3T2/softend/PaiNamNae/sec1_group1_PaiNamNae/test/resources/IDCard.jpg
-${BLACKLIST_SELF_PATH}      /Users/fandy/KKU 3T2/softend/PaiNamNae/sec1_group1_PaiNamNae/test/resources/Selfies.jpg
-${PASSENGER_USER}           bambam
-${PASSENGER_SURNAME}        อิทธิ
-${PASSENGER_PASS}           1234567890
+${BLACKLIST_ID_PATH}        D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/IDCard.jpg
+${BLACKLIST_SELF_PATH}      D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/Selfies.jpg
+${PASSENGER_USER}           Veerapat
+${PASSENGER_SURNAME}        Veera
+${PASSENGER_PASS}           asdfjkl;123
 ${REVIEW_TEXT}              ขับเร็วทันใจ คนขับสุภาพ รถสะอาด ตรงเวลา
-${IMAGE_PATH}               /Users/fandy/KKU 3T2/softend/PaiNamNae/sec1_group1_PaiNamNae/test/resources/IMG-8206.jpg
-${INVALID_PATH}             /Users/fandy/KKU 3T2/softend/PaiNamNae/sec1_group1_PaiNamNae/test/resources/This is pdf file.pdf
+${IMAGE_PATH}               D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/IMG-8206.jpg
+${INVALID_PATH}             D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/This is pdf file.pdf
+
+#--- ตัวแปรของ ณัฐธเนศ ---
+${PASSENGER_USER_SUCCESS}           bambam
+${PASSENGER_SURNAME_SUCCESS}        อิทธิ
+${PASSENGER_PASS_SUCCESS}           1234567890
 ${REPORT_TEXT_SUCCESS}              คนขับขับรถเร็วเกินไป ทำให้รู้สึกไม่ปลอดภัย
 ${REPORT_IMAGE_SUCCESS_PATH}        /Users/fandy/KKU 3T2/softend/PaiNamNae/sec1_group1_PaiNamNae/test/resources/fart-driving.jpg
 ${REPORT_VIDEO_SUCCESS_PATH}        /Users/fandy/KKU 3T2/softend/PaiNamNae/sec1_group1_PaiNamNae/test/resources/fast driving.mp4
+
 
 # ตัวแปรที่ใช้บนเว็บที่ Deploy แล้ว
 

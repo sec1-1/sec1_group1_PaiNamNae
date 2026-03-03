@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.4.1 (Python 3.14.2 on darwin)" generated="2026-03-03T17:31:20.773637" rpa="false" schemaversion="5">
+<suite id="s1" name="UAT-ReportSuccess-02" source="/Users/fandy/KKU 3T2/softend/PaiNamNae/sec1_group1_PaiNamNae/test/sprint 2/uat/UAT-ReportSuccess-02.robot">
+<test id="s1-t1" name="UAT-001 : Login and Go to Report (Super Slow)" line="7">
+<kw name="Set Selenium Speed" owner="SeleniumLibrary">
+<arg>0.2 seconds</arg>
+<doc>Sets the delay that is waited after each Selenium command.</doc>
+<status status="PASS" start="2026-03-03T17:31:20.936927" elapsed="0.000214"/>
+</kw>
+<kw name="Open Browser To Website">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-03-03T17:31:20.937761" level="INFO">Opening browser 'edge' to base url 'http://localhost:3001/'.</msg>
+<arg>${URL}</arg>
+<arg>edge</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-03-03T17:31:20.937600" elapsed="2.573503"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2026-03-03T17:31:23.515544" elapsed="0.537233"/>
+</kw>
+<status status="PASS" start="2026-03-03T17:31:20.937351" elapsed="3.115665"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>เดินทางร่วมกัน</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-03T17:31:24.053321" elapsed="0.221059"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T17:31:24.276765" level="INFO">Clicking element 'xpath=//a[@href='/login']'.</msg>
+<arg>xpath=//a[@href='/login']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T17:31:24.275151" elapsed="0.486039"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//input[@placeholder='กรอกชื่อผู้ใช้หรืออีเมล']</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-03T17:31:24.761630" elapsed="0.439696"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-03T17:31:25.202737" level="INFO">Typing text 'bambam' into text field 'xpath=//input[@placeholder='กรอกชื่อผู้ใช้หรืออีเมล']'.</msg>
+<arg>xpath=//input[@placeholder='กรอกชื่อผู้ใช้หรืออีเมล']</arg>
+<arg>${PASSENGER_USER_SUCCESS}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T17:31:25.201965" elapsed="0.770998"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-03T17:31:25.973784" level="INFO">Typing text '1234567890' into text field 'xpath=//input[@type='password']'.</msg>
+<arg>xpath=//input[@type='password']</arg>
+<arg>${PASSENGER_PASS_SUCCESS}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T17:31:25.973382" elapsed="0.696464"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-03-03T17:31:26.670776" level="INFO">Clicking button 'xpath=//button[@type='submit']'.</msg>
+<arg>xpath=//button[@type='submit']</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T17:31:26.670367" elapsed="1.120882"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//span[contains(., '${PASSENGER_SURNAME_SUCCESS}')]</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-03T17:31:27.791481" elapsed="0.424724"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\n[SUCCESS] Login Completed as ${PASSENGER_USER_SUCCESS}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-03T17:31:28.217354" elapsed="0.001769"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//a[@href='/myTrip']</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-03T17:31:28.219413" elapsed="0.435819"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T17:31:28.656927" level="INFO">Clicking element 'xpath=//a[@href='/myTrip']'.</msg>
+<arg>xpath=//a[@href='/myTrip']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T17:31:28.656216" elapsed="0.479944"/>
+</kw>
+<kw name="Wait Until Location Contains" owner="SeleniumLibrary">
+<arg>/myTrip</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-03-03T17:31:29.136579" elapsed="0.205675"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//button[contains(., 'ทั้งหมด')]</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-03T17:31:29.342483" elapsed="0.416455"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T17:31:29.759675" level="INFO">Clicking element 'xpath=//button[contains(., 'ทั้งหมด')]'.</msg>
+<arg>xpath=//button[contains(., 'ทั้งหมด')]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T17:31:29.759356" elapsed="0.535877"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=(//button[contains(@class, 'bg-red-600') and contains(., 'รายงาน')])[1]</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-03T17:31:30.295567" elapsed="0.427366"/>
+</kw>
+<kw name="Scroll Element Into View" owner="SeleniumLibrary">
+<arg>xpath=(//button[contains(@class, 'bg-red-600') and contains(., 'รายงาน')])[1]</arg>
+<doc>Scrolls the element identified by ``locator`` into view.</doc>
+<status status="PASS" start="2026-03-03T17:31:30.723824" elapsed="0.694016"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-03T17:31:31.423787" level="INFO">Executing JavaScript:
+document.evaluate("(//button[contains(@class, 'bg-red-600') and contains(., 'รายงาน')])[1]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click();
+Without any arguments.</msg>
+<arg>document.evaluate("(//button[contains(@class, 'bg-red-600') and contains(., 'รายงาน')])[1]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click();</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-03T17:31:31.418884" elapsed="0.223431"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>หัวข้อปัญหา</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" start="2026-03-03T17:31:31.642712" elapsed="0.225702"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//select</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-03T17:31:31.869374" elapsed="0.437884"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-03T17:31:32.309691" level="INFO">Executing JavaScript:
+document.querySelector('select').value = 'SAFETY_ISSUE'; document.querySelector('select').dispatchEvent(new Event('change'));
+Without any arguments.</msg>
+<arg>document.querySelector('select').value = 'SAFETY_ISSUE'; document.querySelector('select').dispatchEvent(new Event('change'));</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-03T17:31:32.308176" elapsed="0.217607"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-03T17:31:32.527785" level="INFO">Typing text 'คนขับขับรถเร็วเกินไป ทำให้รู้สึกไม่ปลอดภัย' into text field 'xpath=//textarea'.</msg>
+<arg>xpath=//textarea</arg>
+<arg>${REPORT_TEXT_SUCCESS}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T17:31:32.526776" elapsed="0.735414"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//button[contains(., 'ส่งรายงานความปลอดภัย')]</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-03T17:31:33.262488" elapsed="0.430168"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-03T17:31:33.695003" level="INFO">Executing JavaScript:
+document.evaluate("//button[contains(., 'ส่งรายงานความปลอดภัย')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click();
+Without any arguments.</msg>
+<arg>document.evaluate("//button[contains(., 'ส่งรายงานความปลอดภัย')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click();</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-03T17:31:33.693673" elapsed="0.214746"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\n[SUCCESS] Report Sent! Holding screen for 20 seconds...</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-03T17:31:33.908977" elapsed="0.000670"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-03-03T17:31:53.911515" level="INFO">Slept 20 seconds.</msg>
+<arg>20s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-03-03T17:31:33.910007" elapsed="20.002059"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2026-03-03T17:31:53.913181" elapsed="0.277525"/>
+</kw>
+<doc>ทดสอบการส่งรายงานสำเร็จ โดยใช้ข้อมูลของคุณณัฐธเนศ (bambam)</doc>
+<status status="PASS" start="2026-03-03T17:31:20.935415" elapsed="33.255457"/>
+</test>
+<status status="PASS" start="2026-03-03T17:31:20.774568" elapsed="33.416851"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="UAT-ReportSuccess-02" id="s1" pass="1" fail="0" skip="0">UAT-ReportSuccess-02</stat>
+</suite>
+</statistics>
+<errors>
+<msg time="2026-03-03T17:31:20.934543" level="ERROR">Error in file '/Users/fandy/KKU 3T2/softend/PaiNamNae/sec1_group1_PaiNamNae/test/resources/keywords/auth_keywords.robot' on line 34: Resource file '../resources/keywords/auth_keywords.robot' does not exist.</msg>
+</errors>
+</robot>
