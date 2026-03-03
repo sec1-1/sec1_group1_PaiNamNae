@@ -25,11 +25,33 @@ Parts of this changelog were drafted with the assistance of an AI language model
 
 #### Reports
 - **History Report Page**
-  - Added new page: `frontend/pages/history-report.vue`.
+  - Added new page: `frontend/pages/history-report.vue`.x
   - Displays user report history in a structured layout.
   - Integrated API to fetch and render submitted reports dynamically.
   - Added status visibility for each report entry.
 
+- **Admin Report Statistics**
+  - Added /reports/admin/stats endpoint.
+  - Returns categorized report counts (e.g., VEHICLE_ISSUE, USER_BEHAVIOR, etc.).
+  - Connected statistics API to Admin Dashboard.
+  - Implemented dynamic filtering by category, status, and date range.
+
+- **Notification for Reports**
+  - Added notification system when:
+        - A report is submitted.
+        - A report status is updated by admin.
+  - Created Notification model & migration.
+  - Integrated notification fetch API.
+  - Added notification dropdown UI in frontend.
+  - Mark-as-read functionality implemented.
+
+- **Backend & API (Reviews)**
+  - Refactored review controller logic for better separation of concerns.
+  - Improved error handling using centralized ApiError.
+  - Updated review service to support optional media fields (image + video).
+  - Optimized query performance when fetching reviews with related user data.
+  - Standardized API response format across review endpoints.
+  - Improved authentication middleware integration for protected routes.
 ---
 
 ## Admin Report Management & User Report Tracking
