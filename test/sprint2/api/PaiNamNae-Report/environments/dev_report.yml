@@ -1,0 +1,29 @@
+name: dev
+color: "#2E8A54"
+variables:
+  - name: base_url
+    value: http://localhost:3000
+  - name: passenger01_username
+    value: passenger01
+  - name: passenger01_password
+    value: "12345678"
+  - name: admin_username
+    value: admin123
+  - name: admin_password
+    value: "123456789"
+  - name: passenger_token
+    value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW05NzVkNmUwMDAwdmdpcTZmNTRwdTk2Iiwicm9sZSI6IlBBU1NFTkdFUiIsImlhdCI6MTc3MjQ1NzMwNywiZXhwIjoxNzcyNDYwOTA3fQ.c1iob4y2lw24ejLB0nIo-75V3AmS-HxKppH1B7DM6_0
+  - name: admin_token
+    value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW05OGZzMGIwMDAwN3dsN21hMGhsZnViIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzcyNDU5MjA5LCJleHAiOjE3NzI0NjI4MDl9._g1aOLkxQrFjtL7Tv5Xdlw7n4rMa4M6gGzk5KJdZMto
+  - name: driver_token
+    value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW05OHhhOGcwMDA2N3dsN3VsZWkwdWFpIiwicm9sZSI6IkRSSVZFUiIsImlhdCI6MTc3MjQ2MDYyNiwiZXhwIjoxNzcyNDY0MjI2fQ.fRqDzmVylNLVKcYNIKGR45yS9G9x55Kw7BExGgFBjaY
+  - name: driver_id
+    value: cmm98xa8g00067wl7ulei0uai
+  - name: vehicleId
+    value: cmm992jfw000c7wl79o9lljc4
+  - name: routeId
+    value: cmm99blx4000bvwvi1qr4fr1m
+  - name: bookingId
+    value: cmm99bpot000gvwvi63qaceg4
+  - name: counter
+    value: "1"

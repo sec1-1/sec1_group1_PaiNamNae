@@ -1,0 +1,23 @@
+info:
+  name: RPT_GET_02-get_report_fake_report_id
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: "{{base_url}}/api/reports/invalid-report-id-001"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Get report not found", function () {
+          expect(res.getStatus()).to.equal(404);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

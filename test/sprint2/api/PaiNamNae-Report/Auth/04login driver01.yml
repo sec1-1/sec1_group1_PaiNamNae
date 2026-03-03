@@ -1,0 +1,48 @@
+info:
+  name: 04login driver01
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{base_url}}/api/auth/login"
+  body:
+    type: json
+    data: |
+      {
+        "username": "{{driver01_username}}",
+        "password": "{{driver01_password}}"
+      }
+
+runtime:
+  variables:
+    - name: driver01_username
+      value: driver01
+    - name: driver01_password
+      value: "12345678"
+  scripts:
+    - type: after-response
+      code: |-
+        const body = res.getBody();
+        const json = typeof body === "string" ? JSON.parse(body) : body;
+        bru.setEnvVar("driver_token", json.data.token);
+    - type: tests
+      code: |-
+        const body = res.getBody();
+        const json = typeof body === "string" ? JSON.parse(body) : body;
+
+        test("Login driver: status 200", () => {
+          expect(res.getStatus()).to.equal(200);
+        });
+
+        test("ต้องได้ token", () => {
+          expect(json.data.token).to.be.a("string");
+        });
+
+        bru.setEnvVar("driver_id", json.data.user.id);
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

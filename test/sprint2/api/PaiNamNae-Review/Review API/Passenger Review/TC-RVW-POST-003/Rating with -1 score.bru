@@ -1,0 +1,48 @@
+meta {
+  name: Rating with -1 score
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{base_url}}/api/reviews
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "bookingId": "{{bookingId}}",
+    "rating": -1,
+    "comment": "รีวิวคะแนน -1 ดาว"
+  }
+}
+
+tests {
+  const body = res.getBody();
+  const json = typeof body === "string" ? JSON.parse(body) : body;
+  
+  test("Status code ต้องเป็น 400 (Bad Request)", () => {
+    expect(res.getStatus()).to.equal(400);
+  });
+  
+  test("success ต้องเป็น false", () => {
+    expect(json).to.have.property("success");
+    expect(json.success).to.equal(false);
+  });
+  
+  test('message ต้องมีคำว่า "validation error" ', () => {
+    expect(json).to.have.property("message");
+    expect(json.message).to.be.a("string");
+  
+    const msg = json.message.toLowerCase();
+    expect(msg.includes("validation error").to.equal(true));
+  });
+  
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

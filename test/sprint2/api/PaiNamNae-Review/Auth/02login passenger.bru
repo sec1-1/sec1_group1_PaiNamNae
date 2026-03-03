@@ -1,0 +1,48 @@
+meta {
+  name: 02login passenger
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/api/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "{{passenger_01_username}}",
+    "password": "{{passenger_01_password}}"
+  }
+}
+
+script:post-response {
+  const body = res.getBody();
+  const json = typeof body === "string" ? JSON.parse(body) : body;
+  bru.setEnvVar("passenger_token", json.data.token);
+}
+
+tests {
+  const body = res.getBody();
+  const json = typeof body === "string" ? JSON.parse(body) : body;
+  
+  test("Status code: 200", () => {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("คืนค่า token กลับมา", () => {
+    expect(json.data.token).to.be.a("string");
+  });
+  
+  test("ส่ง role: passenger กลับมา", () => {
+    expect(json.data.user.role).to.equal('PASSENGER');
+  });
+  
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

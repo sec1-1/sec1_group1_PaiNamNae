@@ -1,0 +1,25 @@
+info:
+  name: Driver End Trip
+  type: http
+  seq: 5
+
+http:
+  method: PATCH
+  url: "{{base_url}}/api/routes/{{routeId}}/complete"
+  auth:
+    type: bearer
+    token: "{{driver_token}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("End trip: status 200", () => {
+          expect(res.getStatus()).to.equal(200);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
