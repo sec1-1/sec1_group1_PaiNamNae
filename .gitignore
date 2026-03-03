@@ -1,4 +1,8 @@
 node_modules
 .env
-
+log.html
+report.html
+output.xml
+results/
+selenium-screenshot-*.png
 Back-end/prisma/migrations/
