@@ -127,3 +127,6 @@ Parts of this changelog were drafted with the assistance of an AI language model
 #### UAT Test
 - Add test cases for the “Report System” (report), covering scenarios such as successful submission, failed submission, cancellation, file size limit, invalid file format, and status changes by the administrator.
 - Add test cases reviewed from Sprint 1 for further development, and refactor the code related to Checkbox, Comment, Rating, UploadImage, CloseReview, DoubleReview, and ViewReview.
+
+#### API Test
+- Add test case for "Passenger Report Drivery System" include valid case(successful report) and invallid case(invalid input)
