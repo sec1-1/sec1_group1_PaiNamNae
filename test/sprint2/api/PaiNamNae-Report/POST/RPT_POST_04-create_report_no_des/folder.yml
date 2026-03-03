@@ -1,9 +1,0 @@
-info:
-  name: RPT_POST_04-create_report_no_des
-  type: folder
-  seq: 2
-
-request:
-  auth:
-    type: bearer
-    token: "{{passenger_token}}"

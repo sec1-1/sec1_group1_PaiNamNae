@@ -1,9 +1,0 @@
-info:
-  name: RPT_POST_02-create_report_with_vid&image
-  type: folder
-  seq: 2
-
-request:
-  auth:
-    type: bearer
-    token: "{{passenger_token}}"

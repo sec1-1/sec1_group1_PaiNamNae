@@ -1,9 +1,0 @@
-info:
-  name: RPT_POST_08-create_report_no_passenger_token
-  type: folder
-  seq: 2
-
-request:
-  auth:
-    type: bearer
-    token: "{{passenger_token}}"
