@@ -26,7 +26,6 @@ UAT-ReportFail-010  : Admin change report status from In process to Inspecting
     # กดดูโปรไฟล์ตัวเอง
     # กดเข้าหน้า "การรายงานของคุณ"
 
-
     # ==== Expected Results ====
     # ผู้โดยสารอยู่ในหน้าดูทริป
     # เห็นผลการรายงานเป็น
