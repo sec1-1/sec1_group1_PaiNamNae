@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.4.1 (Python 3.11.9 on win32)" generated="2026-03-03T14:55:26.504072" rpa="false" schemaversion="5">
+<suite id="s1" name="UAT-ReportInvalidFile" source="D:\Coding Project\Github Project\Software Engineering\My Branch\sec1_group1_PaiNamNae\test\sprint2\uat\UAT-ReportInvalidFile.robot">
+<test id="s1-t1" name="UAT-010 Passenger Upload Invalid File" line="8">
+<kw name="Setup Delay Selenium" owner="auth_keywords">
+<kw name="Set Selenium Implicit Wait" owner="SeleniumLibrary">
+<arg>5s</arg>
+<doc>Sets the implicit wait value used by Selenium.</doc>
+<status status="PASS" start="2026-03-03T14:55:26.773289" elapsed="0.001014"/>
+</kw>
+<kw name="Set Selenium Speed" owner="SeleniumLibrary">
+<arg>0.5s</arg>
+<doc>Sets the delay that is waited after each Selenium command.</doc>
+<status status="PASS" start="2026-03-03T14:55:26.774303" elapsed="0.000000"/>
+</kw>
+<status status="PASS" start="2026-03-03T14:55:26.773289" elapsed="0.001014"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:55:26.774872" level="INFO">Opening browser 'edge' to base url 'http://localhost:3001/'.</msg>
+<arg>${URL}</arg>
+<arg>edge</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-03-03T14:55:26.774872" elapsed="2.750626"/>
+</kw>
+<kw name="Passenger Login" owner="auth_keywords">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:55:29.526572" level="INFO">Clicking element 'xpath=//a[@href='/login']'.</msg>
+<arg>xpath=//a[@href='/login']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T14:55:29.526572" elapsed="1.117686"/>
+</kw>
+<kw name="Wait Until Location Contains" owner="SeleniumLibrary">
+<arg>/login</arg>
+<arg>10s</arg>
+<doc>Waits until the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-03-03T14:55:30.644258" elapsed="0.504794"/>
+</kw>
+<kw name="Location Should Contain" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:55:31.653966" level="INFO">Current location contains '/login'.</msg>
+<arg>/login</arg>
+<doc>Verifies that the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-03-03T14:55:31.149700" elapsed="0.504266"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:55:31.655051" level="INFO">Typing text 'Veerapat' into text field '//input[@placeholder="กรอกชื่อผู้ใช้หรืออีเมล"]'.</msg>
+<arg>//input[@placeholder="กรอกชื่อผู้ใช้หรืออีเมล"]</arg>
+<arg>${PASSENGER_USER}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T14:55:31.653966" elapsed="1.586762"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:55:33.241239" level="INFO">Typing text 'asdfjkl;123' into text field '//input[@placeholder="กรอกรหัสผ่าน"]'.</msg>
+<arg>//input[@placeholder="กรอกรหัสผ่าน"]</arg>
+<arg>${PASSENGER_PASS}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T14:55:33.240728" elapsed="1.558808"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:55:34.800054" level="INFO">Clicking button 'xpath=//button[@type='submit']'.</msg>
+<arg>xpath=//button[@type='submit']</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T14:55:34.799536" elapsed="2.562911"/>
+</kw>
+<status status="PASS" start="2026-03-03T14:55:29.525498" elapsed="7.836949"/>
+</kw>
+<kw name="View My Trip" owner="auth_keywords">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:55:37.363457" level="INFO">Clicking element 'xpath=//a[@href='/myTrip']'.</msg>
+<arg>xpath=//a[@href='/myTrip']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T14:55:37.363457" elapsed="1.062871"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-03-03T14:55:40.426633" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-03-03T14:55:38.426328" elapsed="2.000305"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:55:40.426633" level="INFO">Clicking element 'xpath=//button[starts-with(normalize-space(), "ทั้งหมด")]'.</msg>
+<arg>xpath=//button[starts-with(normalize-space(), "ทั้งหมด")]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T14:55:40.426633" elapsed="1.059319"/>
+</kw>
+<status status="PASS" start="2026-03-03T14:55:37.362447" elapsed="4.123505"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:55:41.486549" level="INFO">Executing JavaScript:
+window.scrollBy(0,325)
+Without any arguments.</msg>
+<arg>window.scrollBy(0,325)</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-03T14:55:41.485952" elapsed="0.508464"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:55:41.994416" level="INFO">Clicking element 'xpath=(//button[normalize-space()="รายงาน"])[11]'.</msg>
+<arg>xpath=(//button[normalize-space()="รายงาน"])[11]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T14:55:41.994416" elapsed="1.060085"/>
+</kw>
+<kw name="Select From List By Value" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:55:43.056015" level="INFO">Selecting options from selection list 'xpath=//select[contains(@class,'w-full')]' by value PASSENGER_ISSUE.</msg>
+<arg>xpath=//select[contains(@class,'w-full')]</arg>
+<arg>PASSENGER_ISSUE</arg>
+<doc>Selects options from selection list ``locator`` by ``values``.</doc>
+<status status="PASS" start="2026-03-03T14:55:43.055007" elapsed="4.071740"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:55:47.127285" level="INFO">Typing text 'ขับรถแย่มาก ฝ่าไปแดง ขับเร็ว ขับส่ายไปส่ายมา' into text field 'xpath=//textarea[@placeholder="รบกวนระบุรายละเอียดเพื่อให้เราตรวจสอบได้รวดเร็วขึ้น..."]'.</msg>
+<arg>xpath=//textarea[@placeholder="รบกวนระบุรายละเอียดเพื่อให้เราตรวจสอบได้รวดเร็วขึ้น..."]</arg>
+<arg>${REPORT_TEXT}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T14:55:47.127285" elapsed="1.652661"/>
+</kw>
+<kw name="Choose File" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:55:48.779946" level="INFO">Sending D:\Coding Project\Github Project\Software Engineering\My Branch\sec1_group1_PaiNamNae\image\Thisispdffile.pdf to browser.</msg>
+<arg>xpath=//input[@type="file"]</arg>
+<arg>${PDF_PATH}</arg>
+<doc>Inputs the ``file_path`` into the file input field ``locator``.</doc>
+<status status="PASS" start="2026-03-03T14:55:48.779946" elapsed="1.031902"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//*[contains(text(),"กรุณาเลือกไฟล์รูปหรือวิดีโอเท่านั้น")]</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-03T14:55:49.811848" elapsed="1.018277"/>
+</kw>
+<status status="PASS" start="2026-03-03T14:55:26.772044" elapsed="24.058081"/>
+</test>
+<test id="s1-t2" name="UAT-011 Passenger Upload File Video More than 50MB" line="22">
+<kw name="Setup Delay Selenium" owner="auth_keywords">
+<kw name="Set Selenium Implicit Wait" owner="SeleniumLibrary">
+<arg>5s</arg>
+<doc>Sets the implicit wait value used by Selenium.</doc>
+<status status="PASS" start="2026-03-03T14:55:50.831134" elapsed="0.502201"/>
+</kw>
+<kw name="Set Selenium Speed" owner="SeleniumLibrary">
+<arg>0.5s</arg>
+<doc>Sets the delay that is waited after each Selenium command.</doc>
+<status status="PASS" start="2026-03-03T14:55:51.333335" elapsed="0.000000"/>
+</kw>
+<status status="PASS" start="2026-03-03T14:55:50.831134" elapsed="0.502201"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:55:51.334341" level="INFO">Opening browser 'edge' to base url 'http://localhost:3001/'.</msg>
+<arg>${URL}</arg>
+<arg>edge</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-03-03T14:55:51.333335" elapsed="2.316132"/>
+</kw>
+<kw name="Passenger Login" owner="auth_keywords">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:55:53.650798" level="INFO">Clicking element 'xpath=//a[@href='/login']'.</msg>
+<arg>xpath=//a[@href='/login']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T14:55:53.650798" elapsed="1.119638"/>
+</kw>
+<kw name="Wait Until Location Contains" owner="SeleniumLibrary">
+<arg>/login</arg>
+<arg>10s</arg>
+<doc>Waits until the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-03-03T14:55:54.770436" elapsed="0.505288"/>
+</kw>
+<kw name="Location Should Contain" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:55:55.779956" level="INFO">Current location contains '/login'.</msg>
+<arg>/login</arg>
+<doc>Verifies that the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-03-03T14:55:55.275724" elapsed="0.504232"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:55:55.779956" level="INFO">Typing text 'Veerapat' into text field '//input[@placeholder="กรอกชื่อผู้ใช้หรืออีเมล"]'.</msg>
+<arg>//input[@placeholder="กรอกชื่อผู้ใช้หรืออีเมล"]</arg>
+<arg>${PASSENGER_USER}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T14:55:55.779956" elapsed="1.583679"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:55:57.363635" level="INFO">Typing text 'asdfjkl;123' into text field '//input[@placeholder="กรอกรหัสผ่าน"]'.</msg>
+<arg>//input[@placeholder="กรอกรหัสผ่าน"]</arg>
+<arg>${PASSENGER_PASS}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T14:55:57.363635" elapsed="1.578446"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:55:58.942645" level="INFO">Clicking button 'xpath=//button[@type='submit']'.</msg>
+<arg>xpath=//button[@type='submit']</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T14:55:58.942081" elapsed="2.565927"/>
+</kw>
+<status status="PASS" start="2026-03-03T14:55:53.649467" elapsed="7.858541"/>
+</kw>
+<kw name="View My Trip" owner="auth_keywords">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:56:01.508518" level="INFO">Clicking element 'xpath=//a[@href='/myTrip']'.</msg>
+<arg>xpath=//a[@href='/myTrip']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T14:56:01.508518" elapsed="1.058530"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-03-03T14:56:04.567677" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-03-03T14:56:02.567048" elapsed="2.000629"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:56:04.567677" level="INFO">Clicking element 'xpath=//button[starts-with(normalize-space(), "ทั้งหมด")]'.</msg>
+<arg>xpath=//button[starts-with(normalize-space(), "ทั้งหมด")]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T14:56:04.567677" elapsed="1.066595"/>
+</kw>
+<status status="PASS" start="2026-03-03T14:56:01.508518" elapsed="4.125754"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:56:05.635374" level="INFO">Executing JavaScript:
+window.scrollBy(0,325)
+Without any arguments.</msg>
+<arg>window.scrollBy(0,325)</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-03-03T14:56:05.634822" elapsed="0.507732"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:56:06.142554" level="INFO">Clicking element 'xpath=(//button[normalize-space()="รายงาน"])[11]'.</msg>
+<arg>xpath=(//button[normalize-space()="รายงาน"])[11]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T14:56:06.142554" elapsed="1.070568"/>
+</kw>
+<kw name="Select From List By Value" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:56:07.215607" level="INFO">Selecting options from selection list 'xpath=//select[contains(@class,'w-full')]' by value PASSENGER_ISSUE.</msg>
+<arg>xpath=//select[contains(@class,'w-full')]</arg>
+<arg>PASSENGER_ISSUE</arg>
+<doc>Selects options from selection list ``locator`` by ``values``.</doc>
+<status status="PASS" start="2026-03-03T14:56:07.214991" elapsed="4.100840"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:56:11.316838" level="INFO">Typing text 'ขับรถแย่มาก ฝ่าไปแดง ขับเร็ว ขับส่ายไปส่ายมา' into text field 'xpath=//textarea[@placeholder="รบกวนระบุรายละเอียดเพื่อให้เราตรวจสอบได้รวดเร็วขึ้น..."]'.</msg>
+<arg>xpath=//textarea[@placeholder="รบกวนระบุรายละเอียดเพื่อให้เราตรวจสอบได้รวดเร็วขึ้น..."]</arg>
+<arg>${REPORT_TEXT}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T14:56:11.315831" elapsed="1.623173"/>
+</kw>
+<kw name="Choose File" owner="SeleniumLibrary">
+<msg time="2026-03-03T14:56:12.939004" level="INFO">Sending D:\Coding Project\Github Project\Software Engineering\My Branch\sec1_group1_PaiNamNae\image\5275550-uhd_4096_2160_25fps.mp4 to browser.</msg>
+<arg>xpath=//input[@type="file"]</arg>
+<arg>${INVALID_VIDEO}</arg>
+<doc>Inputs the ``file_path`` into the file input field ``locator``.</doc>
+<status status="PASS" start="2026-03-03T14:56:12.939004" elapsed="1.030607"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//*[contains(text(),"ขนาดไฟล์ต้องไม่เกิน 50MB")]</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-03T14:56:13.969611" elapsed="1.017412"/>
+</kw>
+<status status="PASS" start="2026-03-03T14:55:50.830125" elapsed="24.156898"/>
+</test>
+<status status="PASS" start="2026-03-03T14:55:26.505061" elapsed="48.482979"/>
+</suite>
+<statistics>
+<total>
+<stat pass="2" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="UAT-ReportInvalidFile" id="s1" pass="2" fail="0" skip="0">UAT-ReportInvalidFile</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
