@@ -3,7 +3,7 @@ Library    SeleniumLibrary
 Resource       ../../resources/keywords/auth_keywords.robot
 
 *** Test Cases ***
-UAT-015 Passenger Give 1 Star
+UAT-017 Passenger Give 1 Star
     Setup Delay Selenium
     Open Browser                    ${URL}    edge
     Passenger Login
@@ -20,7 +20,7 @@ UAT-015 Passenger Give 1 Star
     Page Should Contain     1
     Page Should Contain     ${PASSENGER_SURNAME}
 
-UAT-016 Passenger Give 5 Star
+UAT-018 Passenger Give 5 Star
     Setup Delay Selenium
     Open Browser                    ${URL}    edge
     Passenger Login
@@ -37,7 +37,7 @@ UAT-016 Passenger Give 5 Star
     Page Should Contain     1
     Page Should Contain     ${PASSENGER_SURNAME}
 
-UAT-017 Passenger Do not Give a Star
+UAT-019 Passenger Do not Give a Star
     Setup Delay Selenium
     Open Browser                    ${URL}    edge
     Passenger Login

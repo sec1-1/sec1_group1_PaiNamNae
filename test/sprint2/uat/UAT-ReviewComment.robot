@@ -3,7 +3,7 @@ Library    String
 Resource   ../../resources/keywords/auth_keywords.robot
 
 *** Test Cases ***
-UAT-020 Passenger Comments Under 501 Characters
+UAT-022 Passenger Comments Under 501 Characters
     Setup Delay Selenium
     Open Browser                    ${URL}    edge
     Passenger Login
@@ -21,7 +21,7 @@ UAT-020 Passenger Comments Under 501 Characters
     Page Should Contain     ${REVIEW_TEXT}
     Page Should Contain     ${PASSENGER_SURNAME}
 
-UAT-021 Passenger Comments 501 Characters
+UAT-023 Passenger Comments 501 Characters
     Setup Delay Selenium
     Open Browser                    ${URL}    edge
     Passenger Login

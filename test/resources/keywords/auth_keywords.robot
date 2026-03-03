@@ -62,6 +62,7 @@ ${IMAGE03_PATH}             ${EXECDIR}${/}image${/}pexels-hazardos-80412.jpg
 ${IMAGE04_PATH}             ${EXECDIR}${/}image${/}pexels-hazardos-804129.jpg
 ${VIDEO01_PATH}             ${EXECDIR}${/}image${/}3785380-hd_1920_1080_25fps.mp4
 ${PDF_PATH}                 ${EXECDIR}${/}image${/}Thisispdffile.pdf
+${INVALID_VIDEO}            ${EXECDIR}${/}image${/}5275550-uhd_4096_2160_25fps.mp4
 
 # ตัวแปรที่ใช้บนเว็บที่ Deploy แล้ว
 ${PASSENGER_REVIEW_USER}        
@@ -148,10 +149,17 @@ Go To User Management Page
     Mouse Over                          xpath=//span[normalize-space()='${ADMIN_FIRST_NAME}']
     Wait Until Element Is Visible       xpath=//a[@href='/admin/users']    10s
     Click Element                       xpath=//a[@href='/admin/users']
-    Page Should Contain                 User Management   
+    Page Should Contain                 User Management  
+
+Go To User Profile Page
+    Mouse Over                          xpath=//span[normalize-space()='${PASSENGER_SURNAME}']
+    Wait Until Element Is Visible       xpath=//a[normalize-space()="บัญชีของฉัน"]    10s
+    Click Element                       xpath=//a[normalize-space()="บัญชีของฉัน"]
+    Page Should Contain                 โปรไฟล์และการตั้งค่า
+    Page Should Contain                 โปรไฟล์ของฉัน   
 
 Go To Check Report
-    Click Element                   xpath=(//button[normalize-space()="Check Report"])
+    Click Element                   xpath=//a[.//span[normalize-space()="Check Report"]]
 
 View All Route
     Click Element                   xpath=//a[@href='/findTrip']
