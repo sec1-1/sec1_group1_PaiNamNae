@@ -149,7 +149,14 @@ Go To User Management Page
     Mouse Over                          xpath=//span[normalize-space()='${ADMIN_FIRST_NAME}']
     Wait Until Element Is Visible       xpath=//a[@href='/admin/users']    10s
     Click Element                       xpath=//a[@href='/admin/users']
-    Page Should Contain                 User Management   
+    Page Should Contain                 User Management  
+
+Go To User Profile Page
+    Mouse Over                          xpath=//span[normalize-space()='${PASSENGER_SURNAME}']
+    Wait Until Element Is Visible       xpath=//a[normalize-space()="บัญชีของฉัน"]    10s
+    Click Element                       xpath=//a[normalize-space()="บัญชีของฉัน"]
+    Page Should Contain                 โปรไฟล์และการตั้งค่า
+    Page Should Contain                 โปรไฟล์ของฉัน   
 
 Go To Check Report
     Click Element                   xpath=(//button[normalize-space()="Check Report"])
