@@ -73,13 +73,17 @@ ${REPORT_IMAGE_SUCCESS_PATH}        /Users/fandy/KKU 3T2/softend/PaiNamNae/sec1_
 ${REPORT_VIDEO_SUCCESS_PATH}        /Users/fandy/KKU 3T2/softend/PaiNamNae/sec1_group1_PaiNamNae/test/resources/fast driving.mp4
 
 # ตัวแปรที่ใช้บนเว็บที่ Deploy แล้ว
-${PASSENGER_REVIEW_USER}        
-${PASSENGER_REVIEW_SURNAME}
-${PASSENGER_REVIEW_PASS}
+${PASSENGER_REVIEW_USER}        ginny112       
+${PASSENGER_REVIEW_SURNAME}.    ginny 
+${PASSENGER_REVIEW_PASS}        12345678
 
 ${PASSENGER_VIEW_USER}      Ayanokoji
 ${PASSENGER_VIEW_SURNAME}   Kiyotaka
 ${PASSENGER_VIEW_PASS}      asdfjkl;123
+
+${PASSENGER1_USER}          porseater
+${PASSENGER1_SURNAME}       por
+${PASSENGER1_PASS}          123456789
 
 # ตัวแปรที่ใช้ได้ทั้ง Localhost และ Deploy 
 ${REVIEW_TEXT}              ขับเร็วทันใจ คนขับสุภาพ รถสะอาด ตรงเวลา
@@ -138,6 +142,14 @@ Passenger View Review Login
     # ==== Expected Results ====
     Wait Until Element Is Visible       xpath=//span[normalize-space()='${PASSENGER_VIEW_SURNAME}']    10s
     Element Should Be Visible           xpath=//span[normalize-space()='${PASSENGER_VIEW_SURNAME}']
+
+Passenger Deploy Login
+    Click Element                   xpath=//a[@href='/login']
+    Wait Until Location Contains    /login                          10s
+    Location Should Contain         /login
+    Input Text                      //input[@placeholder="กรอกชื่อผู้ใช้หรืออีเมล"]               ${PASSENGER1_USER}
+    Input Text                      //input[@placeholder="กรอกรหัสผ่าน"]                     ${PASSENGER1_PASS}
+    Click Button                    xpath=//button[@type='submit']
 
 # -----------------------------
 # กลุ่ม: ตรวจสอบว่าอยู่ในหน้า Dashboard

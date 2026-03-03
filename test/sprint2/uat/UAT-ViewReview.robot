@@ -9,7 +9,7 @@ UAT-ViewReview-015 Passenger view review
     # ==== Passenger create review ====
     Setup Delay Selenium
     Open Browser                    ${URL}    edge
-    Passenger Login
+    Passenger Deploy Login
     View My Trip
     Execute JavaScript                  window.scrollBy(0,150)
     Click Element                       xpath=(//button[normalize-space()="รีวิวผู้ขับ"])[2]
@@ -39,7 +39,7 @@ UAT-ViewReview-016 Passenger Upload 4 File
     # ==== Passenger create review ====
     Setup Delay Selenium
     Open Browser                    ${URL}    edge
-    Passenger Login
+    Passenger Deploy Login
     View My Trip
     Execute JavaScript                  window.scrollBy(0,150)
     Click Element                       xpath=(//button[normalize-space()="รีวิวผู้ขับ"])[3]
