@@ -35,7 +35,7 @@ Library         String
 
 *** Variables ***
 # ตัวแปรที่ใช้บน Localhost
-${URL}    http://localhost:3001/
+${URL}    https://cssec1web69.cpkku.com/
 ${VALID_PASS}               123456789
 ${ADMIN_USER}               admin123
 ${ADMIN_FIRST_NAME}         System
@@ -50,19 +50,27 @@ ${BLACKLIST_ID}             1234567890987
 ${EXPID_DATE}               02022030
 ${BLACKLIST_ID_PATH}        D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/IDCard.jpg
 ${BLACKLIST_SELF_PATH}      D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/Selfies.jpg
-${PASSENGER_USER}           Veerapat
-${PASSENGER_SURNAME}        Veera
-${PASSENGER_PASS}           asdfjkl;123
+${PASSENGER_USER}           porseater
+${PASSENGER_SURNAME}        por
+${PASSENGER_PASS}           123456789
 
 ${IMAGE_PATH}               D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/IMG-8206.jpg
 ${INVALID_PATH}             D:/Coding Project/Github Project/Software Engineering/My Branch/sec1_group1_PaiNamNae/test/resources/This is pdf file.pdf
-${IMAGE01_PATH}             ${EXECDIR}${/}image${/}pexels-hazardos-804.jpg
-${IMAGE02_PATH}             ${EXECDIR}${/}image${/}pexels-hazardos-8041.jpg
-${IMAGE03_PATH}             ${EXECDIR}${/}image${/}pexels-hazardos-80412.jpg
-${IMAGE04_PATH}             ${EXECDIR}${/}image${/}pexels-hazardos-804129.jpg
-${VIDEO01_PATH}             ${EXECDIR}${/}image${/}3785380-hd_1920_1080_25fps.mp4
-${PDF_PATH}                 ${EXECDIR}${/}image${/}Thisispdffile.pdf
-${INVALID_VIDEO}            ${EXECDIR}${/}image${/}5275550-uhd_4096_2160_25fps.mp4
+${IMAGE01_PATH}             ${EXECDIR}${/}img${/}pexels-hazardos-804.jpg
+${IMAGE02_PATH}             ${EXECDIR}${/}img${/}pexels-hazardos-8041.jpg
+${IMAGE03_PATH}             ${EXECDIR}${/}img${/}pexels-hazardos-80412.jpg
+${IMAGE04_PATH}             ${EXECDIR}${/}img${/}pexels-hazardos-804129.jpg
+${VIDEO01_PATH}             ${EXECDIR}${/}img${/}3785380-hd_1920_1080_25fps.mp4
+${PDF_PATH}                 ${EXECDIR}${/}img${/}Thisispdffile.pdf
+${INVALID_VIDEO}            ${EXECDIR}${/}img${/}5275550-uhd_4096_2160_25fps.mp4
+
+#--- ตัวแปรของ ณัฐธเนศ ---
+${PASSENGER_USER_SUCCESS}           porseater
+${PASSENGER_SURNAME_SUCCESS}        por
+${PASSENGER_PASS_SUCCESS}           123456789
+${REPORT_TEXT_SUCCESS}              คนขับขับรถเร็วเกินไป ทำให้รู้สึกไม่ปลอดภัย
+${REPORT_IMAGE_SUCCESS_PATH}        /Users/fandy/KKU 3T2/softend/PaiNamNae/sec1_group1_PaiNamNae/test/resources/fart-driving.jpg
+${REPORT_VIDEO_SUCCESS_PATH}        /Users/fandy/KKU 3T2/softend/PaiNamNae/sec1_group1_PaiNamNae/test/resources/fast driving.mp4
 
 # ตัวแปรที่ใช้บนเว็บที่ Deploy แล้ว
 ${PASSENGER_REVIEW_USER}        

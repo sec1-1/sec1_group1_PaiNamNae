@@ -55,11 +55,11 @@ UAT-001 : Login and Go to Report (Super Slow)
     Input Text      xpath=//textarea    ${REPORT_TEXT_SUCCESS}
 
     # --- Step 083: เพิ่มไฟล์ภาพและวิดีโอ ---
-    Choose File     xpath=//input[@type='file']    ${REPORT_IMAGE_SUCCESS_PATH}
+    Choose File     xpath=//input[@type='file']    ${IMAGE01_PATH}
     Sleep           2s
-    Choose File     xpath=//input[@type='file']    ${REPORT_IMAGE_SUCCESS_PATH}
+    Choose File     xpath=//input[@type='file']    ${IMAGE02_PATH}
     Sleep           2s
-    Choose File     xpath=//input[@type='file']    ${REPORT_VIDEO_SUCCESS_PATH}
+    Choose File     xpath=//input[@type='file']    ${VIDEO01_PATH}
     # รอให้วิดีโออัปโหลดเสร็จจนปุ่ม "ส่งรายงาน" หาย Disabled
     Sleep           5s
 
@@ -78,5 +78,5 @@ UAT-001 : Login and Go to Report (Super Slow)
 
 *** Keywords ***
 Open Browser To Website
-    Open Browser               ${URL}    edge
+    Open Browser               ${URL}    chrome
     Maximize Browser Window
