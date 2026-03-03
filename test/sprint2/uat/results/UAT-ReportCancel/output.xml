@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.4.1 (Python 3.11.9 on win32)" generated="2026-03-02T12:27:37.545387" rpa="false" schemaversion="5">
+<suite id="s1" name="UAT-ReportCancel" source="D:\Coding Project\Github Project\Software Engineering\My Branch\sec1_group1_PaiNamNae\test\sprint2\uat\UAT-ReportCancel.robot">
+<test id="s1-t1" name="UAT-ReportFail-008 Passenger press cancel button" line="8">
+<kw name="Setup Delay Selenium" owner="auth_keywords">
+<kw name="Set Selenium Implicit Wait" owner="SeleniumLibrary">
+<arg>5s</arg>
+<doc>Sets the implicit wait value used by Selenium.</doc>
+<status status="PASS" start="2026-03-02T12:27:37.809245" elapsed="0.001000"/>
+</kw>
+<kw name="Set Selenium Speed" owner="SeleniumLibrary">
+<arg>0.5s</arg>
+<doc>Sets the delay that is waited after each Selenium command.</doc>
+<status status="PASS" start="2026-03-02T12:27:37.810245" elapsed="0.000000"/>
+</kw>
+<status status="PASS" start="2026-03-02T12:27:37.809245" elapsed="0.001000"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-03-02T12:27:37.810753" level="INFO">Opening browser 'edge' to base url 'http://localhost:3001/'.</msg>
+<arg>${URL}</arg>
+<arg>edge</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-03-02T12:27:37.810753" elapsed="2.387031"/>
+</kw>
+<kw name="Passenger Login" owner="auth_keywords">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-02T12:27:40.199790" level="INFO">Clicking element 'xpath=//a[@href='/login']'.</msg>
+<arg>xpath=//a[@href='/login']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-02T12:27:40.198794" elapsed="1.105223"/>
+</kw>
+<kw name="Wait Until Location Contains" owner="SeleniumLibrary">
+<arg>/login</arg>
+<arg>10s</arg>
+<doc>Waits until the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-03-02T12:27:41.304017" elapsed="0.505029"/>
+</kw>
+<kw name="Location Should Contain" owner="SeleniumLibrary">
+<msg time="2026-03-02T12:27:42.313702" level="INFO">Current location contains '/login'.</msg>
+<arg>/login</arg>
+<doc>Verifies that the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-03-02T12:27:41.809046" elapsed="0.504656"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-02T12:27:42.313702" level="INFO">Typing text 'Veerapat' into text field '//input[@placeholder="กรอกชื่อผู้ใช้หรืออีเมล"]'.</msg>
+<arg>//input[@placeholder="กรอกชื่อผู้ใช้หรืออีเมล"]</arg>
+<arg>${PASSENGER_USER}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-02T12:27:42.313702" elapsed="1.595475"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-02T12:27:43.909177" level="INFO">Typing text 'asdfjkl;123' into text field '//input[@placeholder="กรอกรหัสผ่าน"]'.</msg>
+<arg>//input[@placeholder="กรอกรหัสผ่าน"]</arg>
+<arg>${PASSENGER_PASS}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-02T12:27:43.909177" elapsed="1.558712"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-03-02T12:27:45.468458" level="INFO">Clicking button 'xpath=//button[@type='submit']'.</msg>
+<arg>xpath=//button[@type='submit']</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-02T12:27:45.467889" elapsed="2.564996"/>
+</kw>
+<status status="PASS" start="2026-03-02T12:27:40.197784" elapsed="7.835101"/>
+</kw>
+<kw name="Dashboard User Should Be Visible" owner="auth_keywords">
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//span[normalize-space()='${PASSENGER_SURNAME}']</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-02T12:27:48.033894" elapsed="1.020599"/>
+</kw>
+<kw name="Element Should Be Visible" owner="SeleniumLibrary">
+<msg time="2026-03-02T12:27:50.065958" level="INFO">Element 'xpath=//span[normalize-space()='Veera']' is displayed.</msg>
+<arg>xpath=//span[normalize-space()='${PASSENGER_SURNAME}']</arg>
+<doc>Verifies that the element identified by ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-02T12:27:49.054493" elapsed="1.011465"/>
+</kw>
+<status status="PASS" start="2026-03-02T12:27:48.032885" elapsed="2.033073"/>
+</kw>
+<kw name="View My Trip" owner="auth_keywords">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-02T12:27:50.065958" level="INFO">Clicking element 'xpath=//a[@href='/myTrip']'.</msg>
+<arg>xpath=//a[@href='/myTrip']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-02T12:27:50.065958" elapsed="1.049235"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-03-02T12:27:53.116101" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-03-02T12:27:51.115193" elapsed="2.000908"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-02T12:27:53.116101" level="INFO">Clicking element 'xpath=//button[starts-with(normalize-space(), "ทั้งหมด")]'.</msg>
+<arg>xpath=//button[starts-with(normalize-space(), "ทั้งหมด")]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-02T12:27:53.116101" elapsed="1.064399"/>
+</kw>
+<status status="PASS" start="2026-03-02T12:27:50.065958" elapsed="4.114542"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-02T12:27:54.180851" level="INFO">Clicking element 'xpath=(//button[normalize-space()="รายงาน"])[1]'.</msg>
+<arg>xpath=(//button[normalize-space()="รายงาน"])[1]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-02T12:27:54.180851" elapsed="1.110333"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-02T12:27:55.291184" level="INFO">Clicking element 'xpath=(//button[normalize-space()="ยกเลิก"])'.</msg>
+<arg>xpath=(//button[normalize-space()="ยกเลิก"])</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-02T12:27:55.291184" elapsed="1.212239"/>
+</kw>
+<kw name="Location Should Contain" owner="SeleniumLibrary">
+<msg time="2026-03-02T12:27:57.008309" level="INFO">Current location contains '/myTrip'.</msg>
+<arg>/myTrip</arg>
+<doc>Verifies that the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-03-02T12:27:56.503930" elapsed="0.504379"/>
+</kw>
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<msg time="2026-03-02T12:27:58.026773" level="INFO">Current page contains text 'การเดินทางของฉัน'.</msg>
+<arg>การเดินทางของฉัน</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="PASS" start="2026-03-02T12:27:57.008309" elapsed="1.018464"/>
+</kw>
+<status status="PASS" start="2026-03-02T12:27:37.808244" elapsed="20.218529"/>
+</test>
+<status status="PASS" start="2026-03-02T12:27:37.547387" elapsed="20.480680"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="UAT-ReportCancel" id="s1" pass="1" fail="0" skip="0">UAT-ReportCancel</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

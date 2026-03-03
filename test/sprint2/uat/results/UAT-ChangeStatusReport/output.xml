@@ -1,0 +1,684 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.4.1 (Python 3.11.9 on win32)" generated="2026-03-03T18:33:28.144316" rpa="false" schemaversion="5">
+<suite id="s1" name="UAT-ChangeStatusReport" source="D:\Coding Project\Github Project\Software Engineering\My Branch\sec1_group1_PaiNamNae\test\sprint2\uat\UAT-ChangeStatusReport.robot">
+<test id="s1-t1" name="UAT-ReportFail-010 Admin change report status from In process to Inspecting" line="8">
+<kw name="Setup Delay Selenium" owner="auth_keywords">
+<kw name="Set Selenium Implicit Wait" owner="SeleniumLibrary">
+<arg>5s</arg>
+<doc>Sets the implicit wait value used by Selenium.</doc>
+<status status="PASS" start="2026-03-03T18:33:30.477891" elapsed="0.001001"/>
+</kw>
+<kw name="Set Selenium Speed" owner="SeleniumLibrary">
+<arg>0.5s</arg>
+<doc>Sets the delay that is waited after each Selenium command.</doc>
+<status status="PASS" start="2026-03-03T18:33:30.478892" elapsed="0.000000"/>
+</kw>
+<status status="PASS" start="2026-03-03T18:33:30.476883" elapsed="0.002009"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:33:30.479887" level="INFO">Opening browser 'edge' to base url 'http://localhost:3001/'.</msg>
+<arg>${URL}</arg>
+<arg>edge</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-03-03T18:33:30.479887" elapsed="3.056651"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2026-03-03T18:33:33.536538" elapsed="0.550845"/>
+</kw>
+<kw name="Admin Login" owner="auth_keywords">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:33:34.088389" level="INFO">Clicking element 'xpath=//a[@href='/login']'.</msg>
+<arg>xpath=//a[@href='/login']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:33:34.088389" elapsed="1.127483"/>
+</kw>
+<kw name="Wait Until Location Contains" owner="SeleniumLibrary">
+<arg>/login</arg>
+<arg>10s</arg>
+<doc>Waits until the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-03-03T18:33:35.216376" elapsed="0.506336"/>
+</kw>
+<kw name="Location Should Contain" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:33:36.227295" level="INFO">Current location contains '/login'.</msg>
+<arg>/login</arg>
+<doc>Verifies that the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-03-03T18:33:35.722712" elapsed="0.504583"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:33:36.227800" level="INFO">Typing text 'admin123' into text field '//input[@placeholder="กรอกชื่อผู้ใช้หรืออีเมล"]'.</msg>
+<arg>//input[@placeholder="กรอกชื่อผู้ใช้หรืออีเมล"]</arg>
+<arg>${ADMIN_USER}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:33:36.227295" elapsed="1.640949"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:33:37.868767" level="INFO">Typing text '123456789' into text field '//input[@placeholder="กรอกรหัสผ่าน"]'.</msg>
+<arg>//input[@placeholder="กรอกรหัสผ่าน"]</arg>
+<arg>${ADMIN_PASS}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:33:37.868244" elapsed="1.560697"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:33:39.429458" level="INFO">Clicking button 'xpath=//button[@type='submit']'.</msg>
+<arg>xpath=//button[@type='submit']</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:33:39.428941" elapsed="2.566037"/>
+</kw>
+<status status="PASS" start="2026-03-03T18:33:34.087383" elapsed="7.907595"/>
+</kw>
+<kw name="Dashboard Admin Should Be Visible" owner="auth_keywords">
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//span[normalize-space()='${ADMIN_FIRST_NAME}']</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-03T18:33:41.995518" elapsed="1.080120"/>
+</kw>
+<kw name="Element Should Be Visible" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:33:44.089311" level="INFO">Element 'xpath=//span[normalize-space()='System']' is displayed.</msg>
+<arg>xpath=//span[normalize-space()='${ADMIN_FIRST_NAME}']</arg>
+<doc>Verifies that the element identified by ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-03T18:33:43.075638" elapsed="1.013673"/>
+</kw>
+<status status="PASS" start="2026-03-03T18:33:41.995518" elapsed="2.093793"/>
+</kw>
+<kw name="Go To User Management Page" owner="auth_keywords">
+<kw name="Mouse Over" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:33:44.089818" level="INFO">Simulating Mouse Over on element 'xpath=//span[normalize-space()='System']'.</msg>
+<arg>xpath=//span[normalize-space()='${ADMIN_FIRST_NAME}']</arg>
+<doc>Simulates hovering the mouse over the element ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:33:44.089818" elapsed="1.267755"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//a[@href='/admin/users']</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-03T18:33:45.357573" elapsed="1.017104"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:33:46.374677" level="INFO">Clicking element 'xpath=//a[@href='/admin/users']'.</msg>
+<arg>xpath=//a[@href='/admin/users']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:33:46.374677" elapsed="1.052019"/>
+</kw>
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:33:48.453824" level="INFO">Current page contains text 'User Management'.</msg>
+<arg>User Management</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="PASS" start="2026-03-03T18:33:47.426696" elapsed="1.027128"/>
+</kw>
+<status status="PASS" start="2026-03-03T18:33:44.089818" elapsed="4.364006"/>
+</kw>
+<kw name="Go To Check Report" owner="auth_keywords">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:33:48.453824" level="INFO">Clicking element 'xpath=//a[.//span[normalize-space()="Check Report"]]'.</msg>
+<arg>xpath=//a[.//span[normalize-space()="Check Report"]]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:33:48.453824" elapsed="1.062001"/>
+</kw>
+<status status="PASS" start="2026-03-03T18:33:48.453824" elapsed="1.062001"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:33:49.516332" level="INFO">Clicking element 'xpath=(//button[normalize-space()="ตรวจสอบ"])[2]'.</msg>
+<arg>xpath=(//button[normalize-space()="ตรวจสอบ"])[2]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:33:49.516332" elapsed="1.064089"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:33:50.580421" level="INFO">Clicking element 'xpath=(//button[normalize-space()="กำลังตรวจสอบ"])'.</msg>
+<msg time="2026-03-03T18:33:52.884779" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-10.png"&gt;&lt;img src="selenium-screenshot-10.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2026-03-03T18:33:52.884779" level="FAIL">ElementClickInterceptedException: Message: element click intercepted: Element &lt;button class="px-3 py-1 text-xs rounded-full border transition bg-white text-gray-600 border-gray-300 hover:bg-gray-50"&gt;...&lt;/button&gt; is not clickable at point (1254, 287). Other element would receive the click: &lt;div class="fixed inset-0 z-[1050] flex items-center justify-center p-4 bg-black/50"&gt;...&lt;/div&gt;
+  (Session info: MicrosoftEdge=145.0.3800.82); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementclickinterceptedexception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff61c9e6835
+	0x7ff61c9e6894
+	0x7ff61cd2ad2a
+	0x7ff61c7895dd
+	0x7ff61c787aaf
+	0x7ff61c7858b6
+	0x7ff61c784ced
+	0x7ff61c77a8bd
+	0x7ff61c7a42ba
+	0x7ff61c77a307
+	0x7ff61c77a20d
+	0x7ff61c77a307
+	0x7ff61c7bf1e7
+	0x7ff61c779a1c
+	0x7ff61c778c76
+	0x7ff61c779843
+	0x7ff61c840564
+	0x7ff61c83ca03
+	0x7ff61c84d0c3
+	0x7ff61ca00f18
+	0x7ff61ca097f6
+	0x7ff61c9ede74
+	0x7ff61c9edfb9
+	0x7ff61c9dbdf2
+	0x7ffc58f1e8d7
+	0x7ffc59cec40c
+</msg>
+<arg>xpath=(//button[normalize-space()="กำลังตรวจสอบ"])</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="FAIL" start="2026-03-03T18:33:50.580421" elapsed="2.389722">ElementClickInterceptedException: Message: element click intercepted: Element &lt;button class="px-3 py-1 text-xs rounded-full border transition bg-white text-gray-600 border-gray-300 hover:bg-gray-50"&gt;...&lt;/button&gt; is not clickable at point (1254, 287). Other element would receive the click: &lt;div class="fixed inset-0 z-[1050] flex items-center justify-center p-4 bg-black/50"&gt;...&lt;/div&gt;
+  (Session info: MicrosoftEdge=145.0.3800.82); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementclickinterceptedexception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff61c9e6835
+	0x7ff61c9e6894
+	0x7ff61cd2ad2a
+	0x7ff61c7895dd
+	0x7ff61c787aaf
+	0x7ff61c7858b6
+	0x7ff61c784ced
+	0x7ff61c77a8bd
+	0x7ff61c7a42ba
+	0x7ff61c77a307
+	0x7ff61c77a20d
+	0x7ff61c77a307
+	0x7ff61c7bf1e7
+	0x7ff61c779a1c
+	0x7ff61c778c76
+	0x7ff61c779843
+	0x7ff61c840564
+	0x7ff61c83ca03
+	0x7ff61c84d0c3
+	0x7ff61ca00f18
+	0x7ff61ca097f6
+	0x7ff61c9ede74
+	0x7ff61c9edfb9
+	0x7ff61c9dbdf2
+	0x7ffc58f1e8d7
+	0x7ffc59cec40c
+</status>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//*[contains(text(),"อัปเดตสถานะสำเร็จ")]</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="NOT RUN" start="2026-03-03T18:33:52.970143" elapsed="0.000000"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//*[contains(text(),"สถานะรายงานเปลี่ยนเป็น กำลังตรวจสอบ")]</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="NOT RUN" start="2026-03-03T18:33:52.970143" elapsed="0.000000"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<arg>${URL}</arg>
+<arg>edge</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="NOT RUN" start="2026-03-03T18:33:52.970143" elapsed="0.000000"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="NOT RUN" start="2026-03-03T18:33:52.970143" elapsed="0.000000"/>
+</kw>
+<kw name="Passenger Login" owner="auth_keywords">
+<status status="NOT RUN" start="2026-03-03T18:33:52.971647" elapsed="0.000000"/>
+</kw>
+<kw name="Dashboard User Should Be Visible" owner="auth_keywords">
+<status status="NOT RUN" start="2026-03-03T18:33:52.971647" elapsed="0.000000"/>
+</kw>
+<kw name="View Notification" owner="auth_keywords">
+<status status="NOT RUN" start="2026-03-03T18:33:52.971647" elapsed="0.000000"/>
+</kw>
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<arg>สถานะการรายงานของคุณถูกเปลี่ยนจาก "รอดำเนินการ" เป็น "กำลังตรวจสอบ"</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="NOT RUN" start="2026-03-03T18:33:52.971647" elapsed="0.000000"/>
+</kw>
+<kw name="Go To User Profile Page" owner="auth_keywords">
+<status status="NOT RUN" start="2026-03-03T18:33:52.971647" elapsed="0.000000"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>xpath=//a[normalize-space()="ประวัติการรายงาน"]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-03-03T18:33:52.972486" elapsed="0.000000"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>xpath=//h2[normalize-space()="รับเรื่องแล้ว"]/ancestor::div[contains(@class,"cursor-pointer")]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-03-03T18:33:52.972486" elapsed="0.000000"/>
+</kw>
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<arg>รับเรื่องแล้ว</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="NOT RUN" start="2026-03-03T18:33:52.972486" elapsed="0.000000"/>
+</kw>
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<arg>${REPORT_TEXT}</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="NOT RUN" start="2026-03-03T18:33:52.972486" elapsed="0.000000"/>
+</kw>
+<status status="FAIL" start="2026-03-03T18:33:30.475887" elapsed="22.496599">ElementClickInterceptedException: Message: element click intercepted: Element &lt;button class="px-3 py-1 text-xs rounded-full border transition bg-white text-gray-600 border-gray-300 hover:bg-gray-50"&gt;...&lt;/button&gt; is not clickable at point (1254, 287). Other element would receive the click: &lt;div class="fixed inset-0 z-[1050] flex items-center justify-center p-4 bg-black/50"&gt;...&lt;/div&gt;
+  (Session info: MicrosoftEdge=145.0.3800.82); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementclickinterceptedexception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff61c9e6835
+	0x7ff61c9e6894
+	0x7ff61cd2ad2a
+	0x7ff61c7895dd
+	0x7ff61c787aaf
+	0x7ff61c7858b6
+	0x7ff61c784ced
+	0x7ff61c77a8bd
+	0x7ff61c7a42ba
+	0x7ff61c77a307
+	0x7ff61c77a20d
+	0x7ff61c77a307
+	0x7ff61c7bf1e7
+	0x7ff61c779a1c
+	0x7ff61c778c76
+	0x7ff61c779843
+	0x7ff61c840564
+	0x7ff61c83ca03
+	0x7ff61c84d0c3
+	0x7ff61ca00f18
+	0x7ff61ca097f6
+	0x7ff61c9ede74
+	0x7ff61c9edfb9
+	0x7ff61c9dbdf2
+	0x7ffc58f1e8d7
+	0x7ffc59cec40c
+</status>
+</test>
+<test id="s1-t2" name="UAT-ReportFail-011 Admin change report status from Inspecting to Respond to reports" line="37">
+<kw name="Setup Delay Selenium" owner="auth_keywords">
+<kw name="Set Selenium Implicit Wait" owner="SeleniumLibrary">
+<arg>5s</arg>
+<doc>Sets the implicit wait value used by Selenium.</doc>
+<status status="PASS" start="2026-03-03T18:33:52.974769" elapsed="0.501899"/>
+</kw>
+<kw name="Set Selenium Speed" owner="SeleniumLibrary">
+<arg>0.5s</arg>
+<doc>Sets the delay that is waited after each Selenium command.</doc>
+<status status="PASS" start="2026-03-03T18:33:53.476668" elapsed="0.000570"/>
+</kw>
+<status status="PASS" start="2026-03-03T18:33:52.974769" elapsed="0.502469"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:33:53.477497" level="INFO">Opening browser 'edge' to base url 'http://localhost:3001/'.</msg>
+<arg>${URL}</arg>
+<arg>edge</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-03-03T18:33:53.477497" elapsed="2.194348"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2026-03-03T18:33:55.671845" elapsed="0.551024"/>
+</kw>
+<kw name="Admin Login" owner="auth_keywords">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:33:56.223371" level="INFO">Clicking element 'xpath=//a[@href='/login']'.</msg>
+<arg>xpath=//a[@href='/login']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:33:56.223371" elapsed="1.112207"/>
+</kw>
+<kw name="Wait Until Location Contains" owner="SeleniumLibrary">
+<arg>/login</arg>
+<arg>10s</arg>
+<doc>Waits until the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-03-03T18:33:57.335578" elapsed="0.507025"/>
+</kw>
+<kw name="Location Should Contain" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:33:58.346953" level="INFO">Current location contains '/login'.</msg>
+<arg>/login</arg>
+<doc>Verifies that the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-03-03T18:33:57.842603" elapsed="0.504350"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:33:58.346953" level="INFO">Typing text 'admin123' into text field '//input[@placeholder="กรอกชื่อผู้ใช้หรืออีเมล"]'.</msg>
+<arg>//input[@placeholder="กรอกชื่อผู้ใช้หรืออีเมล"]</arg>
+<arg>${ADMIN_USER}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:33:58.346953" elapsed="1.579503"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:33:59.926973" level="INFO">Typing text '123456789' into text field '//input[@placeholder="กรอกรหัสผ่าน"]'.</msg>
+<arg>//input[@placeholder="กรอกรหัสผ่าน"]</arg>
+<arg>${ADMIN_PASS}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:33:59.926456" elapsed="1.560905"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:34:01.488028" level="INFO">Clicking button 'xpath=//button[@type='submit']'.</msg>
+<arg>xpath=//button[@type='submit']</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:34:01.488028" elapsed="2.569175"/>
+</kw>
+<status status="PASS" start="2026-03-03T18:33:56.223371" elapsed="7.833832"/>
+</kw>
+<kw name="Dashboard Admin Should Be Visible" owner="auth_keywords">
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//span[normalize-space()='${ADMIN_FIRST_NAME}']</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-03T18:34:04.057203" elapsed="1.018519"/>
+</kw>
+<kw name="Element Should Be Visible" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:34:06.089845" level="INFO">Element 'xpath=//span[normalize-space()='System']' is displayed.</msg>
+<arg>xpath=//span[normalize-space()='${ADMIN_FIRST_NAME}']</arg>
+<doc>Verifies that the element identified by ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-03T18:34:05.075722" elapsed="1.014123"/>
+</kw>
+<status status="PASS" start="2026-03-03T18:34:04.057203" elapsed="2.032642"/>
+</kw>
+<kw name="Go To User Management Page" owner="auth_keywords">
+<kw name="Mouse Over" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:34:06.091613" level="INFO">Simulating Mouse Over on element 'xpath=//span[normalize-space()='System']'.</msg>
+<arg>xpath=//span[normalize-space()='${ADMIN_FIRST_NAME}']</arg>
+<doc>Simulates hovering the mouse over the element ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:34:06.090605" elapsed="1.275740"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//a[@href='/admin/users']</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-03T18:34:07.366345" elapsed="1.015527"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:34:08.382379" level="INFO">Clicking element 'xpath=//a[@href='/admin/users']'.</msg>
+<arg>xpath=//a[@href='/admin/users']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:34:08.381872" elapsed="1.102190"/>
+</kw>
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:34:10.505195" level="INFO">Current page contains text 'User Management'.</msg>
+<arg>User Management</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="PASS" start="2026-03-03T18:34:09.484062" elapsed="1.021133"/>
+</kw>
+<status status="PASS" start="2026-03-03T18:34:06.090605" elapsed="4.414590"/>
+</kw>
+<kw name="Go To Check Report" owner="auth_keywords">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:34:10.505587" level="INFO">Clicking element 'xpath=//a[.//span[normalize-space()="Check Report"]]'.</msg>
+<arg>xpath=//a[.//span[normalize-space()="Check Report"]]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:34:10.505587" elapsed="1.048883"/>
+</kw>
+<status status="PASS" start="2026-03-03T18:34:10.505587" elapsed="1.048883"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:34:11.554470" level="INFO">Clicking element 'xpath=(//button[normalize-space()="ตรวจสอบ"])[2]'.</msg>
+<arg>xpath=(//button[normalize-space()="ตรวจสอบ"])[2]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:34:11.554470" elapsed="1.061411"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:34:12.616442" level="INFO">Clicking element 'xpath=(//button[normalize-space()="ตอบรับการรายงาน"])'.</msg>
+<msg time="2026-03-03T18:34:18.757307" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-11.png"&gt;&lt;img src="selenium-screenshot-11.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2026-03-03T18:34:18.757307" level="FAIL">Element with locator 'xpath=(//button[normalize-space()="ตอบรับการรายงาน"])' not found.</msg>
+<arg>xpath=(//button[normalize-space()="ตอบรับการรายงาน"])</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="FAIL" start="2026-03-03T18:34:12.615881" elapsed="6.170828">Element with locator 'xpath=(//button[normalize-space()="ตอบรับการรายงาน"])' not found.</status>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//*[contains(text(),"อัปเดตสถานะสำเร็จ")]</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="NOT RUN" start="2026-03-03T18:34:18.787709" elapsed="0.000000"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//*[contains(text(),"สถานะรายงานเปลี่ยนเป็น ตอบรับการรายงานแล้ว")]</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="NOT RUN" start="2026-03-03T18:34:18.787709" elapsed="0.000000"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<arg>${URL}</arg>
+<arg>edge</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="NOT RUN" start="2026-03-03T18:34:18.787709" elapsed="0.000000"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="NOT RUN" start="2026-03-03T18:34:18.787709" elapsed="0.000000"/>
+</kw>
+<kw name="Passenger Login" owner="auth_keywords">
+<status status="NOT RUN" start="2026-03-03T18:34:18.788707" elapsed="0.000000"/>
+</kw>
+<kw name="Dashboard User Should Be Visible" owner="auth_keywords">
+<status status="NOT RUN" start="2026-03-03T18:34:18.788707" elapsed="0.000000"/>
+</kw>
+<kw name="View Notification" owner="auth_keywords">
+<status status="NOT RUN" start="2026-03-03T18:34:18.788707" elapsed="0.000000"/>
+</kw>
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<arg>สถานะการรายงานของคุณถูกเปลี่ยนจาก "กำลังตรวจสอบ" เป็น "ดำเนินการเสร็จสิ้น"</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="NOT RUN" start="2026-03-03T18:34:18.788707" elapsed="0.000000"/>
+</kw>
+<kw name="Go To User Profile Page" owner="auth_keywords">
+<status status="NOT RUN" start="2026-03-03T18:34:18.790216" elapsed="0.000000"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>xpath=//a[normalize-space()="ประวัติการรายงาน"]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-03-03T18:34:18.790216" elapsed="0.000000"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>xpath=//h2[normalize-space()="ดำเนินการแล้ว"]/ancestor::div[contains(@class,"cursor-pointer")]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-03-03T18:34:18.790216" elapsed="0.000000"/>
+</kw>
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<arg>ดำเนินการแล้ว</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="NOT RUN" start="2026-03-03T18:34:18.790216" elapsed="0.000000"/>
+</kw>
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<arg>${REPORT_TEXT}</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="NOT RUN" start="2026-03-03T18:34:18.790216" elapsed="0.000000"/>
+</kw>
+<status status="FAIL" start="2026-03-03T18:33:52.973755" elapsed="25.817468">Element with locator 'xpath=(//button[normalize-space()="ตอบรับการรายงาน"])' not found.</status>
+</test>
+<test id="s1-t3" name="UAT-ReportFail-012 Admin change report status from In process to Reject" line="66">
+<kw name="Setup Delay Selenium" owner="auth_keywords">
+<kw name="Set Selenium Implicit Wait" owner="SeleniumLibrary">
+<arg>5s</arg>
+<doc>Sets the implicit wait value used by Selenium.</doc>
+<status status="PASS" start="2026-03-03T18:34:18.792225" elapsed="1.003398"/>
+</kw>
+<kw name="Set Selenium Speed" owner="SeleniumLibrary">
+<arg>0.5s</arg>
+<doc>Sets the delay that is waited after each Selenium command.</doc>
+<status status="PASS" start="2026-03-03T18:34:19.795623" elapsed="0.000000"/>
+</kw>
+<status status="PASS" start="2026-03-03T18:34:18.791223" elapsed="1.004400"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:34:19.796633" level="INFO">Opening browser 'edge' to base url 'http://localhost:3001/'.</msg>
+<arg>${URL}</arg>
+<arg>edge</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-03-03T18:34:19.795623" elapsed="2.260924"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2026-03-03T18:34:22.057555" elapsed="0.595137"/>
+</kw>
+<kw name="Admin Login" owner="auth_keywords">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:34:22.653698" level="INFO">Clicking element 'xpath=//a[@href='/login']'.</msg>
+<arg>xpath=//a[@href='/login']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:34:22.653698" elapsed="1.119603"/>
+</kw>
+<kw name="Wait Until Location Contains" owner="SeleniumLibrary">
+<arg>/login</arg>
+<arg>10s</arg>
+<doc>Waits until the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-03-03T18:34:23.773301" elapsed="0.506019"/>
+</kw>
+<kw name="Location Should Contain" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:34:24.784055" level="INFO">Current location contains '/login'.</msg>
+<arg>/login</arg>
+<doc>Verifies that the current URL contains ``expected``.</doc>
+<status status="PASS" start="2026-03-03T18:34:24.279320" elapsed="0.504735"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:34:24.784559" level="INFO">Typing text 'admin123' into text field '//input[@placeholder="กรอกชื่อผู้ใช้หรืออีเมล"]'.</msg>
+<arg>//input[@placeholder="กรอกชื่อผู้ใช้หรืออีเมล"]</arg>
+<arg>${ADMIN_USER}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:34:24.784559" elapsed="1.756250"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:34:26.540809" level="INFO">Typing text '123456789' into text field '//input[@placeholder="กรอกรหัสผ่าน"]'.</msg>
+<arg>//input[@placeholder="กรอกรหัสผ่าน"]</arg>
+<arg>${ADMIN_PASS}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:34:26.540809" elapsed="1.575666"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:34:28.116999" level="INFO">Clicking button 'xpath=//button[@type='submit']'.</msg>
+<arg>xpath=//button[@type='submit']</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:34:28.116475" elapsed="2.572897"/>
+</kw>
+<status status="PASS" start="2026-03-03T18:34:22.652692" elapsed="8.036680"/>
+</kw>
+<kw name="Dashboard Admin Should Be Visible" owner="auth_keywords">
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//span[normalize-space()='${ADMIN_FIRST_NAME}']</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-03T18:34:30.689372" elapsed="1.019412"/>
+</kw>
+<kw name="Element Should Be Visible" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:34:32.721847" level="INFO">Element 'xpath=//span[normalize-space()='System']' is displayed.</msg>
+<arg>xpath=//span[normalize-space()='${ADMIN_FIRST_NAME}']</arg>
+<doc>Verifies that the element identified by ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-03T18:34:31.708784" elapsed="1.013063"/>
+</kw>
+<status status="PASS" start="2026-03-03T18:34:30.689372" elapsed="2.032475"/>
+</kw>
+<kw name="Go To User Management Page" owner="auth_keywords">
+<kw name="Mouse Over" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:34:32.722857" level="INFO">Simulating Mouse Over on element 'xpath=//span[normalize-space()='System']'.</msg>
+<arg>xpath=//span[normalize-space()='${ADMIN_FIRST_NAME}']</arg>
+<doc>Simulates hovering the mouse over the element ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:34:32.721847" elapsed="1.274133"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//a[@href='/admin/users']</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-03-03T18:34:33.995980" elapsed="1.017227"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:34:35.013207" level="INFO">Clicking element 'xpath=//a[@href='/admin/users']'.</msg>
+<arg>xpath=//a[@href='/admin/users']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:34:35.013207" elapsed="1.054105"/>
+</kw>
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:34:37.087231" level="INFO">Current page contains text 'User Management'.</msg>
+<arg>User Management</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="PASS" start="2026-03-03T18:34:36.067312" elapsed="1.019919"/>
+</kw>
+<status status="PASS" start="2026-03-03T18:34:32.721847" elapsed="4.365384"/>
+</kw>
+<kw name="Go To Check Report" owner="auth_keywords">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:34:37.087761" level="INFO">Clicking element 'xpath=//a[.//span[normalize-space()="Check Report"]]'.</msg>
+<arg>xpath=//a[.//span[normalize-space()="Check Report"]]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:34:37.087761" elapsed="1.051082"/>
+</kw>
+<status status="PASS" start="2026-03-03T18:34:37.087761" elapsed="1.051082"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:34:38.139510" level="INFO">Clicking element 'xpath=(//button[normalize-space()="ตรวจสอบ"])[1]'.</msg>
+<arg>xpath=(//button[normalize-space()="ตรวจสอบ"])[1]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-03-03T18:34:38.139510" elapsed="1.054452"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-03-03T18:34:39.193962" level="INFO">Clicking element 'xpath=(//button[normalize-space()="ปฎิเสธ"])'.</msg>
+<msg time="2026-03-03T18:34:45.332657" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-12.png"&gt;&lt;img src="selenium-screenshot-12.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2026-03-03T18:34:45.332657" level="FAIL">Element with locator 'xpath=(//button[normalize-space()="ปฎิเสธ"])' not found.</msg>
+<arg>xpath=(//button[normalize-space()="ปฎิเสธ"])</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="FAIL" start="2026-03-03T18:34:39.193962" elapsed="6.139680">Element with locator 'xpath=(//button[normalize-space()="ปฎิเสธ"])' not found.</status>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//*[contains(text(),"อัปเดตสถานะสำเร็จ")]</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="NOT RUN" start="2026-03-03T18:34:45.334642" elapsed="0.000000"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//*[contains(text(),"สถานะรายงานเปลี่ยนเป็น ปฏิเสธ")]</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="NOT RUN" start="2026-03-03T18:34:45.335146" elapsed="0.000000"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<arg>${URL}</arg>
+<arg>edge</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="NOT RUN" start="2026-03-03T18:34:45.335146" elapsed="0.000000"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="NOT RUN" start="2026-03-03T18:34:45.335146" elapsed="0.000000"/>
+</kw>
+<kw name="Passenger Login" owner="auth_keywords">
+<status status="NOT RUN" start="2026-03-03T18:34:45.336150" elapsed="0.000000"/>
+</kw>
+<kw name="Dashboard User Should Be Visible" owner="auth_keywords">
+<status status="NOT RUN" start="2026-03-03T18:34:45.336150" elapsed="0.000000"/>
+</kw>
+<kw name="View Notification" owner="auth_keywords">
+<status status="NOT RUN" start="2026-03-03T18:34:45.336150" elapsed="0.000000"/>
+</kw>
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<arg>สถานะการรายงานของคุณถูกเปลี่ยนจาก "รอดำเนินการ" เป็น "ปฏิเสธ"</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="NOT RUN" start="2026-03-03T18:34:45.336150" elapsed="0.000000"/>
+</kw>
+<kw name="Go To User Profile Page" owner="auth_keywords">
+<status status="NOT RUN" start="2026-03-03T18:34:45.336150" elapsed="0.000000"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>xpath=//a[normalize-space()="ประวัติการรายงาน"]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-03-03T18:34:45.336150" elapsed="0.000000"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>xpath=//h2[normalize-space()="ไม่พบปัญหา"]/ancestor::div[contains(@class,"cursor-pointer")]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-03-03T18:34:45.337150" elapsed="0.000000"/>
+</kw>
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<arg>ดำเนินการแล้ว</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="NOT RUN" start="2026-03-03T18:34:45.337150" elapsed="0.000000"/>
+</kw>
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<arg>${REPORT_TEXT}</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="NOT RUN" start="2026-03-03T18:34:45.337150" elapsed="0.000000"/>
+</kw>
+<status status="FAIL" start="2026-03-03T18:34:18.791223" elapsed="26.545927">Element with locator 'xpath=(//button[normalize-space()="ปฎิเสธ"])' not found.</status>
+</test>
+<status status="FAIL" start="2026-03-03T18:33:28.147324" elapsed="77.190827"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="3" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="UAT-ChangeStatusReport" id="s1" pass="0" fail="3" skip="0">UAT-ChangeStatusReport</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
