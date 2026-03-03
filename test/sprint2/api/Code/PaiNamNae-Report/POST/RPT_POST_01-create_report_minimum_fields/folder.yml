@@ -1,0 +1,9 @@
+info:
+  name: RPT_POST_01-create_report_minimum_fields
+  type: folder
+  seq: 2
+
+request:
+  auth:
+    type: bearer
+    token: "{{passenger_token}}"

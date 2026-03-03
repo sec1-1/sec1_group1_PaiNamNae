@@ -1,0 +1,45 @@
+info:
+  name: 01login admin
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{base_url}}/api/auth/login"
+  body:
+    type: json
+    data: |-
+      {
+        "username": "{{admin_username}}",
+        "password": "{{admin_password}}"
+      }
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const body = res.getBody();
+        const json = typeof body === "string" ? JSON.parse(body) : body;
+        bru.setEnvVar("admin_token", json.data.token,);
+    - type: tests
+      code: |-
+        const body = res.getBody();
+        const json = typeof body === "string" ? JSON.parse(body) : body;
+
+        test("Status code: 200", () => {
+          expect(res.getStatus()).to.equal(200);
+        });
+
+        test("คืนค่า token กลับมา", () => {
+          expect(json.data.token).to.be.a("string");
+        });
+
+        test("ส่ง role: admin กลับมา", () => {
+          expect(json.data.user.role).to.equal('ADMIN');
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
