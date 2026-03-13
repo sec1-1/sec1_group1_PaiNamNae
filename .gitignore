@@ -6,3 +6,4 @@ output.xml
 results/
 selenium-screenshot-*.png
 Back-end/prisma/migrations/
+credentials.robot
