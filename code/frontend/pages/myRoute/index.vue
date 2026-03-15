@@ -159,6 +159,44 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <!-- รายงานปัญหาเส้นทาง (คนขับ) -->
+                                        <div class="p-4 border border-gray-200 rounded-lg bg-gray-50">
+                                            <div class="flex items-start justify-between gap-4">
+                                                <div class="flex-1">
+                                                    <h5 class="text-sm font-semibold text-gray-900">รายงานปัญหาเส้นทาง</h5>
+                                                    <p class="mt-1 text-xs text-gray-600">
+                                                        ใช้สำหรับแจ้งเหตุให้แอดมินและติดตามสถานะการตรวจสอบ
+                                                    </p>
+                                                    <div class="mt-2 text-xs text-gray-700">
+                                                        <span class="font-medium">สถานะ:</span>
+                                                        <span class="ml-1 status-badge status-pending"
+                                                            v-if="!route.hasReport">ยังไม่เคยรายงาน</span>
+                                                        <span class="ml-1 status-badge status-confirmed"
+                                                            v-else>{{ getReportStatusText(route.reportData?.status || 'PENDING') }}</span>
+                                                    </div>
+                                                    <div v-if="route.hasReport && route.reportData" class="mt-2 text-xs text-gray-600">
+                                                        <span class="font-medium">ประเภท:</span>
+                                                        <span class="ml-1">{{ getCategoryText(route.reportData.category) }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="shrink-0">
+                                                    <button v-if="route.status === 'completed' && !route.hasReport"
+                                                        @click.stop="openDriverReportModal(route)"
+                                                        class="px-4 py-2 text-xs font-semibold text-white bg-red-600 rounded-md hover:bg-red-700">
+                                                        รายงานปัญหา
+                                                    </button>
+                                                    <button v-else-if="route.hasReport"
+                                                        @click.stop="openDriverReportStatusModal(route)"
+                                                        class="px-4 py-2 text-xs font-semibold text-blue-600 border border-blue-200 rounded-md hover:bg-blue-50">
+                                                        ดูสถานะรายงาน
+                                                    </button>
+                                                    <div v-else class="text-[11px] text-gray-500">
+                                                        รายงานได้หลังจบทริป
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -345,12 +383,12 @@
                                     </div>
                                 </div>
 
-                                <div class="flex justify-end space-x-3" :class="{ 'mt-4': selectedTripId !== trip.id }">
-                                    <template v-if="trip.status === 'pending'">
-                                        <button @click.stop="openConfirmModal(trip, 'confirm')"
-                                            class="px-4 py-2 text-sm text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700">
-                                            ยืนยันคำขอ
-                                        </button>
+                                    <div class="flex justify-end space-x-3" :class="{ 'mt-4': selectedTripId !== trip.id }">
+                                        <template v-if="trip.status === 'pending'">
+                                            <button @click.stop="openConfirmModal(trip, 'confirm')"
+                                                class="px-4 py-2 text-sm text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700">
+                                                ยืนยันคำขอ
+                                            </button>
                                         <button @click.stop="openConfirmModal(trip, 'reject')"
                                             class="px-4 py-2 text-sm text-red-600 transition duration-200 border border-red-300 rounded-md hover:bg-red-50">
                                             ปฏิเสธ
@@ -367,6 +405,19 @@
                                         class="px-4 py-2 text-sm text-gray-600 transition duration-200 border border-gray-300 rounded-md hover:bg-gray-50">
                                         ลบรายการ
                                     </button>
+
+                                    <template v-else-if="trip.status === 'completed'">
+                                        <button v-if="!getRouteForTrip(trip)?.hasReport"
+                                            @click.stop="openDriverReportModal(getRouteForTrip(trip) || { id: trip.routeId, origin: trip.origin, destination: trip.destination, status: 'completed' })"
+                                            class="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-md hover:bg-red-700">
+                                            รายงานปัญหา
+                                        </button>
+                                        <button v-else
+                                            @click.stop="openDriverReportStatusModal(getRouteForTrip(trip))"
+                                            class="px-4 py-2 text-sm font-semibold text-blue-600 border border-blue-200 rounded-md hover:bg-blue-50">
+                                            ดูสถานะรายงาน
+                                        </button>
+                                    </template>
                                 </div>
                             </div>
                         </div>
@@ -391,6 +442,146 @@
         <ConfirmModal :show="isModalVisible" :title="modalContent.title" :message="modalContent.message"
             :confirmText="modalContent.confirmText" :variant="modalContent.variant" @confirm="handleConfirmAction"
             @cancel="closeConfirmModal" />
+
+            <!-- Driver Report Modal -->
+        <div v-if="showDriverReportModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+            @click.self="closeDriverReportModal">
+            <div class="w-full max-w-lg p-6 bg-white rounded-xl shadow-2xl animate-in slide-in-from-top duration-300">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-bold text-red-600 leading-tight flex items-center">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        รายงานปัญหาเส้นทาง
+                    </h3>
+                    <button @click="closeDriverReportModal" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Category Selection -->
+                <div class="mb-4">
+                    <label class="block mb-2 text-sm font-semibold text-gray-700">เลือกหัวข้อปัญหาที่พบ</label>
+                    <select v-model="driverReportCategory"
+                        class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <option value="">-- เลือกหัวข้อ --</option>
+                        <option value="VEHICLE_ISSUE">ปัญหาสภาพรถ/ข้อมูลรถไม่ตรง</option>
+                        <option value="PASSENGER_ISSUE">พฤติกรรมผู้โดยสารที่ไม่เหมาะสม</option>
+                        <option value="ROAD_ISSUE">ปัญหาระหว่างเส้นทาง</option>
+                        <option value="SAFETY_ISSUE">ความปลอดภัย/พฤติกรรม</option>
+                        <option value="PAYMENT_ISSUE">ปัญหาการชำระเงิน/ผู้โดยสารไม่จ่ายเงิน</option>
+                        <option value="OTHER">อื่นๆ</option>
+                    </select>
+                </div>
+
+                <!-- Passenger Selection (when PASSENGER_ISSUE) -->
+                <div v-if="driverReportCategory === 'PASSENGER_ISSUE'" class="mb-4">
+                    <label class="block mb-2 text-sm font-semibold text-gray-700">ระบุผู้โดยสารที่เกี่ยวข้อง</label>
+                    <select v-model="driverReportPassengerId"
+                        class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <option value="">-- เลือกผู้โดยสาร --</option>
+                        <option v-if="!reportedRoute?.passengers?.length" value="" disabled>ไม่พบผู้โดยสารในทริปนี้</option>
+                        <option v-for="p in (reportedRoute?.passengers || [])" :key="p.id" :value="p.userId" :disabled="!p.userId">
+                            {{ p.name }} ({{ p.seats }} ที่นั่ง)
+                        </option>
+                    </select>
+                    <p v-if="!reportedRoute?.passengers?.length" class="mt-2 text-xs text-red-500">
+                        ไม่พบข้อมูลผู้โดยสารของทริปนี้
+                    </p>
+                </div>
+
+                <!-- Report Text -->
+                <div class="mb-4">
+                    <label class="block mb-2 text-sm font-semibold text-gray-700">รายละเอียดปัญหาที่พบ</label>
+                    <textarea v-model="driverReportText" rows="5"
+                        placeholder="โปรดระบุปัญหาที่คุณพบเพื่อให้ทีมงานสามารถตรวจสอบได้..."
+                        class="w-full px-4 py-3 leading-relaxed border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent resize-none transition-all placeholder-gray-400"></textarea>
+                </div>
+
+                <!-- Image Upload -->
+                <div class="mb-6">
+                    <label class="block mb-2 text-sm font-semibold text-gray-700">หลักฐานรูปภาพประกอบ (สูงสุด 2 รูป)</label>
+                    <div class="flex flex-wrap gap-3">
+                        <div v-for="(img, idx) in driverReportImages" :key="idx" class="relative w-24 h-24 group">
+                            <img :src="img.url" class="object-cover w-full h-full rounded-lg border border-gray-100 shadow-sm" />
+                            <button @click="removeDriverReportImage(idx)"
+                                class="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        <label v-if="driverReportImages.length < 2"
+                            class="flex flex-col items-center justify-center w-24 h-24 border-2 border-dashed border-gray-200 rounded-lg cursor-pointer hover:border-red-400 hover:bg-red-50 transition-all text-gray-400 hover:text-red-500">
+                            <svg class="w-8 h-8 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                            <span class="text-[10px] font-medium">เพิ่มรูป</span>
+                            <input type="file" class="hidden" @change="handleDriverReportFiles" accept="image/*" multiple />
+                        </label>
+                    </div>
+                    <p class="mt-2 text-xs text-gray-500 italic">ลำดับความสำคัญ: การแจ้งข้อมูลเท็จอาจส่งผลต่อการถูกระงับบัญชีผู้ใช้งาน</p>
+                </div>
+
+                <div class="flex gap-3">
+                    <button @click="closeDriverReportModal"
+                        class="flex-1 px-4 py-3 text-sm font-bold text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                        ยกเลิก
+                    </button>
+                    <button @click="submitDriverReport"
+                        class="flex-[2] px-4 py-3 text-sm font-bold text-white bg-red-600 rounded-lg hover:bg-red-700 shadow-lg shadow-red-200 transition-all active:scale-[0.98]">
+                        ส่งรายงาน
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Driver Report Status Modal -->
+        <div v-if="showDriverReportStatusModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+            @click.self="showDriverReportStatusModal = false">
+            <div class="w-full max-w-lg p-6 bg-white rounded-xl shadow-2xl animate-in slide-in-from-top duration-300">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-bold text-blue-600 leading-tight">สถานะรายงาน</h3>
+                    <button @click="showDriverReportStatusModal = false" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div v-if="reportedRouteData" class="space-y-3">
+                    <div class="text-sm text-gray-700">
+                        <span class="font-medium">เส้นทาง:</span>
+                        <span class="ml-1">{{ reportedRoute?.origin }} → {{ reportedRoute?.destination }}</span>
+                    </div>
+                    <div class="text-sm text-gray-700">
+                        <span class="font-medium">ประเภท:</span>
+                        <span class="ml-1">{{ getCategoryText(reportedRouteData.category) }}</span>
+                    </div>
+                    <div class="text-sm text-gray-700">
+                        <span class="font-medium">รายละเอียด:</span>
+                        <p class="mt-1 p-3 bg-gray-50 border border-gray-200 rounded-md">
+                            {{ reportedRouteData.description || 'ไม่ได้ระบุรายละเอียด' }}
+                        </p>
+                    </div>
+                    <div class="text-sm text-gray-700">
+                        <span class="font-medium">สถานะ:</span>
+                        <span class="ml-2 status-badge status-confirmed">
+                            {{ getReportStatusText(reportedRouteData.status || 'PENDING') }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <button @click="showDriverReportStatusModal = false"
+                        class="w-full px-4 py-3 text-sm font-bold text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                        ปิด
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -415,6 +606,16 @@ const isLoading = ref(false)
 const mapContainer = ref(null)
 const allTrips = ref([])
 const myRoutes = ref([])
+
+// --- Driver Report Modal State ---
+const showDriverReportModal = ref(false)
+const showDriverReportStatusModal = ref(false)
+const reportedRoute = ref(null)
+const reportedRouteData = ref(null)
+const driverReportCategory = ref('')
+const driverReportText = ref('')
+const driverReportImages = ref([])
+const driverReportPassengerId = ref('')
 
 // ---------- Google Maps states ----------
 let gmap = null
@@ -537,6 +738,7 @@ async function fetchMyRoutes() {
                 const routeStatusLower = (r.status || '').toLowerCase()
                 formatted.push({
                     id: b.id,
+                    routeId: r.id,
                     status: routeStatusLower === 'completed'
             ? 'completed'
             : bookingStatus,
@@ -599,6 +801,7 @@ async function fetchMyRoutes() {
                 conditions: r.conditions || '',
                 passengers: confirmedBookings.map(b => ({
                     id: b.id,
+                    userId: b.passenger?.id || null,
                     seats: b.numberOfSeats || 0,
                     status: 'confirmed',
                     name: `${b.passenger?.firstName || ''} ${b.passenger?.lastName || ''}`.trim() || 'ผู้โดยสาร',
@@ -644,6 +847,11 @@ async function fetchMyRoutes() {
     }
 }
 
+function getRouteForTrip(trip) {
+    if (!trip?.routeId) return null
+    return myRoutes.value.find(r => r.id === trip.routeId) || null
+}
+
 const getTripCount = (status) => {
     if (status === 'all') return allTrips.value.length
     if (status === 'myRoutes') return myRoutes.value.length
@@ -658,6 +866,140 @@ const toggleTripDetails = (id) => {
     if (item) updateMap(item)
 
     selectedTripId.value = (selectedTripId.value === id) ? null : id
+}
+
+// --- Driver Report Modal Functions ---
+function openDriverReportModal(route) {
+    reportedRoute.value = route
+    driverReportCategory.value = ''
+    driverReportText.value = ''
+    driverReportPassengerId.value = ''
+    driverReportImages.value.forEach(it => it.url && URL.revokeObjectURL(it.url))
+    driverReportImages.value = []
+    showDriverReportModal.value = true
+}
+
+function openDriverReportStatusModal(route) {
+    reportedRoute.value = route
+    reportedRouteData.value = route.reportData
+    showDriverReportStatusModal.value = true
+}
+
+function closeDriverReportModal() {
+    showDriverReportModal.value = false
+    setTimeout(() => { reportedRoute.value = null }, 200)
+}
+
+function handleDriverReportFiles(e) {
+    const files = Array.from(e.target.files || [])
+    const remaining = 2 - driverReportImages.value.length
+    files.slice(0, remaining).forEach(f => {
+        driverReportImages.value.push({ file: f, url: URL.createObjectURL(f) })
+    })
+    e.target.value = ''
+}
+
+function removeDriverReportImage(idx) {
+    const it = driverReportImages.value[idx]
+    if (it?.url) URL.revokeObjectURL(it.url)
+    driverReportImages.value.splice(idx, 1)
+}
+
+async function submitDriverReport() {
+    if (!reportedRoute.value) return
+    if (!driverReportCategory.value) {
+        toast.error('กรุณาเลือกหัวข้อปัญหา', 'กรุณาเลือกหัวข้อปัญหาที่พบ')
+        return
+    }
+    const allowedCats = new Set(['VEHICLE_ISSUE', 'PASSENGER_ISSUE', 'ROAD_ISSUE', 'SAFETY_ISSUE', 'PAYMENT_ISSUE', 'OTHER'])
+    if (!allowedCats.has(driverReportCategory.value)) {
+        toast.error('หัวข้อปัญหาไม่ถูกต้อง', 'กรุณาเลือกหัวข้อที่ระบบรองรับ')
+        return
+    }
+    if (driverReportCategory.value === 'PASSENGER_ISSUE' && !driverReportPassengerId.value) {
+        toast.error('กรุณาระบุผู้โดยสาร', 'เลือกผู้โดยสารที่เกี่ยวข้องก่อนส่งรายงาน')
+        return
+    }
+    try {
+        const fd = new FormData()
+        fd.append('type', 'DRIVER')
+        fd.append('category', driverReportCategory.value)
+        fd.append('description', driverReportText.value || 'ไม่ได้ระบุรายละเอียด')
+        fd.append('routeId', reportedRoute.value.id)
+        if (driverReportPassengerId.value) {
+            fd.append('targetUserId', driverReportPassengerId.value)
+        }
+        driverReportImages.value.forEach((it) => {
+            if (it.file) fd.append('images', it.file)
+        })
+
+        await $api('/reports', { method: 'POST', body: fd })
+        toast.success('ขอบคุณที่แจ้งรายงาน', 'ทีมงานจะตรวจสอบในเร็วๆ นี้')
+
+        // update route in place
+        const routeInList = myRoutes.value.find(r => r.id === reportedRoute.value.id)
+        if (routeInList) {
+            routeInList.hasReport = true
+            routeInList.reportData = { 
+                status: 'PENDING', 
+                category: driverReportCategory.value, 
+                description: driverReportText.value || 'ไม่ได้ระบุรายละเอียด',
+                createdAt: new Date(),
+                adminNotes: null 
+            }
+        }
+
+        closeDriverReportModal()
+        checkReportsForRoutes() // background sync
+    } catch (err) {
+        console.error('Failed to submit driver report', err)
+        toast.error('ไม่สามารถส่งรายงานได้', err?.data?.message || 'โปรดลองอีกครั้ง')
+    }
+}
+
+async function checkReportsForRoutes() {
+    // Get all reports made by current user
+    try {
+        const res = await $api('/reports/me')
+        const reports = res.data || res || []
+        
+        // Match reports with routes
+        myRoutes.value.forEach(route => {
+            const report = reports.find(r => r.routeId === route.id && r.type === 'DRIVER')
+            if (report) {
+                route.hasReport = true
+                route.reportData = report
+            }
+        })
+    } catch (e) {
+        console.error('Failed to check reports for routes', e)
+    }
+}
+
+function getReportStatusText(status) {
+    const reportStatus = {
+        PENDING: 'รอการตรวจสอบ',
+        APPROVED: 'รับเรื่องแล้ว',
+        REJECTED: 'ไม่พบปัญหา',
+        RESOLVED: 'ดำเนินการแก้ไขแล้ว'
+    }
+    return reportStatus[status] || 'ไม่ทราบสถานะ'
+}
+
+function getCategoryText(cat) {
+    const cats = {
+        VEHICLE_ISSUE: 'ปัญหาสภาพรถ/ข้อมูลรถไม่ตรง',
+        PASSENGER_ISSUE: 'พฤติกรรมไม่เหมาะสม',
+        ROAD_ISSUE: 'ปัญหาระหว่างเส้นทาง',
+        SAFETY_ISSUE: 'ความปลอดภัย/พฤติกรรม',
+        PAYMENT_ISSUE: 'ปัญหาการชำระเงิน',
+        LATE_ISSUE: 'ความล่าช้า',
+        WRONG_INFO: 'ข้อมูลไม่ตรงตามที่ระบุ',
+        APP_ISSUE: 'ปัญหาการใช้งานแอปพลิเคชัน',
+        NO_SHOW: 'ผู้โดยสารไม่มาพบตามจุดนัดหมาย',
+        OTHER: 'อื่น ๆ'
+    }
+    return cats[cat] || cat || 'ทั่วไป'
 }
 
 // ---------- Google Maps helpers ----------
