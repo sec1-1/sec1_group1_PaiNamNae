@@ -45,41 +45,119 @@ const reportInclude = {
   },
 };
 
+const canonicalCategories = [
+  { key: 'DRIVER_ISSUE', label: 'พฤติกรรมคนขับ' },
+  { key: 'ROAD_ISSUE', label: 'การเดินทาง' },
+  { key: 'VEHICLE_ISSUE', label: 'ปัญหาเกี่ยวกับรถ' },
+  { key: 'PAYMENT_ISSUE', label: 'การชำระเงิน' },
+  { key: 'OTHER', label: 'อื่นๆ' },
+  { key: 'PASSENGER_ISSUE', label: 'พฤติกรรมผู้โดยสาร' },
+  { key: 'SAFETY_ISSUE', label: 'ความปลอดภัย' },
+  { key: 'APP_ISSUE', label: 'ปัญหาแอปพลิเคชัน' },
+  { key: 'ACCOUNT_ISSUE', label: 'ปัญหาบัญชีผู้ใช้' },
+  { key: 'TRIP_ISSUE', label: 'ปัญหาเกี่ยวกับทริป' },
+]
+
+const keyToLabel = Object.fromEntries(canonicalCategories.map(item => [item.key, item.label]))
+
+const labelToKey = {
+  'พฤติกรรมคนขับ': 'DRIVER_ISSUE',
+  'การเดินทาง': 'ROAD_ISSUE',
+  'ปัญหาเกี่ยวกับรถ': 'VEHICLE_ISSUE',
+  'รถยนต์': 'VEHICLE_ISSUE',
+  'การชำระเงิน': 'PAYMENT_ISSUE',
+  'ค่าโดยสาร': 'PAYMENT_ISSUE',
+  'อื่นๆ': 'OTHER',
+  'อื่น ๆ': 'OTHER',
+  'พฤติกรรมผู้โดยสาร': 'PASSENGER_ISSUE',
+  'ความปลอดภัย': 'SAFETY_ISSUE',
+  'ปัญหาแอปพลิเคชัน': 'APP_ISSUE',
+  'ปัญหาบัญชีผู้ใช้': 'ACCOUNT_ISSUE',
+  'ปัญหาเกี่ยวกับทริป': 'TRIP_ISSUE',
+
+  // Backward-compatible labels from older report forms.
+  'ปัญหาสภาพรถ/ข้อมูลรถไม่ตรง': 'VEHICLE_ISSUE',
+  'พฤติกรรมผู้โดยสารร่วมทริปที่ไม่เหมาะสม': 'PASSENGER_ISSUE',
+  'ปัญหาระหว่างเส้นทาง': 'ROAD_ISSUE',
+  'พฤติกรรมการขับขี่ที่ไม่ปลอดภัย': 'SAFETY_ISSUE',
+  'ไม่มาพบตามจุดนัดหมาย': 'OTHER',
+}
+
+function extractSelectedLabels(description) {
+  if (!description) return []
+
+  const selectedLine = String(description)
+    .split('\n')
+    .map(line => line.trim())
+    .find(line => line.startsWith('หัวข้อที่เลือก:') || line.startsWith('หมวดหมู่ที่เลือก:'))
+
+  if (!selectedLine) return []
+
+  return selectedLine
+    .split(':')
+    .slice(1)
+    .join(':')
+    .split(',')
+    .map(label => label.trim())
+    .filter(Boolean)
+}
+
+function normalizeCategoryKey(value) {
+  if (!value) return null
+  const normalized = String(value).trim()
+  const upper = normalized.toUpperCase()
+
+  if (keyToLabel[upper]) return upper
+  if (labelToKey[normalized]) return labelToKey[normalized]
+  return null
+}
+
+function getReportCategoryKeys(report) {
+  const labelsFromDescription = extractSelectedLabels(report.description)
+  if (labelsFromDescription.length) {
+    return labelsFromDescription
+      .map(label => normalizeCategoryKey(label))
+      .filter(Boolean)
+  }
+
+  const fallbackKey = normalizeCategoryKey(report.category)
+  return [fallbackKey || 'OTHER']
+}
+
 const createReport = async (reportData) => {
-  return prisma.$transaction(async (tx) => {
+  const report = await prisma.report.create({
+    data: {
+      reporterId: reportData.reporterId,
+      type: reportData.type,
+      category: reportData.category,
+      reportScope: reportData.reportScope || 'SYSTEM',
+      description: reportData.description,
+      images: reportData.images || null,
+      videos: reportData.videos || null,
+      routeId: reportData.routeId || null,
+      bookingId: reportData.bookingId || null,
+      targetUserId: reportData.targetUserId || null,
+    },
+    include: reportInclude
+  })
 
-    const report = await tx.report.create({
-      data: {
-        reporterId: reportData.reporterId,
-        type: reportData.type,
-        category: reportData.category,
-        description: reportData.description,
-        images: reportData.images || null,
-        videos: reportData.videos || null,
-        routeId: reportData.routeId || null,
-        bookingId: reportData.bookingId || null,
-        targetUserId: reportData.targetUserId || null,
-      },
-      include: reportInclude
-    })
-
-    // 🔔 แจ้งเตือนผู้ใช้ว่าส่งรีพอร์ตสำเร็จ
-    await tx.notification.create({
-      data: {
-        userId: report.reporterId,
-        type: 'SYSTEM',
-        title: 'ส่งการรายงานสำเร็จ',
-        body: 'เราได้รับการรายงานของคุณแล้ว และจะดำเนินการตรวจสอบโดยเร็วที่สุด',
-        link: `/reports/${report.id}`,
-        metadata: {
-          reportId: report.id,
-          status: report.status
-        }
+  try {
+    await createSystemNotification({
+      userId: report.reporterId,
+      type: 'SYSTEM',
+      title: 'ส่งการรายงานสำเร็จ',
+      body: 'เราได้รับการรายงานของคุณแล้ว และจะดำเนินการตรวจสอบโดยเร็วที่สุด',
+      link: `/reports/${report.id}`,
+      metadata: {
+        reportId: report.id,
+        status: report.status
       }
     })
+  } catch (error) {
+    console.error('Failed to create report notification:', error)
+  }
 
-    return report
-  })
+  return report
 }
 
 const getReportById = async (id) => {
@@ -185,6 +263,7 @@ const searchReports = async (opts = {}) => {
     limit = 20,
     q,
     type,
+    reportScope,
     status,
     category,
     reporterId,
@@ -198,6 +277,7 @@ const searchReports = async (opts = {}) => {
   const where = {};
 
   if (type) where.type = type;
+  if (reportScope) where.reportScope = reportScope;
   if (status) where.status = status;
   if (category) where.category = category;
   if (reporterSearch) {
@@ -276,30 +356,31 @@ const searchReports = async (opts = {}) => {
   };
 };
 const getReportStats = async () => {
-  const result = await prisma.report.groupBy({
-    by: ['category'],
-    _count: true
-  });
+  const reports = await prisma.report.findMany({
+    select: {
+      category: true,
+      description: true,
+    },
+  })
 
-  const allCategories = [
-    'VEHICLE_ISSUE',
-    'PASSENGER_ISSUE',
-    'ROAD_ISSUE',
-    'SAFETY_ISSUE',
-    'PAYMENT_ISSUE',
-    'NO_SHOW',
-    'OTHER'
-  ];
+  const countsByKey = Object.fromEntries(canonicalCategories.map(item => [item.key, 0]))
 
-  const stats = Object.fromEntries(
-    allCategories.map(cat => [cat, 0])
-  );
+  reports.forEach((report) => {
+    const uniqueKeys = [...new Set(getReportCategoryKeys(report))]
+    uniqueKeys.forEach((key) => {
+      countsByKey[key] = (countsByKey[key] || 0) + 1
+    })
+  })
 
-  result.forEach(item => {
-    stats[item.category] = item._count;
-  });
+  const categoryStats = canonicalCategories.map(item => ({
+    key: item.key,
+    label: item.label,
+    count: countsByKey[item.key] || 0,
+  }))
 
-  return { stats };
+  const stats = Object.fromEntries(categoryStats.map(item => [item.key, item.count]))
+
+  return { stats, categoryStats }
 };
 
 module.exports = {

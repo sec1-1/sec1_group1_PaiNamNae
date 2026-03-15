@@ -186,8 +186,8 @@
                                             แชทกับผู้ขับ
                                         </button>
                                         <button @click.stop="trip.hasReport ? openProgressForTrip(trip) : openReportModal(trip)"
-                                                class="px-4 py-2 ml-2 text-sm text-white transition duration-200 rounded-md"
-                                                :class="trip.hasReport ? 'bg-orange-500 hover:bg-orange-600' : 'bg-red-600 hover:bg-red-700'">
+                                          class="px-4 py-2 ml-2 text-sm transition duration-200 rounded-md"
+                                          :class="trip.hasReport ? 'bg-white text-blue-600 border border-blue-600 hover:bg-blue-50' : 'text-white bg-red-600 hover:bg-red-700'">
                                                 {{ trip.hasReport ? 'ติดตามสถานะ' : 'รายงาน' }}
                                         </button>
                                     </template>
@@ -199,8 +199,8 @@
     รีวิวผู้ขับ
   </button>
   <button @click.stop="trip.hasReport ? openProgressForTrip(trip) : openReportModal(trip)"
-    class="px-4 py-2 ml-2 text-sm text-white transition duration-200 rounded-md"
-    :class="trip.hasReport ? 'bg-orange-500 hover:bg-orange-600' : 'bg-red-600 hover:bg-red-700'">
+    class="px-4 py-2 ml-2 text-sm transition duration-200 rounded-md"
+    :class="trip.hasReport ? 'bg-white text-blue-600 border border-blue-600 hover:bg-blue-50' : 'text-white bg-red-600 hover:bg-red-700'">
     {{ trip.hasReport ? 'ติดตามสถานะ' : 'รายงาน' }}
   </button>
 </template>
@@ -623,11 +623,11 @@
 
   <div
     v-if="showReportModal"
-    class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
+    class="fixed inset-0 z-[9999] flex items-start justify-center p-4 overflow-y-auto bg-slate-900/60 backdrop-blur-sm sm:items-center"
     @click.self="closeReportModal"
   >
     <div 
-      class="w-full max-w-lg overflow-hidden transition-all transform bg-white shadow-2xl rounded-3xl animate-in fade-in zoom-in duration-300"
+      class="w-full max-w-lg overflow-y-auto max-h-[calc(100vh-2rem)] transition-all transform bg-white shadow-2xl rounded-3xl animate-in fade-in zoom-in duration-300"
     >
       <div class="relative p-6 pb-0">
         <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-red-500 via-orange-500 to-red-600"></div>
@@ -645,22 +645,27 @@
       <div class="p-6 space-y-5">
         <div>
           <label class="block mb-2 text-sm font-semibold text-gray-700">
-            หัวข้อปัญหา
+            หัวข้อปัญหา (เลือกได้มากกว่า 1 ข้อ)
           </label>
-          <div class="relative group">
-            <select
-              v-model="passengerReportCategory"
-              class="w-full px-4 py-3 transition-all border-2 border-gray-100 appearance-none rounded-xl focus:border-red-500 focus:ring-0 bg-gray-50/50"
+          <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <button
+              v-for="option in passengerReportCategoryOptions"
+              :key="option.value"
+              type="button"
+              class="w-full px-3 py-2 text-sm text-left border rounded-lg transition"
+              :class="passengerReportCategories.includes(option.value)
+                ? 'border-red-500 bg-red-50 text-red-700 font-semibold'
+                : 'border-gray-200 bg-gray-50 text-gray-700 hover:border-red-300 hover:bg-red-50/40'"
+              @click="togglePassengerReportCategory(option.value)"
             >
-              <option disabled value="">-- เลือกหัวข้อที่เกี่ยวข้อง --</option>
-              <option value="SAFETY_ISSUE">🚨 ความปลอดภัย</option>
-              <option value="PASSENGER_ISSUE">👤 พฤติกรรมคนขับ</option>
-              <option value="PAYMENT_ISSUE">💰 ปัญหาการชำระเงิน</option>
-              <option value="OTHER">📁 อื่น ๆ</option>
-            </select>
-            <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-400">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-            </div>
+              {{ option.label }}
+            </button>
+          </div>
+          <div v-if="!passengerReportCategories.length" class="mt-2 text-xs text-gray-500">
+            โปรดเลือกอย่างน้อย 1 หมวดหมู่
+          </div>
+          <div v-else class="mt-2 text-xs text-gray-500">
+            เลือกแล้ว {{ passengerReportCategories.length }} หมวดหมู่
           </div>
         </div>
 
@@ -741,7 +746,7 @@
 
         <button
           @click="submitReport"
-          :disabled="!passengerReportCategory || !reportText"
+          :disabled="!passengerReportCategories.length || !reportText"
           class="flex-[2] py-3 font-semibold text-white transition-all bg-red-600 rounded-xl hover:bg-red-700 shadow-lg shadow-red-200 active:scale-95 disabled:opacity-50 disabled:grayscale disabled:pointer-events-none"
         >
           ส่งรายงานความปลอดภัย
@@ -756,16 +761,15 @@
             @click.self="isProgressModalVisible = false">
             <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 overflow-hidden animate-in">
                 <!-- Header -->
-                <div class="bg-gradient-to-r from-red-500 to-red-600 p-6 text-white">
-                    <div class="flex items-center justify-between mb-2">
+                <div class="border-b border-gray-200 bg-white p-6 text-black">
+                  <div class="flex items-center justify-between mb-3">
                         <h2 class="text-xl font-bold">ติดตามสถานะรายงาน</h2>
-                        <button @click="isProgressModalVisible = false" class="text-white/80 hover:text-white transition">
+                    <button @click="isProgressModalVisible = false" class="text-gray-500 hover:text-black transition">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
                     </div>
-                    <p v-if="selectedTrip" class="text-sm text-white/90">{{ selectedTrip.origin }} → {{ selectedTrip.destination }}</p>
                 </div>
 
                 <!-- Content -->
@@ -808,8 +812,19 @@
                                     <div class="pt-1">
                                         <span class="opacity-75 block mb-1 font-medium">รายละเอียดที่แจ้ง:</span>
                                         <p class="text-gray-700 bg-white/60 p-3 rounded-lg border border-blue-100 italic leading-relaxed">
-                                            "{{ selectedTrip.reportData?.description }}"
+                                        "{{ getReportDetailText(selectedTrip.reportData?.description) }}"
                                         </p>
+                                    </div>
+                                    <div v-if="getReportLink(selectedTrip.reportData?.description)" class="pt-1">
+                                      <span class="opacity-75 block mb-1 font-medium">ลิงก์ที่แนบ:</span>
+                                      <a
+                                        :href="getReportLink(selectedTrip.reportData?.description)"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="block break-all text-blue-700 hover:text-blue-800 underline bg-white/60 p-3 rounded-lg border border-blue-100"
+                                      >
+                                        {{ getReportLink(selectedTrip.reportData?.description) }}
+                                      </a>
                                     </div>
                                     <div v-if="(selectedTrip.reportData?.images?.length || selectedTrip.reportData?.videos?.length)" class="pt-2">
                                         <span class="opacity-75 block mb-2 font-medium">ไฟล์ประกอบ:</span>
@@ -908,7 +923,14 @@ const selectedTripId = ref(null)
 const isProgressModalVisible = ref(false)
 const isLoading = ref(false)
 const mapContainer = ref(null)
-const passengerReportCategory = ref('')
+const passengerReportCategories = ref([])
+const passengerReportCategoryOptions = [
+  { value: 'DRIVER_ISSUE', label: 'พฤติกรรมคนขับ' },
+  { value: 'ROAD_ISSUE', label: 'การเดินทาง' },
+  { value: 'VEHICLE_ISSUE', label: 'รถยนต์' },
+  { value: 'PAYMENT_ISSUE', label: 'ค่าโดยสาร' },
+  { value: 'OTHER', label: 'อื่นๆ' }
+]
 const modalTab = ref('trip')
 let map = null
 let currentPolyline = null
@@ -1774,6 +1796,25 @@ function getCategoryText(cat) {
     return cats[cat] || cat || 'ทั่วไป'
 }
 
+  function getReportLink(description) {
+    if (!description) return ''
+    const linkLine = String(description)
+      .split('\n')
+      .map(line => line.trim())
+      .find(line => line.startsWith('ลิงก์:'))
+    if (!linkLine) return ''
+    return linkLine.replace('ลิงก์:', '').trim()
+  }
+
+  function getReportDetailText(description) {
+    if (!description) return '-'
+    return String(description)
+      .split('\n')
+      .filter(line => !line.trim().startsWith('ลิงก์:'))
+      .join('\n')
+      .trim() || '-'
+  }
+
 // --- Lifecycle and Watchers ---
 useHead({
     title: 'การเดินทางของฉัน - ไปนำแหน่',
@@ -1850,10 +1891,19 @@ const REPORT_MAX_FILE_SIZE = 50 * 1024 * 1024 // 50 MB
 
 function openReportModal(trip) {
     reportTrip.value = trip
-    passengerReportCategory.value = ''
+  passengerReportCategories.value = []
     reportText.value = ''
     resetReportAttachments()
     showReportModal.value = true
+}
+
+function togglePassengerReportCategory(categoryValue) {
+  const idx = passengerReportCategories.value.indexOf(categoryValue)
+  if (idx >= 0) {
+    passengerReportCategories.value.splice(idx, 1)
+    return
+  }
+  passengerReportCategories.value.push(categoryValue)
 }
 
 function openProgressForTrip(trip) {
@@ -1919,7 +1969,7 @@ function removeReportVideo(idx) {
 async function submitReport() {
     if (!reportTrip.value) return
 
-    if (!passengerReportCategory.value) {
+    if (!passengerReportCategories.value.length) {
         toast.error('กรุณาเลือกหัวข้อปัญหา', 'กรุณาเลือกหัวข้อปัญหาที่พบ')
         return
     }
@@ -1933,9 +1983,16 @@ async function submitReport() {
     try {
         const fd = new FormData()
 
+        const selectedCategoryLabels = passengerReportCategoryOptions
+          .filter(opt => passengerReportCategories.value.includes(opt.value))
+          .map(opt => opt.label)
+
+        const primaryCategory = passengerReportCategories.value[0]
+        const reportDescription = `หมวดหมู่ที่เลือก: ${selectedCategoryLabels.join(', ')}\n\n${reportText.value || 'ไม่ได้ระบุรายละเอียด'}`
+
         fd.append('type', 'PASSENGER')
-        fd.append('category', passengerReportCategory.value)
-        fd.append('description', reportText.value || 'ไม่ได้ระบุรายละเอียด')
+        fd.append('category', primaryCategory)
+        fd.append('description', reportDescription)
 
         // ✅ append เฉพาะตอนมีค่าเท่านั้น
         if (reportTrip.value?.routeId) {
@@ -1979,8 +2036,8 @@ async function submitReport() {
             tripInList.hasReport = true
             tripInList.reportData = {
                 status: 'PENDING',
-                category: passengerReportCategory.value,
-                description: reportText.value || 'ไม่ได้ระบุรายละเอียด',
+            category: primaryCategory,
+            description: reportDescription,
                 createdAt: new Date(),
                 adminNotes: null
             }

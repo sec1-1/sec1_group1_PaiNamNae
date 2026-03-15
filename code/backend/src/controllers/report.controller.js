@@ -13,6 +13,7 @@ const createReport = asyncHandler(async (req, res) => {
 
   let imageUrls = [];
   let videoUrls = [];
+  let audioUrls = [];
   if (req.files) {
     if (req.files.images) {
       const uploads = req.files.images.map(file =>
@@ -28,15 +29,23 @@ const createReport = asyncHandler(async (req, res) => {
       const results = await Promise.all(uploads);
       videoUrls = results.map(r => r.url);
     }
+    if (req.files.audios) {
+      const uploads = req.files.audios.map(file =>
+        uploadToCloudinary(file.buffer, 'reports', { resource_type: 'video' })
+      );
+      const results = await Promise.all(uploads);
+      audioUrls = results.map(r => r.url);
+    }
   }
 
   const reportData = {
     reporterId: req.user.sub,
     type,
     category,
+    reportScope: (bookingId || routeId) ? 'POST_TRIP' : 'SYSTEM',
     description,
     images: imageUrls.length > 0 ? imageUrls : null,
-    videos: videoUrls.length > 0 ? videoUrls : null,
+    videos: [...videoUrls, ...audioUrls].length > 0 ? [...videoUrls, ...audioUrls] : null,
     routeId: routeId || null,
     bookingId: bookingId || null,
     targetUserId: targetUserId || null,
@@ -120,7 +129,11 @@ const deleteReport = async (req, res, next) => {
  */
 const getMyReports = async (req, res, next) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.sub || req.user.id;
+
+    if (!userId) {
+      throw new ApiError(401, 'Not authorized');
+    }
 
     const reports = await reportService.getReportsByUser(userId);
 

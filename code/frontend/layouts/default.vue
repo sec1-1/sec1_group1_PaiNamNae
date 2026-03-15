@@ -221,6 +221,11 @@
                                     class="flex items-center block w-full px-4 py-2 text-left text-gray-700 transition-colors duration-200 hover:bg-blue-50 hover:text-blue-600">
                                     บัญชีของฉัน
                                 </NuxtLink>
+                                <NuxtLink to="/reportSystem"
+                                    class="flex items-center block w-full px-4 py-2 text-left text-gray-700 transition-colors duration-200 hover:bg-blue-50 hover:text-blue-600"
+                                    :class="{ 'text-blue-600': $route.path.startsWith('/reportSystem') }">
+                                    รายงานระบบ
+                                </NuxtLink>
                                 <button @click="logout"
                                     class="flex items-center block w-full px-4 py-2 text-left text-red-600 transition-colors duration-200 hover:bg-red-50 hover:text-red-700">
                                     Logout
@@ -360,6 +365,11 @@
                                 <NuxtLink to="/profile" @click="closeMobileMenu"
                                     class="flex items-center block w-full px-3 py-2 text-left text-gray-600 transition-colors duration-200 rounded-md hover:bg-blue-50 hover:text-blue-600">
                                     บัญชีของฉัน
+                                </NuxtLink>
+                                <NuxtLink to="/reportSystem" @click="closeMobileMenu"
+                                    class="flex items-center block w-full px-3 py-2 text-left text-gray-600 transition-colors duration-200 rounded-md hover:bg-blue-50 hover:text-blue-600"
+                                    :class="$route.path.startsWith('/reportSystem') ? 'text-blue-600 bg-blue-50' : ''">
+                                    รายงานระบบ
                                 </NuxtLink>
                                 <button @click="logout"
                                     class="flex items-center block w-full px-3 py-2 text-left text-red-600 transition-colors duration-200 rounded-md hover:bg-red-50 hover:text-red-700">

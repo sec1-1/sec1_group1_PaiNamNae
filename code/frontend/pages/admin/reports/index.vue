@@ -14,54 +14,89 @@
 </div>
                     <!-- Report Statistics -->
 <!-- Report Statistics -->
-<div class="grid grid-cols-7 gap-4 mb-6">
-  <div
-  v-for="item in categories"
-  :key="item.key"
-  class="p-4 rounded-xl border bg-white border-gray-200"
->
-    <div class="text-xs text-gray-500 font-medium truncate">
-      {{ item.label }}
+<div class="mb-6">
+    <div class="flex gap-2">
+        <div
+            v-for="item in categoryStatCards"
+            :key="item.key"
+            class="flex-1 min-w-0 p-2 rounded-lg border bg-white border-gray-200"
+        >
+            <div class="text-[11px] text-gray-500 font-medium truncate">
+                {{ item.label }}
+            </div>
+            <div class="text-base font-bold text-gray-800 mt-1 leading-none">
+                {{ item.count }}
+            </div>
+        </div>
     </div>
-    <div class="text-xl font-bold text-gray-800 mt-1">
-      {{ reportStats?.[item.key] ?? 0 }}
-    </div>
-  </div>
 </div>
 
                 
 
                 <!-- Card -->
                 <div class="bg-white border border-gray-300 rounded-lg shadow-sm">
-                    <div class="flex items-center justify-between px-4 py-4 border-b border-gray-200 sm:px-6">
-                        <div class="text-sm text-gray-600">
-                            หน้าที่ {{ pagination.page }} / {{ pagination.totalPages || 1 }} • ทั้งหมด {{ pagination.total }} รายงาน
+                    <div class="px-4 py-4 border-b border-gray-200 sm:px-6">
+                        <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                            <div class="text-sm text-gray-600">
+                                หน้าที่ {{ pagination.page }} / {{ pagination.totalPages || 1 }} • ทั้งหมด {{ pagination.total }} รายงาน
+                            </div>
+
+                            <div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between lg:flex-1 lg:max-w-4xl xl:max-w-5xl">
+                                <div class="flex flex-col gap-2">
+                                    <span class="text-xs font-semibold tracking-wide text-gray-500 uppercase">สถานะ</span>
+                                    <div class="flex flex-wrap gap-2">
+                                        <button
+                                            @click="filterByStatus('')"
+                                            class="px-3 py-1 text-xs rounded-full border transition"
+                                            :class="!filters.status
+                                                ? 'bg-blue-600 text-white border-blue-600'
+                                                : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'"
+                                        >
+                                            สถานะทั้งหมด
+                                        </button>
+
+                                        <button
+                                            v-for="s in statuses"
+                                            :key="s.key"
+                                            @click="filterByStatus(s.key)"
+                                            class="px-3 py-1 text-xs rounded-full border transition"
+                                            :class="filters.status === s.key
+                                                ? 'bg-blue-600 text-white border-blue-600'
+                                                : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'"
+                                        >
+                                            {{ s.label }}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col gap-2 lg:items-end">
+                                    <span class="text-xs font-semibold tracking-wide text-gray-500 uppercase">ประเภทรายงาน</span>
+                                    <div class="flex flex-wrap gap-2 lg:justify-end">
+                                        <button
+                                            @click="filterByReportScope('')"
+                                            class="px-3 py-1 text-xs rounded-full border transition"
+                                            :class="!filters.reportScope
+                                                ? 'bg-indigo-600 text-white border-indigo-600'
+                                                : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'"
+                                        >
+                                            ประเภทรายงานทั้งหมด
+                                        </button>
+
+                                        <button
+                                            v-for="s in reportScopes"
+                                            :key="s.key"
+                                            @click="filterByReportScope(s.key)"
+                                            class="px-3 py-1 text-xs rounded-full border transition"
+                                            :class="filters.reportScope === s.key
+                                                ? 'bg-indigo-600 text-white border-indigo-600'
+                                                : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'"
+                                        >
+                                            {{ s.label }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
-                         <!-- Right: Status Filter Buttons -->
-    <div class="flex flex-wrap gap-2">
-        <button
-            @click="filterByStatus('')"
-            class="px-3 py-1 text-xs rounded-full border transition"
-            :class="!filters.status
-                ? 'bg-blue-600 text-white border-blue-600'
-                : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'"
-        >
-            ทั้งหมด
-        </button>
-
-        <button
-            v-for="s in statuses"
-            :key="s.key"
-            @click="filterByStatus(s.key)"
-            class="px-3 py-1 text-xs rounded-full border transition"
-            :class="filters.status === s.key
-                ? 'bg-blue-600 text-white border-blue-600'
-                : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'"
-        >
-            {{ s.label }}
-        </button>
-    </div>
                     </div>
 
                     <!-- Loading / Error -->
@@ -73,8 +108,8 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-4 py-3 text-xs font-medium text-left text-gray-500 uppercase">ประเภท / หมวดหมู่ </th>
-                                    <th class="px-4 py-3 text-xs font-medium text-left text-gray-500 uppercase">รายละเอียด</th>
+                                    <th class="px-4 py-3 text-xs font-medium text-left text-gray-500 uppercase">หมวดหมู่</th>
+                                    <th class="px-4 py-3 text-xs font-medium text-left text-gray-500 uppercase">ประเภทรายงาน</th>
                                     <th class="px-4 py-3 text-xs font-medium text-left text-gray-500 uppercase">ผู้รายงาน</th>
                                     <th class="px-4 py-3 text-xs font-medium text-left text-gray-500 uppercase">ผู้ถูกรายงาน</th>
                                     <th class="px-4 py-3 text-xs font-medium text-left text-gray-500 uppercase">สร้างเมื่อ</th>
@@ -96,13 +131,12 @@
 
     </td>
 
-    <!-- รายละเอียด -->
-    <td
-      class="px-4 py-3 text-sm text-gray-500 max-w-xs truncate"
-      :title="report.description"
-    >
-      {{ report.description || 'ไม่มีรายละเอียด' }}
-    </td>
+        <!-- ขอบเขตรายงาน -->
+        <td class="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">
+            <span class="text-sm font-medium text-gray-900 whitespace-nowrap">
+                {{ reportScopeLabel(report.reportScope) }}
+            </span>
+        </td>
 
     <!-- ผู้รายงาน -->
     <td class="px-4 py-3 text-sm text-gray-900">
@@ -124,9 +158,9 @@
     </td>
 
     <!-- สถานะ -->
-    <td class="px-4 py-3 text-sm">
+        <td class="px-4 py-3 text-sm whitespace-nowrap">
       <span
-        class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full"
+                class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full whitespace-nowrap"
         :class="statusBadge(report.status)"
       >
         {{ statusLabel(report.status) }}
@@ -137,7 +171,7 @@
     <td class="px-4 py-3 text-sm">
       <button
         @click="openViewModal(report)"
-        class="px-3 py-1 text-xs text-blue-600 bg-blue-50 border border-blue-200 rounded hover:bg-blue-100 shadow-sm"
+                class="px-3 py-1 text-xs text-blue-600 bg-white border border-blue-200 rounded hover:bg-blue-50 shadow-sm"
         title="ตรวจสอบรายงาน"
       >
         ตรวจสอบ
@@ -147,7 +181,7 @@
 
   <!-- ไม่มีข้อมูล -->
   <tr v-if="!reports.length">
-    <td colspan="7" class="px-4 py-10 text-center text-gray-500">
+                <td colspan="7" class="px-4 py-10 text-center text-gray-500">
       ไม่พบข้อมูลรายงาน
     </td>
   </tr>
@@ -201,114 +235,129 @@
 
         <!-- View Report Modal -->
         <Transition name="modal-fade">
-        <div v-if="showViewModal && viewingReport" class="fixed inset-0 z-[1050] flex items-center justify-center p-4 bg-black/50" @click.self="closeViewModal">
-            <div class="modal-popup w-full max-w-2xl bg-white rounded-lg shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
-                <!-- Header -->
-                <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50">
-                    <h3 class="text-lg font-medium text-gray-900">ตรวจสอบรายงาน</h3>
-                    <button @click="closeViewModal" class="text-gray-400 hover:text-gray-500 focus:outline-none">
+        <div v-if="showViewModal && viewingReport" class="fixed inset-0 z-[1050] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm" @click.self="closeViewModal">
+            <div class="modal-popup w-full max-w-5xl bg-slate-50 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] border border-slate-200">
+                <div class="relative overflow-hidden border-b border-slate-200 bg-white px-6 py-5 text-slate-900">
+                    <div class="relative flex items-start justify-between gap-4">
+                        <div>
+                            <h3 class="text-2xl font-semibold tracking-tight">ตรวจสอบรายงาน</h3>
+                        </div>
+                        <button @click="closeViewModal" class="relative z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-                
-                <!-- Body -->
-                <div class="p-6 overflow-y-auto flex-1">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Left Col -->
-                        <div class="space-y-4">
-                          <div>
-  <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
-    ประเภท / หมวดหมู่
-  </h4>
+                </div>
 
-  <div class="text-sm font-medium text-gray-900">
-    {{ typeLabel(viewingReport.type) }} / 
-    {{ categoryLabel(viewingReport.category) }}
-  </div>
-</div>
-                            
-                            <div>
-                                <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">ผู้รายงาน</h4>
-                                <div class="text-sm text-gray-900">{{ viewingReport.reporterName || '-' }}</div>
-                                <div class="text-xs text-gray-500">{{ viewingReport.reporterEmail || '-' }}</div>
-                            </div>
-
-                            <div v-if="viewingReport.targetUser">
-                                <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">ผู้ถูกรายงาน</h4>
-                                <div class="text-sm text-gray-900">{{ viewingReport.targetUser.firstName }} {{ viewingReport.targetUser.lastName }}</div>
-                                <div class="text-xs text-gray-500">{{ viewingReport.targetUser.email || '-' }}</div>
-                            </div>
-                            
-                            <div>
-                                <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">สถานะปัจจุบัน</h4>
-                                <span class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full" :class="statusBadge(viewingReport.status)">
-                                    {{ statusLabel(viewingReport.status) }}
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Right Col -->
-                        <div class="space-y-4">
-                           <div>
-                                <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">สร้างเมื่อ</h4>
-                                <div class="text-sm text-gray-900">{{ formatDate(viewingReport.createdAt) }}</div>
-                            </div>
-                            
-                            <div v-if="viewingReport.routeId">
-                                <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">เส้นทางอ้างอิง</h4>
-                                <div class="text-sm text-blue-600 hover:underline cursor-pointer" @click="goToRoute(viewingReport.routeId)">
-                                    ดูเส้นทาง (#{{ viewingReport.routeId.substring(0,8) }})
+                <div class="flex-1 overflow-y-auto bg-slate-50/80 p-6">
+                    <div class="space-y-6">
+                        <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                            <h4 class="text-lg font-semibold text-slate-900">ข้อมูลรายงาน</h4>
+                            <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                                <div class="rounded-2xl bg-slate-50 p-4">
+                                    <p class="text-xs font-semibold tracking-wide text-slate-500">ประเภทรายงาน</p>
+                                    <p class="mt-2 text-sm font-semibold text-slate-900">{{ reportScopeLabel(viewingReport.reportScope) }}</p>
+                                </div>
+                                <div class="rounded-2xl bg-slate-50 p-4">
+                                    <p class="text-xs font-semibold tracking-wide text-slate-500">สถานะ</p>
+                                    <div class="mt-2">
+                                        <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold" :class="statusBadge(viewingReport.status)">
+                                            {{ statusLabel(viewingReport.status) }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="rounded-2xl bg-slate-50 p-4">
+                                    <p class="text-xs font-semibold tracking-wide text-slate-500">หมวดหมู่</p>
+                                    <p class="mt-2 text-sm font-semibold text-slate-900">{{ categoryLabel(viewingReport.category) }}</p>
+                                </div>
+                                <div class="rounded-2xl bg-slate-50 p-4">
+                                    <p class="text-xs font-semibold tracking-wide text-slate-500">วันที่สร้าง</p>
+                                    <p class="mt-2 text-sm font-semibold text-slate-900">{{ formatDate(viewingReport.createdAt) }}</p>
+                                </div>
+                                <div class="rounded-2xl bg-slate-50 p-4">
+                                    <p class="text-xs font-semibold tracking-wide text-slate-500">ผู้รายงาน</p>
+                                    <p class="mt-2 text-sm font-semibold text-slate-900">{{ viewingReport.reporterName || '-' }}</p>
+                                    <p class="mt-1 text-xs text-slate-500 break-all">{{ viewingReport.reporterEmail || '-' }}</p>
+                                </div>
+                                <div v-if="viewingReport.targetUser" class="rounded-2xl bg-slate-50 p-4">
+                                    <p class="text-xs font-semibold tracking-wide text-slate-500">ผู้ถูกรายงาน</p>
+                                    <p class="mt-2 text-sm font-semibold text-slate-900">{{ targetUserName(viewingReport) }}</p>
+                                    <p class="mt-1 text-xs text-slate-500 break-all">{{ targetUserEmail(viewingReport) }}</p>
                                 </div>
                             </div>
-                            
-                            <div v-if="viewingReport.bookingId">
-                                <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">การจองอ้างอิง</h4>
-                                <div class="text-sm text-blue-600 hover:underline cursor-pointer" @click="goToBooking(viewingReport.bookingId)">
-                                    ดูการจอง (#{{ viewingReport.bookingId.substring(0,8) }})
-                                </div>
+
+                            <div v-if="viewingReport.routeId || viewingReport.bookingId" class="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
+                                <button v-if="viewingReport.routeId" @click="goToRoute(viewingReport.routeId)" class="flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-4 text-left transition hover:border-blue-200 hover:bg-blue-50">
+                                    <div>
+                                        <p class="text-xs font-semibold tracking-wide text-slate-500">เส้นทางอ้างอิง</p>
+                                        <p class="mt-1 text-sm font-medium text-slate-900">ดูเส้นทาง</p>
+                                    </div>
+                                    <i class="fas fa-arrow-up-right-from-square text-blue-500"></i>
+                                </button>
+
+                                <button v-if="viewingReport.bookingId" @click="goToBooking(viewingReport.bookingId)" class="flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-4 text-left transition hover:border-blue-200 hover:bg-blue-50">
+                                    <div>
+                                        <p class="text-xs font-semibold tracking-wide text-slate-500">การจองอ้างอิง</p>
+                                        <p class="mt-1 text-sm font-medium text-slate-900">ดูการจอง</p>
+                                    </div>
+                                    <i class="fas fa-arrow-up-right-from-square text-blue-500"></i>
+                                </button>
                             </div>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-6">
-                        <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">รายละเอียด</h4>
-                        <div class="bg-gray-50 p-4 rounded-md text-sm text-gray-800 whitespace-pre-wrap border border-gray-200">{{ viewingReport.description || '-' }}</div>
-                    </div>
+                        </section>
 
-                    <div v-if="viewingReport.images && viewingReport.images.length > 0" class="mt-6">
-                        <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">รูปภาพแนบ</h4>
-                        <div class="flex flex-wrap gap-2">
-                            <a v-for="(img, idx) in viewingReport.images" :key="idx" :href="img" target="_blank" class="block">
-                                <img :src="img" class="h-24 w-auto rounded border border-gray-200 object-cover hover:opacity-80 transition" alt="Report Attachment" />
-                            </a>
-                        </div>
-                    </div>
+                        <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                            <h4 class="text-lg font-semibold text-slate-900">รายละเอียดการรายงาน</h4>
+                            <div class="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm leading-7 text-slate-700 whitespace-pre-wrap">{{ getReportDetailText(viewingReport.description) }}</div>
 
-                    <div v-if="viewingReport.videos && viewingReport.videos.length > 0" class="mt-6">
-                        <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">วิดีโอแนบ</h4>
-                        <div class="flex flex-wrap gap-4">
-                            <div v-for="(vid, idx) in viewingReport.videos" :key="'vid'+idx" class="relative group">
-                                <video :src="vid" controls class="h-40 w-auto rounded border border-gray-200 bg-black"></video>
-                                <a :href="vid" target="_blank" class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded">
-                                    <span class="text-white text-sm px-3 py-1 bg-black/60 rounded-full"><i class="fas fa-external-link-alt mr-2"></i>เปิดดูเต็มจอ</span>
+                            <div v-if="getReportLink(viewingReport.description)" class="mt-4 rounded-2xl border border-blue-200 bg-blue-50 p-4">
+                                <p class="text-xs font-semibold tracking-wide text-blue-600">ลิงก์ที่แนบ</p>
+                                <a :href="getReportLink(viewingReport.description)" target="_blank" rel="noopener noreferrer" class="mt-2 block break-all text-sm font-medium text-blue-700 underline decoration-blue-300 underline-offset-2 hover:text-blue-800">
+                                    {{ getReportLink(viewingReport.description) }}
                                 </a>
                             </div>
-                        </div>
+
+                            <div v-if="viewingReport.adminNotes" class="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+                                <p class="text-xs font-semibold tracking-wide text-emerald-600">หมายเหตุจากผู้ดูแล</p>
+                                <p class="mt-2 text-sm leading-7 text-emerald-900 whitespace-pre-wrap">{{ viewingReport.adminNotes }}</p>
+                            </div>
+                        </section>
+
+                        <section v-if="viewingReport.images?.length || viewingReport.videos?.length" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                            <h4 class="text-lg font-semibold text-slate-900">ไฟล์แนบ</h4>
+
+                            <div v-if="viewingReport.images?.length" class="mt-4">
+                                <p class="mb-3 text-sm font-semibold text-slate-700">รูปภาพ</p>
+                                <div class="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
+                                    <a v-for="(img, idx) in viewingReport.images" :key="`img-${idx}`" :href="img" target="_blank" rel="noopener noreferrer" class="group overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 shadow-sm">
+                                        <img :src="img" class="h-36 w-full object-cover transition duration-300 group-hover:scale-105" alt="ไฟล์แนบรายงาน" />
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div v-if="viewingReport.videos?.length" class="mt-5">
+                                <p class="mb-3 text-sm font-semibold text-slate-700">วิดีโอหรือเสียง</p>
+                                <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                                    <div v-for="(vid, idx) in viewingReport.videos" :key="`vid-${idx}`" class="overflow-hidden rounded-2xl border border-slate-200 bg-slate-950 shadow-sm">
+                                        <video :src="vid" controls class="h-56 w-full bg-black object-contain"></video>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
                     </div>
                 </div>
 
-                <!-- Footer Actions -->
-                <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex flex-wrap items-center justify-between gap-3">
-                    
-                    
-                    <div class="flex items-center gap-2">
-                        <button v-if="viewingReport.status !== 'RESOLVED' && viewingReport.status !== 'REJECTED'" @click="updateStatus(viewingReport, 'REJECTED')" class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                <div class="px-6 py-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
+                    <div class="text-sm text-slate-500">
+                        ตรวจสอบรายละเอียดให้ครบก่อนอัปเดตสถานะรายงาน
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button v-if="viewingReport.status !== 'RESOLVED' && viewingReport.status !== 'REJECTED'" @click="updateStatus(viewingReport, 'REJECTED')" class="px-4 py-2 text-sm font-medium text-red-600 bg-white border border-red-600 hover:bg-red-50 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                             ปฏิเสธ
                         </button>
-                        <button v-if="viewingReport.status === 'PENDING'" @click="updateStatus(viewingReport, 'APPROVED')" class="px-4 py-2 text-sm font-medium text-white bg-amber-500 hover:bg-amber-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
+                        <button v-if="viewingReport.status === 'PENDING'" @click="updateStatus(viewingReport, 'APPROVED')" class="px-4 py-2 text-sm font-medium text-amber-600 bg-white border border-amber-500 hover:bg-amber-50 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
                             กำลังตรวจสอบ
                         </button>
-                        <button v-if="viewingReport.status === 'APPROVED' || viewingReport.status === 'PENDING'" @click="updateStatus(viewingReport, 'RESOLVED')" class="px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        <button v-if="viewingReport.status === 'APPROVED' || viewingReport.status === 'PENDING'" @click="updateStatus(viewingReport, 'RESOLVED')" class="px-4 py-2 text-sm font-medium text-green-600 bg-white border border-green-600 hover:bg-green-50 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                             ตอบรับการรายงาน
                         </button>
                         <button @click="closeViewModal" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-sm ml-2">
@@ -340,7 +389,7 @@ import AdminSidebar from '~/components/admin/AdminSidebar.vue'
 import ConfirmModal from '~/components/ConfirmModal.vue'
 import { useToast } from '~/composables/useToast'
 
-const reportStats = ref({})
+const reportStats = ref({ categoryStats: [] })
 
 dayjs.locale('th')
 dayjs.extend(buddhistEra)
@@ -363,7 +412,8 @@ const pagination = reactive({
 
 const filters = reactive({
   q: '',
-  status: ''
+    status: '',
+    reportScope: ''
 })
 
 function formatDate(iso) {
@@ -401,6 +451,7 @@ async function fetchReports() {
 
         if (filters.q) params.append('q', filters.q)
         if (filters.status) params.append('status', filters.status)
+        if (filters.reportScope) params.append('reportScope', filters.reportScope)
 
         const res = await fetch(
             `${config.public.apiBase}/reports/admin?${params.toString()}`,
@@ -432,28 +483,13 @@ async function fetchReports() {
         loadError.value = err?.message || 'ไม่สามารถโหลดข้อมูลได้'
         toast.error('เกิดข้อผิดพลาด', loadError.value)
         reports.value = []
-        reportStats.value = {}
+        reportStats.value = { categoryStats: [] }
     } finally {
         isLoading.value = false
     }
 }
 
-const categoryWithCount = computed(() => {
-    return categories.map(cat => ({
-        ...cat,
-        count: reportStats.value[cat.key] || 0
-    }))
-})
-
-const categories = [
-  { key: 'VEHICLE_ISSUE', label: 'ปัญหายานพาหนะ' },
-  { key: 'PASSENGER_ISSUE', label: 'ปัญหาผู้โดยสาร' },
-  { key: 'ROAD_ISSUE', label: 'ปัญหาเส้นทาง' },
-  { key: 'SAFETY_ISSUE', label: 'ความปลอดภัย' },
-  { key: 'PAYMENT_ISSUE', label: 'ปัญหาการชำระเงิน' },
-  { key: 'NO_SHOW', label: 'ไม่มาตามนัด' },
-  { key: 'OTHER', label: 'อื่น ๆ' }
-];
+const categoryStatCards = computed(() => reportStats.value?.categoryStats || [])
 
 const statuses = [
   { key: 'PENDING', label: 'รอดำเนินการ' },
@@ -461,13 +497,24 @@ const statuses = [
   { key: 'RESOLVED', label: 'ตอบรับแล้ว' },
   { key: 'REJECTED', label: 'ปฏิเสธแล้ว' }
 ]
-function typeLabel(type) {
-  const map = {
-    USER_REPORT: 'รายงานผู้ใช้',
-    ROUTE_REPORT: 'รายงานเส้นทาง',
-    BOOKING_REPORT: 'รายงานการจอง'
-  }
-  return map[type] || type || '-'
+
+const reportScopes = [
+    { key: 'SYSTEM', label: 'รายงานระบบ' },
+    { key: 'POST_TRIP', label: 'รายงานหลังจบทริป' }
+]
+
+function reportScopeLabel(scope) {
+    const map = {
+        SYSTEM: 'รายงานระบบ',
+        POST_TRIP: 'รายงานหลังจบทริป'
+    }
+    return map[scope] || scope || '-'
+}
+
+function scopeBadge(scope) {
+    if (scope === 'POST_TRIP') return 'bg-orange-100 text-orange-700'
+    if (scope === 'SYSTEM') return 'bg-blue-100 text-blue-700'
+    return 'bg-gray-100 text-gray-700'
 }
 
 function categoryLabel(category) {
@@ -482,10 +529,45 @@ function categoryLabel(category) {
   }
   return map[category] || category || '-'
 }
+
+function getReportLink(description) {
+    if (!description) return ''
+    const linkLine = String(description)
+        .split('\n')
+        .map(line => line.trim())
+        .find(line => line.startsWith('ลิงก์:'))
+    if (!linkLine) return ''
+    return linkLine.replace('ลิงก์:', '').trim()
+}
+
+function getReportDetailText(description) {
+    if (!description) return '-'
+    return String(description)
+        .split('\n')
+        .filter(line => !line.trim().startsWith('ลิงก์:'))
+        .join('\n')
+        .trim() || '-'
+}
+
+function targetUserName(report) {
+    if (!report?.targetUser) return 'ไม่ระบุ'
+    return `${report.targetUser.firstName} ${report.targetUser.lastName}`.trim() || 'ไม่ระบุ'
+}
+
+function targetUserEmail(report) {
+    return report?.targetUser?.email || '-'
+}
+
 function filterByStatus(statusKey) {
   filters.status = statusKey
   pagination.page = 1
   fetchReports()
+}
+
+function filterByReportScope(scopeKey) {
+    filters.reportScope = scopeKey
+    pagination.page = 1
+    fetchReports()
 }
 
 async function fetchReportStats() {
@@ -507,11 +589,13 @@ async function fetchReportStats() {
         const body = await res.json()
         if (!res.ok) throw new Error(body?.message || `Request failed: ${res.status}`)
 
-        reportStats.value = body?.stats || {}
+        reportStats.value = {
+            categoryStats: Array.isArray(body?.categoryStats) ? body.categoryStats : []
+        }
 
     } catch (err) {
         console.error(err)
-        reportStats.value = {}
+        reportStats.value = { categoryStats: [] }
     }
 }
 
@@ -634,20 +718,23 @@ function goToBooking(bookingId) {
 }
 
 function statusBadge(s) {
-    if (s === 'RESOLVED') return 'bg-green-100 text-green-700'
-    if (s === 'APPROVED') return 'bg-amber-100 text-amber-700'
-    if (s === 'REJECTED') return 'bg-red-100 text-red-700'
+    const status = String(s || '').toUpperCase()
+    if (status === 'PENDING') return 'bg-yellow-100 text-yellow-700'
+    if (status === 'RESOLVED') return 'bg-green-100 text-green-700'
+    if (status === 'APPROVED') return 'bg-amber-100 text-amber-700'
+    if (status === 'REJECTED') return 'bg-red-100 text-red-700'
     return 'bg-gray-100 text-gray-700'
 }
 
 function statusLabel(s) {
+    const status = String(s || '').toUpperCase()
     const map = {
         PENDING: 'รอดำเนินการ',
         APPROVED: 'กำลังตรวจสอบ',
         REJECTED: 'ปฏิเสธแล้ว',
         RESOLVED: 'ตอบรับแล้ว',
     }
-    return map[s] || 'รอดำเนินการ'
+    return map[status] || 'รอดำเนินการ'
 }
 
 function closeMobileSidebar() {
