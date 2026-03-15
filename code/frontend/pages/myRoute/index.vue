@@ -444,9 +444,9 @@
             @cancel="closeConfirmModal" />
 
             <!-- Driver Report Modal -->
-        <div v-if="showDriverReportModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+        <div v-if="showDriverReportModal" class="fixed inset-0 z-50 flex items-start justify-center p-4 overflow-y-auto bg-black/50 backdrop-blur-sm sm:items-center"
             @click.self="closeDriverReportModal">
-            <div class="w-full max-w-lg p-6 bg-white rounded-xl shadow-2xl animate-in slide-in-from-top duration-300">
+            <div class="w-full max-w-lg p-6 bg-white rounded-xl shadow-2xl animate-in slide-in-from-top duration-300 max-h-[calc(100vh-2rem)] overflow-y-auto">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-xl font-bold text-red-600 leading-tight flex items-center">
                         <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -464,20 +464,27 @@
                 <!-- Category Selection -->
                 <div class="mb-4">
                     <label class="block mb-2 text-sm font-semibold text-gray-700">เลือกหัวข้อปัญหาที่พบ</label>
-                    <select v-model="driverReportCategory"
-                        class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
-                        <option value="">-- เลือกหัวข้อ --</option>
-                        <option value="VEHICLE_ISSUE">ปัญหาสภาพรถ/ข้อมูลรถไม่ตรง</option>
-                        <option value="PASSENGER_ISSUE">พฤติกรรมผู้โดยสารที่ไม่เหมาะสม</option>
-                        <option value="ROAD_ISSUE">ปัญหาระหว่างเส้นทาง</option>
-                        <option value="SAFETY_ISSUE">ความปลอดภัย/พฤติกรรม</option>
-                        <option value="PAYMENT_ISSUE">ปัญหาการชำระเงิน/ผู้โดยสารไม่จ่ายเงิน</option>
-                        <option value="OTHER">อื่นๆ</option>
-                    </select>
+                    <div class="flex flex-wrap gap-2">
+                        <button
+                            v-for="opt in driverReportCategoryOptions"
+                            :key="opt.value"
+                            type="button"
+                            @click="toggleDriverReportCategory(opt.value)"
+                            class="px-3 py-2 text-sm font-medium transition border rounded-lg"
+                            :class="driverReportCategories.includes(opt.value)
+                                ? 'bg-white text-red-600 border-red-600'
+                                : 'bg-white text-gray-700 border-gray-200 hover:border-red-300 hover:text-red-600'"
+                        >
+                            {{ opt.label }}
+                        </button>
+                    </div>
+                    <p class="mt-2 text-xs text-gray-500">
+                        เลือกได้มากกว่า 1 หัวข้อ (เลือกแล้ว {{ driverReportCategories.length }} หัวข้อ)
+                    </p>
                 </div>
 
                 <!-- Passenger Selection (when PASSENGER_ISSUE) -->
-                <div v-if="driverReportCategory === 'PASSENGER_ISSUE'" class="mb-4">
+                <div v-if="driverReportCategories.includes('PASSENGER_ISSUE')" class="mb-4">
                     <label class="block mb-2 text-sm font-semibold text-gray-700">ระบุผู้โดยสารที่เกี่ยวข้อง</label>
                     <select v-model="driverReportPassengerId"
                         class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
@@ -495,16 +502,24 @@
                 <!-- Report Text -->
                 <div class="mb-4">
                     <label class="block mb-2 text-sm font-semibold text-gray-700">รายละเอียดปัญหาที่พบ</label>
-                    <textarea v-model="driverReportText" rows="5"
+                    <textarea v-model="driverReportText" rows="5" maxlength="501"
                         placeholder="โปรดระบุปัญหาที่คุณพบเพื่อให้ทีมงานสามารถตรวจสอบได้..."
                         class="w-full px-4 py-3 leading-relaxed border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent resize-none transition-all placeholder-gray-400"></textarea>
+                    <p class="mt-2 text-xs text-right text-gray-500">
+                        {{ driverReportText.length }}/501
+                    </p>
                 </div>
 
-                <!-- Image Upload -->
+                
+
+                <!-- Media Upload -->
                 <div class="mb-6">
-                    <label class="block mb-2 text-sm font-semibold text-gray-700">หลักฐานรูปภาพประกอบ (สูงสุด 2 รูป)</label>
+                    <label class="block mb-2 text-sm font-semibold text-gray-700">
+                        หลักฐานรูป วิดีโอ หรือเสียง (ถ้ามี)
+                        <span class="font-normal text-gray-400">(สูงสุดอย่างละ 3 ไฟล์, ไฟล์ละไม่เกิน 50MB)</span>
+                    </label>
                     <div class="flex flex-wrap gap-3">
-                        <div v-for="(img, idx) in driverReportImages" :key="idx" class="relative w-24 h-24 group">
+                        <div v-for="(img, idx) in driverReportImages" :key="`img-${idx}`" class="relative w-24 h-24 group">
                             <img :src="img.url" class="object-cover w-full h-full rounded-lg border border-gray-100 shadow-sm" />
                             <button @click="removeDriverReportImage(idx)"
                                 class="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
@@ -513,18 +528,59 @@
                                 </svg>
                             </button>
                         </div>
-                        <label v-if="driverReportImages.length < 2"
+
+                        <div v-for="(vid, idx) in driverReportVideos" :key="`vid-${idx}`" class="relative w-24 h-24 group">
+                            <video :src="vid.url" controls class="object-cover w-full h-full rounded-lg border border-gray-100 shadow-sm"></video>
+                            <button @click="removeDriverReportVideo(idx)"
+                                class="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div v-for="(audio, idx) in driverReportAudios" :key="`aud-${idx}`" class="relative p-2 bg-white border border-gray-200 shadow-sm rounded-lg w-56 group">
+                            <div class="mb-1 text-xs font-medium text-gray-600 truncate">{{ audio.file.name }}</div>
+                            <audio :src="audio.url" controls class="w-full"></audio>
+                            <button @click="removeDriverReportAudio(idx)"
+                                class="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <label v-if="driverReportImages.length < DRIVER_REPORT_MAX_IMAGES || driverReportVideos.length < DRIVER_REPORT_MAX_VIDEOS || driverReportAudios.length < DRIVER_REPORT_MAX_AUDIOS"
                             class="flex flex-col items-center justify-center w-24 h-24 border-2 border-dashed border-gray-200 rounded-lg cursor-pointer hover:border-red-400 hover:bg-red-50 transition-all text-gray-400 hover:text-red-500">
                             <svg class="w-8 h-8 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                             </svg>
-                            <span class="text-[10px] font-medium">เพิ่มรูป</span>
-                            <input type="file" class="hidden" @change="handleDriverReportFiles" accept="image/*" multiple />
+                            <span class="text-[10px] font-medium">เพิ่มไฟล์</span>
+                            <input type="file" class="hidden" @change="handleDriverReportFiles" accept="image/*,video/*,audio/*" multiple />
                         </label>
                     </div>
                     <p class="mt-2 text-xs text-gray-500 italic">ลำดับความสำคัญ: การแจ้งข้อมูลเท็จอาจส่งผลต่อการถูกระงับบัญชีผู้ใช้งาน</p>
                 </div>
-
+            <div class="mb-4">
+                    <label class="block mb-2 text-sm font-semibold text-gray-700">ลิงก์ (ถ้ามี)</label>
+                    <div class="flex flex-col gap-2 sm:flex-row">
+                        <button
+                            type="button"
+                            class="px-4 py-2 text-sm font-medium text-blue-700 transition border border-blue-200 rounded-lg bg-blue-50 hover:bg-blue-100"
+                            @click="toggleDriverReportLinkInput"
+                        >
+                            {{ showDriverReportLinkInput ? 'ซ่อนช่องแนบลิงก์' : 'แนบลิงก์' }}
+                        </button>
+                        <input
+                            v-if="showDriverReportLinkInput"
+                            v-model.trim="driverReportAttachedLink"
+                            type="url"
+                            placeholder="https://example.com"
+                            class="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                        />
+                    </div>
+                    <p v-if="driverReportLinkError" class="mt-1 text-xs text-red-600">{{ driverReportLinkError }}</p>
+                </div>
                 <div class="flex gap-3">
                     <button @click="closeDriverReportModal"
                         class="flex-1 px-4 py-3 text-sm font-bold text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
@@ -539,44 +595,120 @@
         </div>
 
         <!-- Driver Report Status Modal -->
-        <div v-if="showDriverReportStatusModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
-            @click.self="showDriverReportStatusModal = false">
-            <div class="w-full max-w-lg p-6 bg-white rounded-xl shadow-2xl animate-in slide-in-from-top duration-300">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-xl font-bold text-blue-600 leading-tight">สถานะรายงาน</h3>
-                    <button @click="showDriverReportStatusModal = false" class="text-gray-400 hover:text-gray-600">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-
-                <div v-if="reportedRouteData" class="space-y-3">
-                    <div class="text-sm text-gray-700">
-                        <span class="font-medium">เส้นทาง:</span>
-                        <span class="ml-1">{{ reportedRoute?.origin }} → {{ reportedRoute?.destination }}</span>
-                    </div>
-                    <div class="text-sm text-gray-700">
-                        <span class="font-medium">ประเภท:</span>
-                        <span class="ml-1">{{ getCategoryText(reportedRouteData.category) }}</span>
-                    </div>
-                    <div class="text-sm text-gray-700">
-                        <span class="font-medium">รายละเอียด:</span>
-                        <p class="mt-1 p-3 bg-gray-50 border border-gray-200 rounded-md">
-                            {{ reportedRouteData.description || 'ไม่ได้ระบุรายละเอียด' }}
-                        </p>
-                    </div>
-                    <div class="text-sm text-gray-700">
-                        <span class="font-medium">สถานะ:</span>
-                        <span class="ml-2 status-badge status-confirmed">
-                            {{ getReportStatusText(reportedRouteData.status || 'PENDING') }}
-                        </span>
+        <div v-if="showDriverReportStatusModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+            @click.self="closeDriverReportStatusModal">
+            <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 overflow-hidden animate-in">
+                <div class="border-b border-gray-200 bg-white p-6 text-black">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-xl font-bold">ติดตามสถานะรายงาน</h2>
+                        <button @click="closeDriverReportStatusModal" class="text-gray-500 hover:text-black transition">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
                     </div>
                 </div>
 
-                <div class="mt-6">
-                    <button @click="showDriverReportStatusModal = false"
-                        class="w-full px-4 py-3 text-sm font-bold text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                <div class="p-0 overflow-y-auto max-h-[70vh]">
+                    <div v-if="reportedRouteData" class="p-6 space-y-6">
+                        <ReportStatusCard :status="reportedRouteData.status || 'PENDING'" />
+
+                        <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 shadow-sm">
+                            <div class="flex items-center justify-between mb-4">
+                                <h4 class="font-bold text-blue-900">สรุปการรายงาน</h4>
+                                <span
+                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold shadow-sm"
+                                    :class="{
+                                        'bg-yellow-100 text-yellow-800 border border-yellow-200': (reportedRouteData.status || 'PENDING') === 'PENDING',
+                                        'bg-green-100 text-green-800 border border-green-200': ['APPROVED', 'RESOLVED'].includes(reportedRouteData.status),
+                                        'bg-red-100 text-red-800 border border-red-200': reportedRouteData.status === 'REJECTED'
+                                    }"
+                                >
+                                    {{ getReportStatusText(reportedRouteData.status || 'PENDING') }}
+                                </span>
+                            </div>
+
+                            <div class="space-y-3 text-sm text-blue-800">
+                                <div class="flex justify-between border-b border-blue-100 pb-2 gap-2">
+                                    <span class="opacity-75">เส้นทาง:</span>
+                                    <span class="font-semibold text-right">{{ reportedRoute?.origin || '-' }} → {{ reportedRoute?.destination || '-' }}</span>
+                                </div>
+                                <div class="flex justify-between border-b border-blue-100 pb-2 gap-2">
+                                    <span class="opacity-75">หัวข้อข้อปัญหา:</span>
+                                    <span class="font-semibold text-right">{{ getCategoryText(reportedRouteData.category) }}</span>
+                                </div>
+                                <div class="flex justify-between border-b border-blue-100 pb-2 gap-2">
+                                    <span class="opacity-75">วันที่แจ้ง:</span>
+                                    <span class="font-semibold text-right">{{ reportedRouteData.createdAt ? dayjs(reportedRouteData.createdAt).format('D MMM BBBB HH:mm น.') : '-' }}</span>
+                                </div>
+                                <div class="pt-1">
+                                    <span class="opacity-75 block mb-1 font-medium">รายละเอียดที่แจ้ง:</span>
+                                    <p class="text-gray-700 bg-white/60 p-3 rounded-lg border border-blue-100 italic leading-relaxed">
+                                        "{{ getDriverReportDetailText(reportedRouteData.description) }}"
+                                    </p>
+                                </div>
+                                <div v-if="getDriverReportLink(reportedRouteData.description)" class="pt-1">
+                                    <span class="opacity-75 block mb-1 font-medium">ลิงก์ที่แนบ:</span>
+                                    <a
+                                        :href="getDriverReportLink(reportedRouteData.description)"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="block break-all text-blue-700 hover:text-blue-800 underline bg-white/60 p-3 rounded-lg border border-blue-100"
+                                    >
+                                        {{ getDriverReportLink(reportedRouteData.description) }}
+                                    </a>
+                                </div>
+                                <div v-if="(reportedRouteData.images?.length || reportedRouteData.videos?.length)" class="pt-2">
+                                    <span class="opacity-75 block mb-2 font-medium">ไฟล์ประกอบ:</span>
+                                    <div class="flex flex-wrap gap-2">
+                                        <img v-if="reportedRouteData.images"
+                                            v-for="(img, idx) in reportedRouteData.images" :key="`img-${idx}`" :src="img"
+                                            class="w-20 h-20 object-cover rounded-lg border-2 border-white shadow-sm hover:scale-105 transition-transform cursor-pointer"
+                                            @click="window.open(img, '_blank')"
+                                        />
+                                        <video v-if="reportedRouteData.videos"
+                                            v-for="(vid, idx) in reportedRouteData.videos" :key="`vid-${idx}`" :src="vid"
+                                            class="w-20 h-20 object-cover rounded-lg border-2 border-white shadow-sm hover:scale-105 transition-transform cursor-pointer" controls
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+                            <h4 class="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 013 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                                การตอบรับจากทีมงาน
+                            </h4>
+                            <div v-if="(reportedRouteData.status || 'PENDING') !== 'PENDING'" class="p-4 bg-gray-50 rounded-lg border border-gray-100">
+                                <p class="text-sm text-gray-700 leading-relaxed italic">
+                                    "{{ reportedRouteData.adminNotes || 'ได้รับการตรวจสอบเรียบร้อยแล้ว' }}"
+                                </p>
+                                <div v-if="reportedRouteData.resolvedAt" class="mt-3 pt-3 border-t border-gray-200 flex justify-between items-center text-[10px] text-gray-400">
+                                    <span>ตรวจสอบเมื่อ: {{ dayjs(reportedRouteData.resolvedAt).format('D MMM BBBB HH:mm') }}</span>
+                                    <span class="text-green-600 font-bold tracking-wider">VERIFIED BY TEAM</span>
+                                </div>
+                            </div>
+                            <div v-else class="flex flex-col items-center py-6 text-center">
+                                <div class="w-12 h-12 bg-yellow-50 rounded-full flex items-center justify-center mb-3">
+                                    <svg class="w-6 h-6 text-yellow-500 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <p class="text-sm text-gray-500">รายงานของคุณกำลังรอการตรวจสอบ<br>เราจะเร่งดำเนินการให้เร็วที่สุด</p>
+                            </div>
+                            <div class="mt-4 p-3 bg-blue-50 border border-blue-100 rounded-lg text-xs text-blue-800 text-center">
+                                หากปัญหานี้ได้รับการแก้ไขแล้ว หรือต้องการให้ข้อมูลเพิ่มเติม<br>สามารถติดต่อแอดมินได้ที่ <strong>admin@example.com</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
+                    <button @click="closeDriverReportStatusModal"
+                        class="w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all shadow-md active:scale-95">
                         ปิด
                     </button>
                 </div>
@@ -612,10 +744,30 @@ const showDriverReportModal = ref(false)
 const showDriverReportStatusModal = ref(false)
 const reportedRoute = ref(null)
 const reportedRouteData = ref(null)
-const driverReportCategory = ref('')
+const driverReportCategories = ref([])
 const driverReportText = ref('')
 const driverReportImages = ref([])
+const driverReportVideos = ref([])
+const driverReportAudios = ref([])
 const driverReportPassengerId = ref('')
+const driverReportAttachedLink = ref('')
+const showDriverReportLinkInput = ref(false)
+const driverReportLinkError = ref('')
+
+const DRIVER_REPORT_MAX_IMAGES = 3
+const DRIVER_REPORT_MAX_VIDEOS = 3
+const DRIVER_REPORT_MAX_AUDIOS = 3
+const DRIVER_REPORT_MAX_FILE_SIZE = 50 * 1024 * 1024
+const DRIVER_REPORT_MAX_COMMENT_LENGTH = 501
+
+const driverReportCategoryOptions = [
+    { value: 'VEHICLE_ISSUE', label: 'ปัญหาเกี่ยวกับรถ' },
+    { value: 'PASSENGER_ISSUE', label: 'พฤติกรรมผู้โดยสาร' },
+    { value: 'ROAD_ISSUE', label: 'การเดินทาง' },
+    { value: 'SAFETY_ISSUE', label: 'ความปลอดภัย' },
+    { value: 'PAYMENT_ISSUE', label: 'การชำระเงิน' },
+    { value: 'OTHER', label: 'อื่นๆ' }
+]
 
 // ---------- Google Maps states ----------
 let gmap = null
@@ -782,6 +934,8 @@ async function fetchMyRoutes() {
             ownRoutes.push({
                 id: r.id,
                 status: (r.status || '').toLowerCase(),
+                hasReport: false,
+                reportData: null,
                 origin: start?.name || `(${Number(start.lat).toFixed(2)}, ${Number(start.lng).toFixed(2)})`,
                 destination: end?.name || `(${Number(end.lat).toFixed(2)}, ${Number(end.lng).toFixed(2)})`,
                 originAddress: start?.address ? cleanAddr(start.address) : null,
@@ -818,6 +972,7 @@ async function fetchMyRoutes() {
 
         allTrips.value = formatted
         myRoutes.value = ownRoutes
+        await checkReportsForRoutes()
 
         // รอแผนที่พร้อม แล้ว reverse เฉพาะกรณีที่ backend ไม่มี name (เฉพาะ list คำขอจอง)
         await waitMapReady()
@@ -871,12 +1026,32 @@ const toggleTripDetails = (id) => {
 // --- Driver Report Modal Functions ---
 function openDriverReportModal(route) {
     reportedRoute.value = route
-    driverReportCategory.value = ''
+    driverReportCategories.value = []
     driverReportText.value = ''
     driverReportPassengerId.value = ''
+    driverReportAttachedLink.value = ''
+    showDriverReportLinkInput.value = false
+    driverReportLinkError.value = ''
     driverReportImages.value.forEach(it => it.url && URL.revokeObjectURL(it.url))
+    driverReportVideos.value.forEach(it => it.url && URL.revokeObjectURL(it.url))
+    driverReportAudios.value.forEach(it => it.url && URL.revokeObjectURL(it.url))
     driverReportImages.value = []
+    driverReportVideos.value = []
+    driverReportAudios.value = []
     showDriverReportModal.value = true
+}
+
+function toggleDriverReportCategory(value) {
+    if (!value) return
+    if (driverReportCategories.value.includes(value)) {
+        driverReportCategories.value = driverReportCategories.value.filter(v => v !== value)
+    } else {
+        driverReportCategories.value = [...driverReportCategories.value, value]
+    }
+
+    if (!driverReportCategories.value.includes('PASSENGER_ISSUE')) {
+        driverReportPassengerId.value = ''
+    }
 }
 
 function openDriverReportStatusModal(route) {
@@ -885,16 +1060,57 @@ function openDriverReportStatusModal(route) {
     showDriverReportStatusModal.value = true
 }
 
+function closeDriverReportStatusModal() {
+    showDriverReportStatusModal.value = false
+}
+
 function closeDriverReportModal() {
     showDriverReportModal.value = false
+    driverReportImages.value.forEach(it => it.url && URL.revokeObjectURL(it.url))
+    driverReportVideos.value.forEach(it => it.url && URL.revokeObjectURL(it.url))
+    driverReportAudios.value.forEach(it => it.url && URL.revokeObjectURL(it.url))
+    driverReportImages.value = []
+    driverReportVideos.value = []
+    driverReportAudios.value = []
     setTimeout(() => { reportedRoute.value = null }, 200)
 }
 
 function handleDriverReportFiles(e) {
     const files = Array.from(e.target.files || [])
-    const remaining = 2 - driverReportImages.value.length
-    files.slice(0, remaining).forEach(f => {
-        driverReportImages.value.push({ file: f, url: URL.createObjectURL(f) })
+    files.forEach((f) => {
+        if (f.size > DRIVER_REPORT_MAX_FILE_SIZE) {
+            toast.error('ขนาดไฟล์ต้องไม่เกิน 50MB')
+            return
+        }
+
+        if (f.type.startsWith('image/')) {
+            if (driverReportImages.value.length >= DRIVER_REPORT_MAX_IMAGES) {
+                toast.error(`เพิ่มรูปได้สูงสุด ${DRIVER_REPORT_MAX_IMAGES} รูป`)
+                return
+            }
+            driverReportImages.value.push({ file: f, url: URL.createObjectURL(f) })
+            return
+        }
+
+        if (f.type.startsWith('video/')) {
+            if (driverReportVideos.value.length >= DRIVER_REPORT_MAX_VIDEOS) {
+                toast.error(`เพิ่มวิดีโอได้สูงสุด ${DRIVER_REPORT_MAX_VIDEOS} วิดีโอ`)
+                return
+            }
+            driverReportVideos.value.push({ file: f, url: URL.createObjectURL(f) })
+            return
+        }
+
+        if (f.type.startsWith('audio/')) {
+            if (driverReportAudios.value.length >= DRIVER_REPORT_MAX_AUDIOS) {
+                toast.error(`เพิ่มเสียงได้สูงสุด ${DRIVER_REPORT_MAX_AUDIOS} ไฟล์`)
+                return
+            }
+            driverReportAudios.value.push({ file: f, url: URL.createObjectURL(f) })
+            return
+        }
+
+        toast.error('กรุณาเลือกไฟล์รูป วิดีโอ หรือเสียงเท่านั้น')
     })
     e.target.value = ''
 }
@@ -905,32 +1121,88 @@ function removeDriverReportImage(idx) {
     driverReportImages.value.splice(idx, 1)
 }
 
+function removeDriverReportVideo(idx) {
+    const it = driverReportVideos.value[idx]
+    if (it?.url) URL.revokeObjectURL(it.url)
+    driverReportVideos.value.splice(idx, 1)
+}
+
+function removeDriverReportAudio(idx) {
+    const it = driverReportAudios.value[idx]
+    if (it?.url) URL.revokeObjectURL(it.url)
+    driverReportAudios.value.splice(idx, 1)
+}
+
+function toggleDriverReportLinkInput() {
+    showDriverReportLinkInput.value = !showDriverReportLinkInput.value
+    if (!showDriverReportLinkInput.value) {
+        driverReportAttachedLink.value = ''
+        driverReportLinkError.value = ''
+    }
+}
+
+function isValidUrl(url) {
+    try {
+        const parsed = new URL(url)
+        return parsed.protocol === 'http:' || parsed.protocol === 'https:'
+    } catch {
+        return false
+    }
+}
+
 async function submitDriverReport() {
     if (!reportedRoute.value) return
-    if (!driverReportCategory.value) {
+    if (!driverReportCategories.value.length) {
         toast.error('กรุณาเลือกหัวข้อปัญหา', 'กรุณาเลือกหัวข้อปัญหาที่พบ')
         return
     }
-    const allowedCats = new Set(['VEHICLE_ISSUE', 'PASSENGER_ISSUE', 'ROAD_ISSUE', 'SAFETY_ISSUE', 'PAYMENT_ISSUE', 'OTHER'])
-    if (!allowedCats.has(driverReportCategory.value)) {
+    const allowedCats = new Set(driverReportCategoryOptions.map(opt => opt.value))
+    if (driverReportCategories.value.some(cat => !allowedCats.has(cat))) {
         toast.error('หัวข้อปัญหาไม่ถูกต้อง', 'กรุณาเลือกหัวข้อที่ระบบรองรับ')
         return
     }
-    if (driverReportCategory.value === 'PASSENGER_ISSUE' && !driverReportPassengerId.value) {
+    if (driverReportCategories.value.includes('PASSENGER_ISSUE') && !driverReportPassengerId.value) {
         toast.error('กรุณาระบุผู้โดยสาร', 'เลือกผู้โดยสารที่เกี่ยวข้องก่อนส่งรายงาน')
         return
     }
+    if (driverReportText.value.length > DRIVER_REPORT_MAX_COMMENT_LENGTH) {
+        toast.error('รายละเอียดยาวเกินไป', `รายละเอียดต้องไม่เกิน ${DRIVER_REPORT_MAX_COMMENT_LENGTH} ตัวอักษร`)
+        return
+    }
+
+    if (driverReportAttachedLink.value && !isValidUrl(driverReportAttachedLink.value)) {
+        driverReportLinkError.value = 'กรุณากรอกลิงก์ให้ถูกต้อง (ต้องขึ้นต้นด้วย http:// หรือ https://)'
+        return
+    }
+    driverReportLinkError.value = ''
+
     try {
         const fd = new FormData()
         fd.append('type', 'DRIVER')
-        fd.append('category', driverReportCategory.value)
-        fd.append('description', driverReportText.value || 'ไม่ได้ระบุรายละเอียด')
+        const primaryCategory = driverReportCategories.value[0]
+        const selectedCategoryLabels = driverReportCategoryOptions
+            .filter(opt => driverReportCategories.value.includes(opt.value))
+            .map(opt => opt.label)
+        fd.append('category', primaryCategory)
+
+        const detailText = driverReportText.value || 'ไม่ได้ระบุรายละเอียด'
+        const categorySummary = `หัวข้อที่เลือก: ${selectedCategoryLabels.join(', ')}`
+        const finalDescription = driverReportAttachedLink.value
+            ? `${categorySummary}\n${detailText}\n\nลิงก์: ${driverReportAttachedLink.value}`
+            : `${categorySummary}\n${detailText}`
+        fd.append('description', finalDescription)
         fd.append('routeId', reportedRoute.value.id)
         if (driverReportPassengerId.value) {
             fd.append('targetUserId', driverReportPassengerId.value)
         }
         driverReportImages.value.forEach((it) => {
             if (it.file) fd.append('images', it.file)
+        })
+        driverReportVideos.value.forEach((it) => {
+            if (it.file) fd.append('videos', it.file)
+        })
+        driverReportAudios.value.forEach((it) => {
+            if (it.file) fd.append('audios', it.file)
         })
 
         await $api('/reports', { method: 'POST', body: fd })
@@ -942,8 +1214,8 @@ async function submitDriverReport() {
             routeInList.hasReport = true
             routeInList.reportData = { 
                 status: 'PENDING', 
-                category: driverReportCategory.value, 
-                description: driverReportText.value || 'ไม่ได้ระบุรายละเอียด',
+                category: primaryCategory,
+                description: finalDescription,
                 createdAt: new Date(),
                 adminNotes: null 
             }
@@ -969,6 +1241,9 @@ async function checkReportsForRoutes() {
             if (report) {
                 route.hasReport = true
                 route.reportData = report
+            } else {
+                route.hasReport = false
+                route.reportData = null
             }
         })
     } catch (e) {
@@ -1000,6 +1275,25 @@ function getCategoryText(cat) {
         OTHER: 'อื่น ๆ'
     }
     return cats[cat] || cat || 'ทั่วไป'
+}
+
+function getDriverReportLink(description) {
+    if (!description) return ''
+    const linkLine = String(description)
+        .split('\n')
+        .map(line => line.trim())
+        .find(line => line.startsWith('ลิงก์:'))
+    if (!linkLine) return ''
+    return linkLine.replace('ลิงก์:', '').trim()
+}
+
+function getDriverReportDetailText(description) {
+    if (!description) return '-'
+    return String(description)
+        .split('\n')
+        .filter(line => !line.trim().startsWith('ลิงก์:'))
+        .join('\n')
+        .trim() || '-'
 }
 
 // ---------- Google Maps helpers ----------

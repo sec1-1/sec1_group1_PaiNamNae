@@ -42,7 +42,6 @@ export default defineNuxtConfig({
   },
 
   plugins: ["~/plugins/api.client.js"],
-
   vite: {
     plugins: [tailwindcssVite()],
   },

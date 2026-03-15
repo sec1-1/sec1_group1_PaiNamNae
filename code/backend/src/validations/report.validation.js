@@ -19,6 +19,7 @@ const listReportsQuerySchema = z.object({
     limit: z.coerce.number().int().min(1).max(100).optional().default(20),
     q: z.string().optional(),
     type: z.enum(['DRIVER', 'PASSENGER']).optional(),
+    reportScope: z.enum(['SYSTEM', 'POST_TRIP']).optional(),
     status: z.enum(['PENDING', 'APPROVED', 'REJECTED', 'RESOLVED']).optional(),
     reporterSearch: z.string().optional(),
     targetUserSearch: z.string().optional(),

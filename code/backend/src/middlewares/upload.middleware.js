@@ -8,11 +8,15 @@ const upload = multer({
     storage: storage,
     limits: { fileSize: 50 * 1024 * 1024 }, // ขยายเป็น 50 MB
     fileFilter: (req, file, cb) => {
-        // อนุญาตไฟล์รูปภาพและวิดีโอ
-        if (file.mimetype.startsWith('image/') || file.mimetype.startsWith('video/')) {
+        // อนุญาตไฟล์รูปภาพ วิดีโอ และเสียง
+        if (
+            file.mimetype.startsWith('image/') ||
+            file.mimetype.startsWith('video/') ||
+            file.mimetype.startsWith('audio/')
+        ) {
             cb(null, true);
         } else {
-            cb(new ApiError(400, 'Only image or video files are allowed!'), false);
+            cb(new ApiError(400, 'Only image, video, or audio files are allowed!'), false);
         }
     },
 });
