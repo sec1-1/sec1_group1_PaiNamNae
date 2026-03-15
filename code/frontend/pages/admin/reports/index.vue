@@ -345,24 +345,57 @@
                     </div>
                 </div>
 
-                <div class="px-6 py-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
-                    <div class="text-sm text-slate-500">
-                        ตรวจสอบรายละเอียดให้ครบก่อนอัปเดตสถานะรายงาน
+                <div class="px-6 py-4 border-t border-slate-200 bg-white">
+                    <div class="mb-4">
+                        <label for="admin-notes" class="block text-sm font-semibold text-slate-700 mb-2">
+                            หมายเหตุหรือข้อความตอบกลับจากผู้ดูแล
+                        </label>
+                        <textarea
+                            id="admin-notes"
+                            v-model="adminComment"
+                            rows="3"
+                            class="w-full px-4 py-3 text-sm text-slate-700 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-100 focus:border-blue-400 transition-all placeholder:text-slate-400"
+                            placeholder="กรอกข้อความที่ต้องการแจ้งให้ผู้รายงานทราบ... (เช่น ขอข้อมูลเพิ่มเติม หรือแจ้งการดำเนินการ)"
+                        ></textarea>
                     </div>
 
-                    <div class="flex flex-wrap items-center gap-2">
-                        <button v-if="viewingReport.status !== 'RESOLVED' && viewingReport.status !== 'REJECTED'" @click="updateStatus(viewingReport, 'REJECTED')" class="px-4 py-2 text-sm font-medium text-red-600 bg-white border border-red-600 hover:bg-red-50 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                            ปฏิเสธ
-                        </button>
-                        <button v-if="viewingReport.status === 'PENDING'" @click="updateStatus(viewingReport, 'APPROVED')" class="px-4 py-2 text-sm font-medium text-amber-600 bg-white border border-amber-500 hover:bg-amber-50 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
-                            กำลังตรวจสอบ
-                        </button>
-                        <button v-if="viewingReport.status === 'APPROVED' || viewingReport.status === 'PENDING'" @click="updateStatus(viewingReport, 'RESOLVED')" class="px-4 py-2 text-sm font-medium text-green-600 bg-white border border-green-600 hover:bg-green-50 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                            ตอบรับการรายงาน
-                        </button>
-                        <button @click="closeViewModal" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-sm ml-2">
-                            ปิดหน้าต่าง
-                        </button>
+                    <div class="flex flex-wrap items-center justify-between gap-4">
+                        <div class="text-xs text-slate-500 italic">
+                            * ข้อความนี้จะถูกแสดงให้ผู้รายงานเห็นในหน้ารายละเอียดการรายงาน
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button 
+                                v-if="viewingReport.status !== 'RESOLVED' && viewingReport.status !== 'REJECTED'" 
+                                @click="updateStatus(viewingReport, 'REJECTED')" 
+                                :disabled="isUpdating"
+                                class="px-5 py-2 text-sm font-semibold text-red-600 bg-white border border-red-200 hover:bg-red-50 hover:border-red-300 rounded-xl transition shadow-sm disabled:opacity-50"
+                            >
+                                <i class="fas fa-times-circle mr-1.5"></i>ปฏิเสธ
+                            </button>
+                            <button 
+                                v-if="viewingReport.status === 'PENDING'" 
+                                @click="updateStatus(viewingReport, 'APPROVED')" 
+                                :disabled="isUpdating"
+                                class="px-5 py-2 text-sm font-semibold text-amber-600 bg-white border border-amber-200 hover:bg-amber-50 hover:border-amber-300 rounded-xl transition shadow-sm disabled:opacity-50"
+                            >
+                                <i class="fas fa-search mr-1.5"></i>กำลังตรวจสอบ
+                            </button>
+                            <button 
+                                v-if="viewingReport.status === 'APPROVED' || viewingReport.status === 'PENDING'" 
+                                @click="updateStatus(viewingReport, 'RESOLVED')" 
+                                :disabled="isUpdating"
+                                class="px-5 py-2 text-sm font-semibold text-emerald-600 bg-white border border-emerald-200 hover:bg-emerald-50 hover:border-emerald-300 rounded-xl transition shadow-sm disabled:opacity-50"
+                            >
+                                <i class="fas fa-check-circle mr-1.5"></i>ตอบรับการรายงาน
+                            </button>
+                            <button 
+                                @click="closeViewModal" 
+                                class="px-5 py-2 text-sm font-semibold text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition shadow-sm ml-2"
+                            >
+                                ปิด
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -409,6 +442,9 @@ const pagination = reactive({
     total: 0,
     totalPages: 1
 })
+
+const adminComment = ref('')
+const isUpdating = ref(false)
 
 const filters = reactive({
   q: '',
@@ -615,15 +651,20 @@ const viewingReport = ref(null)
 
 function openViewModal(report) {
     viewingReport.value = { ...report }
+    adminComment.value = report.adminNotes || ''
     showViewModal.value = true
 }
 
 function closeViewModal() {
     showViewModal.value = false
+    adminComment.value = ''
     // viewingReport.value = null
 }
 
 async function updateStatus(report, status) {
+    if (isUpdating.value) return
+    isUpdating.value = true
+
     try {
         const token = useCookie('token').value || (process.client ? localStorage.getItem('token') : '')
         const res = await fetch(`${config.public.apiBase}/reports/admin/${report.id}`, {
@@ -633,7 +674,10 @@ async function updateStatus(report, status) {
                 'Content-Type': 'application/json',
                 ...(token ? { Authorization: `Bearer ${token}` } : {})
             },
-            body: JSON.stringify({ status }),
+            body: JSON.stringify({ 
+                status,
+                adminNotes: adminComment.value 
+            }),
             credentials: 'include'
         })
 
@@ -644,9 +688,11 @@ async function updateStatus(report, status) {
         const index = reports.value.findIndex(r => r.id === report.id)
         if (index !== -1) {
              reports.value[index].status = status
+             reports.value[index].adminNotes = adminComment.value
         }
         if (viewingReport.value && viewingReport.value.id === report.id) {
              viewingReport.value.status = status
+             viewingReport.value.adminNotes = adminComment.value
         }
         
         let statusTh = status
@@ -664,13 +710,15 @@ async function updateStatus(report, status) {
         
         // Refresh full list to get correct resolvedBy / etc.
         fetchReports()
-        // if user resolved or rejected, might want to close the modal
-        // if (status === 'RESOLVED' || status === 'REJECTED') {
-        //   closeViewModal()
-        // }
+        
+        // Close modal after success
+        // closeViewModal()
+        
     } catch (err) {
         console.error(err)
         toast.error('ไม่สามารถอัปเดตสถานะได้', err.message)
+    } finally {
+        isUpdating.value = false
     }
 }
 

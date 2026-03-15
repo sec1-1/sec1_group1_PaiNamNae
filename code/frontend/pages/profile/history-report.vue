@@ -174,7 +174,8 @@
                                     class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold shadow-sm"
                                     :class="{
                                         'bg-yellow-100 text-yellow-800 border border-yellow-200': selectedReport.status === 'PENDING',
-                                        'bg-green-100 text-green-800 border border-green-200': ['APPROVED', 'RESOLVED'].includes(selectedReport.status),
+                                        'bg-blue-100 text-blue-800 border border-blue-200': selectedReport.status === 'APPROVED',
+                                        'bg-green-100 text-green-800 border border-green-200': selectedReport.status === 'RESOLVED',
                                         'bg-red-100 text-red-800 border border-red-200': selectedReport.status === 'REJECTED'
                                     }"
                                 >
@@ -362,6 +363,13 @@ const reportStatusSummary = computed(() => {
             textClass: 'text-green-700',
             badgeClass: 'bg-green-100 text-green-800',
             activeClass: 'border-green-300 bg-green-500 text-white'
+        },
+        {
+            status: 'REJECTED',
+            label: getReportStatusText('REJECTED'),
+            textClass: 'text-red-700',
+            badgeClass: 'bg-red-100 text-red-800',
+            activeClass: 'border-red-300 bg-red-500 text-white'
         }
     ];
 
