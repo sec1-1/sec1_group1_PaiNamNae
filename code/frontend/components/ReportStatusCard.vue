@@ -78,7 +78,7 @@ const circleClass = computed(() => {
     PENDING: 'w-20 h-20 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-4',
     IN_PROGRESS: 'w-20 h-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4',
     RESOLVED: 'w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4',
-    APPROVED: 'w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4',
+    APPROVED: 'w-20 h-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4',
     REJECTED: 'w-20 h-20 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4'
   }
   return map[props.status] || map.PENDING
@@ -90,7 +90,7 @@ const titleClass = computed(() => {
     PENDING: 'text-orange-600',
     IN_PROGRESS: 'text-blue-600',
     RESOLVED: 'text-green-600',
-    APPROVED: 'text-green-600',
+    APPROVED: 'text-blue-600',
     REJECTED: 'text-red-600'
   }
   return map[props.status] || 'text-gray-600'
