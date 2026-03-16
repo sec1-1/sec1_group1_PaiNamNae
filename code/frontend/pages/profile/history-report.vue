@@ -325,7 +325,7 @@ function getReportStatusText(status) {
     const reportStatus = {
         PENDING: 'รอการตรวจสอบ',
         APPROVED: 'รับเรื่องแล้ว',
-        REJECTED: 'ไม่พบสถานะ',
+        REJECTED: 'ถูกปฏิเสธ',
         RESOLVED: 'ดำเนินการแก้ไขแล้ว'
     };
     return reportStatus[status] || 'ไม่ทราบสถานะ';
