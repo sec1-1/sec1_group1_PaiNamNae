@@ -1,1 +1,0 @@
-export { default } from "file:///Users/fandy/KKU%203T2/softend/PaiNamNae/sec1_group1_PaiNamNae/frontend/node_modules/@nuxt/vite-builder/dist/vite-node-entry.mjs"

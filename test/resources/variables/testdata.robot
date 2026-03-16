@@ -1,5 +1,5 @@
 *** Variables ***
-${URL}                      https://cssec1web69.cpkku.com/
+${URL}                      http://localhost:3001/
 ${IMAGE01_PATH}             ${EXECDIR}${/}img${/}pexels-hazardos-804.jpg
 ${IMAGE02_PATH}             ${EXECDIR}${/}img${/}pexels-hazardos-8041.jpg
 ${IMAGE03_PATH}             ${EXECDIR}${/}img${/}pexels-hazardos-80412.jpg
