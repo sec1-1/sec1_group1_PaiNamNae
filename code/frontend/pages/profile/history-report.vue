@@ -49,13 +49,13 @@
                                         :key="item.status"
                                         type="button"
                                         class="inline-flex items-center gap-2 rounded-full border bg-white px-4 py-2 text-sm shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
-                                        :class="activeStatus === item.status ? item.activeClass : 'border-slate-200 hover:border-slate-300'"
+                                        :class="activeStatus === item.status ? 'border-slate-400 shadow-md' : 'border-slate-200 hover:border-slate-300'"
                                         @click="setActiveStatus(item.status)"
                                     >
                                         <span class="font-semibold" :class="item.textClass">{{ item.label }}</span>
                                         <span
                                             class="inline-flex items-center justify-center rounded-full px-2 py-0.5 text-xs font-bold min-w-[1.4rem]"
-                                            :class="activeStatus === item.status ? 'bg-white/30 text-current' : item.badgeClass"
+                                            :class="item.badgeClass"
                                         >
                                             {{ item.count }}
                                         </span>
@@ -325,7 +325,7 @@ function getReportStatusText(status) {
     const reportStatus = {
         PENDING: 'รอการตรวจสอบ',
         APPROVED: 'รับเรื่องแล้ว',
-        REJECTED: 'ไม่พบสถานะ',
+        REJECTED: 'ถูกปฏิเสธ',
         RESOLVED: 'ดำเนินการแก้ไขแล้ว'
     };
     return reportStatus[status] || 'ไม่ทราบสถานะ';

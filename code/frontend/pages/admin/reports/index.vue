@@ -700,13 +700,7 @@ async function updateStatus(report, status) {
         if (status === 'RESOLVED') statusTh = 'ตอบรับการรายงานแล้ว'
         if (status === 'REJECTED') statusTh = 'ปฏิเสธ'
 
-        if (status === 'APPROVED') {
-            toast.info('อัปเดตสถานะสำเร็จ', `สถานะรายงานเปลี่ยนเป็น ${statusTh}`)
-        } else if (status === 'REJECTED') {
-            toast.error('อัปเดตสถานะสำเร็จ', `สถานะรายงานเปลี่ยนเป็น ${statusTh}`)
-        } else {
-            toast.success('อัปเดตสถานะสำเร็จ', `สถานะรายงานเปลี่ยนเป็น ${statusTh}`)
-        }
+        toast.success('อัปเดตสถานะสำเร็จ', `สถานะรายงานเปลี่ยนเป็น ${statusTh}`)
         
         // Refresh full list to get correct resolvedBy / etc.
         fetchReports()
