@@ -163,6 +163,20 @@ const searchReports = async (req, res, next) => {
   }
 };
 
+/**
+ * @desc    Get report statistics (ADMIN)
+ * @route   GET /reports/stats
+ */
+const getReportStats = async (req, res, next) => {
+  try {
+    const stats = await reportService.getReportStats();
+
+    res.json(stats);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   createReport,
   getReportById,
@@ -171,4 +185,5 @@ module.exports = {
   getMyReports,
   getReportByBookingId,
   searchReports,
+  getReportStats,
 };

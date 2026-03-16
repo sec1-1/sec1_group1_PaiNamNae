@@ -2,11 +2,24 @@ import tailwindcssVite from "@tailwindcss/vite";
 
 export default defineNuxtConfig({
   ssr: false,
+
+  app: {
+    head: {
+      link: [
+        {
+          rel: 'stylesheet',
+          href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'
+        }
+      ]
+    }
+  },
+
   nitro: {
     prerender: {
       crawlLinks: true,
     }
   },
+
   compatibilityDate: '2024-04-03',
 
   devtools: { enabled: true },
@@ -31,6 +44,7 @@ export default defineNuxtConfig({
   css: [
     '~/assets/css/input.css',
   ],
+
   build: {
     transpile: ['leaflet']
   },
