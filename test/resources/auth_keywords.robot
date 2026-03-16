@@ -2,10 +2,8 @@
 Library         SeleniumLibrary
 Resource       ../resources/keywords/auth_keywords.robot
 Library         String
-<<<<<<< HEAD
-Variables       variables/credentials.robot
-Variables       variables/testdata.robot
-=======
+Resource        variables/credentials.robot
+Resource        variables/testdata.robot
 
 # รวมฟังก์ชั่นทั้งหมด สามารถพิมพ์แค่ชื่อและนำไปใช้ได้เลยในไฟล์ UAT_Test
 *** Keywords ***
@@ -16,6 +14,9 @@ Setup Delay Selenium
     Set Selenium Implicit Wait    5s
     Set Selenium Speed            0.5s
 
+Open Browser To Website
+    Open Browser                    ${URL}    edge
+    Maximize Browser Window
 # -----------------------------
 # กลุ่ม: Login
 # -----------------------------
@@ -33,6 +34,14 @@ Passenger Login
     Location Should Contain         /login
     Input Text                      //input[@placeholder="กรอกชื่อผู้ใช้หรืออีเมล"]               ${PASSENGER_USER}
     Input Text                      //input[@placeholder="กรอกรหัสผ่าน"]                     ${PASSENGER_PASS}
+    Click Button                    xpath=//button[@type='submit']
+
+Driver Login
+    Click Element                   xpath=//a[@href='/login']
+    Wait Until Location Contains    /login                          10s
+    Location Should Contain         /login
+    Input Text                      //input[@placeholder="กรอกชื่อผู้ใช้หรืออีเมล"]               ${DRIVER_USER}
+    Input Text                      //input[@placeholder="กรอกรหัสผ่าน"]                     ${DRIVER_PASS}
     Click Button                    xpath=//button[@type='submit']
 
 # ฟังก์ชั่นนี้ ใช้ข้อมูลจาก Database จริง
@@ -90,7 +99,7 @@ Go To User Management Page
     Page Should Contain                 User Management  
 
 Go To User Profile Page
-    Mouse Over                          xpath=//span[normalize-space()='${PASSENGER_SURNAME}']
+    Mouse Over                          xpath=//span[normalize-space()='${DRIVER_FIRST_NAME}']
     Wait Until Element Is Visible       xpath=//a[normalize-space()="บัญชีของฉัน"]    10s
     Click Element                       xpath=//a[normalize-space()="บัญชีของฉัน"]
     Page Should Contain                 โปรไฟล์และการตั้งค่า
@@ -100,12 +109,19 @@ Go To Check Report
     Click Element                   xpath=//a[.//span[normalize-space()="Check Report"]]
 
 View All Route
-    Click Element                   xpath=//a[@href='/findTrip']
+    Click Element    xpath=//a[@href="/myTrip"]
+    Click Element    xpath=//a[@href="/myRoute"]
 
 View My Trip
     Click Element                   xpath=//a[@href='/myTrip']
     Sleep                           2s
     Click Element                   xpath=//button[starts-with(normalize-space(), "ทั้งหมด")]
+
+View My Route
+    Click Element                   css:.dropdown-trigger > a
+    Click Element                   xpath=//div[contains(@class,"dropdown-menu")]//a[@href="/myRoute"]
+    Sleep                           2s
+    Click Element                   xpath=//button[starts-with(normalize-space(), "จบทริปแล้ว")]
 
 View Passenger Info
     Wait Until Element Is Visible    xpath=//h4[normalize-space()="Takumi Fujiwara"]    10s
@@ -114,6 +130,7 @@ View Passenger Info
 View Notification
     Wait Until Element Is Visible    xpath=//button[@aria-haspopup="true"]    10s
     Click Element                    xpath=//button[@aria-haspopup="true"]
+
 # -----------------------------
 # กลุ่ม: Checkbox Review
 # -----------------------------
@@ -141,3 +158,12 @@ Upload 4 Images
     Choose File         xpath=//input[@type="file"]    ${IMAGE02_PATH}
     Choose File         xpath=//input[@type="file"]    ${IMAGE03_PATH}
     Choose File         xpath=//input[@type="file"]    ${IMAGE04_PATH}
+
+# -----------------------------
+# กลุ่ม: Upload File
+# -----------------------------
+Upload link
+    Click Element                   xpath=//button[starts-with(normalize-space(), "แนบลิงก์")]
+    Input Text                      xpath=//input[@placeholder="https://example.com"]    ${TEST_URL}
+ 
+    

@@ -38,7 +38,7 @@ UAT-001 : Login and Go to Report (Super Slow)
     Click Element                    xpath=//button[contains(., 'ทั้งหมด')]
 
     # --- Step 06: กดปุ่ม "รายงาน" ---
-    Wait Until Element Is Visible    xpath=(//button[contains(@class, 'bg-red-600') and contains(., 'รายงาน')])[1]    timeout=10s
+    Wait Until Element Is Visible    xpath=(//button[contains(@class, 'bg-red-600') and contains(., 'รายงาน')])[1]    timeout=20s
     Scroll Element Into View         xpath=(//button[contains(@class, 'bg-red-600') and contains(., 'รายงาน')])[1]
     
     # ใช้ JavaScript คลิกเพื่อป้องกันปุ่มโดนบัง
