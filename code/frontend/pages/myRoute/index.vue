@@ -463,7 +463,7 @@
 
                 <!-- Category Selection -->
                 <div class="mb-4">
-                    <label class="block mb-2 text-sm font-semibold text-gray-700">เลือกหัวข้อปัญหาที่พบ</label>
+                    <label class="block mb-2 text-sm font-semibold text-gray-700">เลือกหัวข้อปัญหาที่พบ <span class="text-red-500">*</span></label>
                     <div class="flex flex-wrap gap-2">
                         <button
                             v-for="opt in driverReportCategoryOptions"
@@ -501,7 +501,7 @@
 
                 <!-- Report Text -->
                 <div class="mb-4">
-                    <label class="block mb-2 text-sm font-semibold text-gray-700">รายละเอียดปัญหาที่พบ</label>
+                    <label class="block mb-2 text-sm font-semibold text-gray-700">รายละเอียดปัญหาที่พบ <span class="text-red-500">*</span></label>
                     <textarea v-model="driverReportText" rows="5" maxlength="501"
                         placeholder="โปรดระบุปัญหาที่คุณพบเพื่อให้ทีมงานสามารถตรวจสอบได้..."
                         class="w-full px-4 py-3 leading-relaxed border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent resize-none transition-all placeholder-gray-400"></textarea>
@@ -587,7 +587,9 @@
                         ยกเลิก
                     </button>
                     <button @click="submitDriverReport"
-                        class="flex-[2] px-4 py-3 text-sm font-bold text-white bg-red-600 rounded-lg hover:bg-red-700 shadow-lg shadow-red-200 transition-all active:scale-[0.98]">
+                        :disabled="!driverReportCategories.length || !driverReportText.trim()"
+                        :class="(!driverReportCategories.length || !driverReportText.trim()) ? 'bg-gray-300 text-gray-400 cursor-not-allowed' : 'bg-red-600 text-white hover:bg-red-700 shadow-lg shadow-red-200 active:scale-[0.98]'"
+                        class="flex-[2] px-4 py-3 text-sm font-bold rounded-lg transition-all">
                         ส่งรายงาน
                     </button>
                 </div>
@@ -1165,6 +1167,10 @@ async function submitDriverReport() {
         toast.error('กรุณาระบุผู้โดยสาร', 'เลือกผู้โดยสารที่เกี่ยวข้องก่อนส่งรายงาน')
         return
     }
+    if (!driverReportText.value.trim()) {
+        toast.error('กรุณากรอกรายละเอียด', 'กรุณาระบุรายละเอียดปัญหาที่พบก่อนส่งรายงาน')
+        return
+    }
     if (driverReportText.value.length > DRIVER_REPORT_MAX_COMMENT_LENGTH) {
         toast.error('รายละเอียดยาวเกินไป', `รายละเอียดต้องไม่เกิน ${DRIVER_REPORT_MAX_COMMENT_LENGTH} ตัวอักษร`)
         return
@@ -1185,7 +1191,7 @@ async function submitDriverReport() {
             .map(opt => opt.label)
         fd.append('category', primaryCategory)
 
-        const detailText = driverReportText.value || 'ไม่ได้ระบุรายละเอียด'
+        const detailText = driverReportText.value.trim()
         const categorySummary = `หัวข้อที่เลือก: ${selectedCategoryLabels.join(', ')}`
         const finalDescription = driverReportAttachedLink.value
             ? `${categorySummary}\n${detailText}\n\nลิงก์: ${driverReportAttachedLink.value}`

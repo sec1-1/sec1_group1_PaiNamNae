@@ -41,7 +41,7 @@
 					</div>
 
 					<div>
-						<label class="block mb-2 text-sm font-semibold text-gray-700">รายละเอียดเหตุการณ์</label>
+						<label class="block mb-2 text-sm font-semibold text-gray-700">รายละเอียดเหตุการณ์ <span class="text-red-500">*</span></label>
 						<textarea
 							v-model="description"
 							rows="5"
@@ -50,7 +50,7 @@
 							placeholder="โปรดระบุปัญหาที่พบอย่างละเอียดเพื่อให้ทีมงานตรวจสอบได้รวดเร็วขึ้น"
 						></textarea>
 						<div class="flex justify-between mt-1 text-xs text-gray-500">
-							<span>อย่างน้อย 5 ตัวอักษร</span>
+							<span>กรุณาระบุรายละเอียด</span>
 							<span>{{ description.length }} / 501</span>
 						</div>
 					</div>
@@ -214,7 +214,7 @@ const reportTypeLabel = computed(() => {
 
 const isSubmitDisabled = computed(() => {
 	const textLen = description.value.trim().length
-	return !selectedCategories.value.length || textLen < 5 || textLen > MAX_COMMENT_LENGTH || !reportType.value
+	return !selectedCategories.value.length || textLen < 1 || textLen > MAX_COMMENT_LENGTH || !reportType.value
 })
 
 function clearAttachments() {
