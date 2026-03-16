@@ -8,7 +8,7 @@ UAT-001 Driver Report Trip Success
     Open Browser To Website
     Driver Login
     View My Route
-    Click Element                   xpath=(//button[normalize-space()="รายงาน"])[1]
+    Click Element                   xpath=(//button[normalize-space()="รายงานปัญหา"])[1]
     Select From List By Value       xpath=//select[contains(@class,'w-full')]                                       
     Input Text                      xpath=//textarea[@placeholder="รบกวนระบุรายละเอียดเพื่อให้เราตรวจสอบได้รวดเร็วขึ้น..."]    ${DRIVER_REPORT_TEXT}
     Upload 2 Image and 1 Video
@@ -27,7 +27,7 @@ UAT-002 Driver Report Trip Upload File Too Large
     Open Browser To Website
     Driver Login
     View My Route
-    Click Element                   xpath=(//button[normalize-space()="รายงาน"])[1]
+    Click Element                   xpath=(//button[normalize-space()="รายงานปัญหา"])[2]
     Select From List By Value       xpath=//select[contains(@class,'w-full')]                                       
     Input Text                      xpath=//textarea[@placeholder="รบกวนระบุรายละเอียดเพื่อให้เราตรวจสอบได้รวดเร็วขึ้น..."]    ${DRIVER_REPORT_TEXT}
     Choose File                     xpath=//input[@type="file"]    ${INVALID_VIDEO}
@@ -42,7 +42,7 @@ UAT-003 Driver Report Trip Upload Invilid File
     Open Browser To Website
     Driver Login
     View My Route
-    Click Element                   xpath=(//button[normalize-space()="รายงาน"])[1]
+   Click Element                   xpath=(//button[normalize-space()="รายงานปัญหา"])[2]
     Select From List By Value       xpath=//select[contains(@class,'w-full')]                                       
     Input Text                      xpath=//textarea[@placeholder="รบกวนระบุรายละเอียดเพื่อให้เราตรวจสอบได้รวดเร็วขึ้น..."]    ${DRIVER_REPORT_TEXT}
     Choose File                     xpath=//input[@type="file"]    ${PDF_PATH}
@@ -57,7 +57,7 @@ UAT-004 Driver Report Trip Upload Image 4 File
     Open Browser To Website
     Driver Login
     View My Route
-    Click Element                   xpath=(//button[normalize-space()="รายงาน"])[1]
+   Click Element                   xpath=(//button[normalize-space()="รายงานปัญหา"])[2]
     Select From List By Value       xpath=//select[contains(@class,'w-full')]                                       
     Input Text                      xpath=//textarea[@placeholder="รบกวนระบุรายละเอียดเพื่อให้เราตรวจสอบได้รวดเร็วขึ้น..."]    ${DRIVER_REPORT_TEXT}
     Upload 4 Images

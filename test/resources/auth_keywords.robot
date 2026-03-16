@@ -107,7 +107,8 @@ Go To Check Report
     Click Element                   xpath=//a[.//span[normalize-space()="Check Report"]]
 
 View All Route
-    Click Element                   xpath=//a[@href='/findTrip']
+    Click Element    xpath=//a[@href="/myTrip"]
+    Click Element    xpath=//a[@href="/myRoute"]
 
 View My Trip
     Click Element                   xpath=//a[@href='/myTrip']
