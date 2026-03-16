@@ -1,8 +1,11 @@
 *** Settings ***
 Library         SeleniumLibrary
+Resource       ../resources/keywords/auth_keywords.robot
 Library         String
+<<<<<<< HEAD
 Variables       variables/credentials.robot
 Variables       variables/testdata.robot
+=======
 
 # รวมฟังก์ชั่นทั้งหมด สามารถพิมพ์แค่ชื่อและนำไปใช้ได้เลยในไฟล์ UAT_Test
 *** Keywords ***
