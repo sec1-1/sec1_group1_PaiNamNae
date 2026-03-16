@@ -14,3 +14,5 @@ ${REPORT_TEXT}              ขับรถแย่มาก ฝ่าไปแ
 ${DRIVER_REPORT_TEXT}       ผู้โดยสารพูดจาไม่สุภาพ เสียมารยาท
 
 ${TEST_URL}                 https://www.youtube.com/watch?v=e6cYYEQpwa0
+
+${ADMIN_NOTE}               รบกวนส่งข้อมูลเพิ่มเติมเกี่ยวกับเหตุการณ์ที่เกิดขึ้นด้วยครับ สามารถส่งมาได้ทาง admin@example.com
