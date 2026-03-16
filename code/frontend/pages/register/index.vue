@@ -361,15 +361,16 @@ async function postForm(url, formData, token = '') {
     body: formData,
     credentials: 'include',
   });
+
+  const text = await res.text(); // อ่านครั้งเดียว
   let body;
+
   try {
-    body = await res.json();
+    body = text ? JSON.parse(text) : {};
   } catch {
-    const text = await res.text();
-    const err = new Error(text || 'Unexpected response from server');
-    err.status = res.status;
-    throw err;
+    body = { message: text };
   }
+
   if (!res.ok) {
     const msg = body?.message || `Request failed with status ${res.status}`;
     const err = new Error(msg);
@@ -377,6 +378,7 @@ async function postForm(url, formData, token = '') {
     err.payload = body;
     throw err;
   }
+
   return body;
 }
 
