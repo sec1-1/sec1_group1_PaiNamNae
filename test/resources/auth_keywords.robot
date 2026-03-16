@@ -15,6 +15,7 @@ Setup Delay Selenium
 
 Open Browser To Website
     Open Browser                    ${URL}    edge
+    Maximize Browser Window
 # -----------------------------
 # กลุ่ม: Login
 # -----------------------------
@@ -97,7 +98,7 @@ Go To User Management Page
     Page Should Contain                 User Management  
 
 Go To User Profile Page
-    Mouse Over                          xpath=//span[normalize-space()='${PASSENGER_SURNAME}']
+    Mouse Over                          xpath=//span[normalize-space()='${DRIVER_FIRST_NAME}']
     Wait Until Element Is Visible       xpath=//a[normalize-space()="บัญชีของฉัน"]    10s
     Click Element                       xpath=//a[normalize-space()="บัญชีของฉัน"]
     Page Should Contain                 โปรไฟล์และการตั้งค่า
@@ -116,9 +117,10 @@ View My Trip
     Click Element                   xpath=//button[starts-with(normalize-space(), "ทั้งหมด")]
 
 View My Route
-    Click Element                   xpath=//a[@href='/myRoute']
+    Click Element                   css:.dropdown-trigger > a
+    Click Element                   xpath=//div[contains(@class,"dropdown-menu")]//a[@href="/myRoute"]
     Sleep                           2s
-    Click Element                   xpath=//button[starts-with(normalize-space(), "ทั้งหมด")]
+    Click Element                   xpath=//button[starts-with(normalize-space(), "จบทริปแล้ว")]
 
 View Passenger Info
     Wait Until Element Is Visible    xpath=//h4[normalize-space()="Takumi Fujiwara"]    10s
@@ -161,6 +163,6 @@ Upload 4 Images
 # -----------------------------
 Upload link
     Click Element                   xpath=//button[starts-with(normalize-space(), "แนบลิงก์")]
-    Input Text                      //input[@placeholder="กรอกรหัสผ่าน"]                      ${PASSENGER_VIEW_PASS}
+    Input Text                      xpath=//input[@placeholder="https://example.com"]    ${TEST_URL}
  
     
