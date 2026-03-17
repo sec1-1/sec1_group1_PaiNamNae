@@ -45,9 +45,18 @@
                                             </h4>
                                             <span class="status-badge" :class="{
                                                 'status-confirmed': route.status === 'available',
-                                                'status-pending': route.status === 'full',
+                                                'status-pending': route.status === 'full' || route.status === 'in_transit',
+                                                'status-completed': route.status === 'completed',
                                             }">
-                                                {{ route.status === 'available' ? 'เปิดรับผู้โดยสาร' : 'เต็ม' }}
+                                                {{
+                                                    route.status === 'available'
+                                                        ? 'เปิดรับผู้โดยสาร'
+                                                        : route.status === 'completed'
+                                                            ? 'จบทริปแล้ว'
+                                                            : route.status === 'in_transit'
+                                                                ? 'กำลังเดินทาง'
+                                                                : 'เต็ม'
+                                                }}
                                             </span>
                                         </div>
                                         <p class="mt-1 text-sm text-gray-600">
