@@ -1,6 +1,6 @@
 *** Variables ***
-# ${URL}                      http://localhost:3001/
-${URL}                     https://cssec1web69.cpkku.com/
+${URL}                      http://localhost:3001/
+# ${URL}                     https://cssec1web69.cpkku.com/
 ${IMAGE01_PATH}             ${EXECDIR}${/}img${/}pexels-hazardos-804.jpg
 ${IMAGE02_PATH}             ${EXECDIR}${/}img${/}pexels-hazardos-8041.jpg
 ${IMAGE03_PATH}             ${EXECDIR}${/}img${/}pexels-hazardos-80412.jpg
@@ -13,8 +13,11 @@ ${SOUND_PATH}               ${EXECDIR}${/}test/resources/testdata/PeopleTalking.
 ${REVIEW_TEXT}              ขับเร็วทันใจ คนขับสุภาพ รถสะอาด ตรงเวลา
 ${REPORT_TEXT}              ขับรถแย่มาก ฝ่าไปแดง ขับเร็ว ขับส่ายไปส่ายมา
 
-${DRIVER_REPORT_TEXT}       ผู้โดยสารพูดจาไม่สุภาพ เสียมารยาท
+${DRIVER_REPORT_TEXT}               ผู้โดยสารพูดจาไม่สุภาพ เสียมารยาท
+${DRIVER_REPORT_SYSTEM_TEXT}        เว็บช้ามาก และมี Error ในตอนที่กำลังสร้าง Trip 
 
 ${TEST_URL}                 https://www.youtube.com/watch?v=e6cYYEQpwa0
 
 ${ADMIN_NOTE}               รบกวนส่งข้อมูลเพิ่มเติมเกี่ยวกับเหตุการณ์ที่เกิดขึ้นด้วยครับ สามารถส่งมาได้ทาง admin@example.com
+${ADMIN_NOTE_SUCCESS}       เรียนผู้ใช้งาน ตอนนี้ทางทีมงานได้ดำเนินการแก้ปัญหาเรียบร้อยแล้วครับ
+${ADMIN_NOTE_REJECTION}     เรียนผู้ใช้งาน โปรดอย่ารายงานมั่วหรือสแปมนะครับ ไม่งั้นคุณจะโดนจับ อิอิ
