@@ -45,9 +45,18 @@
                                             </h4>
                                             <span class="status-badge" :class="{
                                                 'status-confirmed': route.status === 'available',
-                                                'status-pending': route.status === 'full',
+                                                'status-pending': route.status === 'full' || route.status === 'in_transit',
+                                                'status-completed': route.status === 'completed',
                                             }">
-                                                {{ route.status === 'available' ? 'เปิดรับผู้โดยสาร' : 'เต็ม' }}
+                                                {{
+                                                    route.status === 'available'
+                                                        ? 'เปิดรับผู้โดยสาร'
+                                                        : route.status === 'completed'
+                                                            ? 'จบทริปแล้ว'
+                                                            : route.status === 'in_transit'
+                                                                ? 'กำลังเดินทาง'
+                                                                : 'เต็ม'
+                                                }}
                                             </span>
                                         </div>
                                         <p class="mt-1 text-sm text-gray-600">
@@ -180,20 +189,9 @@
                                                         <span class="ml-1">{{ getCategoryText(route.reportData.category) }}</span>
                                                     </div>
                                                 </div>
-                                                <div class="shrink-0">
-                                                    <button v-if="route.status === 'completed' && !route.hasReport"
-                                                        @click.stop="openDriverReportModal(route)"
-                                                        class="px-4 py-2 text-xs font-semibold text-white bg-red-600 rounded-md hover:bg-red-700">
-                                                        รายงานปัญหา
-                                                    </button>
-                                                    <button v-else-if="route.hasReport"
-                                                        @click.stop="openDriverReportStatusModal(route)"
-                                                        class="px-4 py-2 text-xs font-semibold text-blue-600 border border-blue-200 rounded-md hover:bg-blue-50">
-                                                        ดูสถานะรายงาน
-                                                    </button>
-                                                    <div v-else class="text-[11px] text-gray-500">
-                                                        รายงานได้หลังจบทริป
-                                                    </div>
+                                                <div class="shrink-0 text-[11px] text-gray-500">
+                                                    <span v-if="route.status !== 'completed'">รายงานได้หลังจบทริป</span>
+                                                    <span v-else>ใช้ปุ่มด้านล่างเพื่อรายงานหรือติดตามสถานะ</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -221,6 +219,19 @@
                                         @click.stop="openCompleteModal(route)"
                                         class="px-4 py-2 ml-2 text-sm text-white bg-green-600 rounded-md hover:bg-green-700">
                                         จบทริป
+                                    </button>
+
+                                    <button
+                                        v-if="route.status === 'completed' && !route.hasReport"
+                                        @click.stop="openDriverReportModal(route)"
+                                        class="px-4 py-2 ml-2 text-sm font-semibold text-white bg-red-600 rounded-md hover:bg-red-700">
+                                        รายงานปัญหา
+                                    </button>
+                                    <button
+                                        v-else-if="route.status === 'completed' && route.hasReport"
+                                        @click.stop="openDriverReportStatusModal(route)"
+                                        class="px-4 py-2 ml-2 text-sm font-semibold text-blue-600 border border-blue-200 rounded-md hover:bg-blue-50">
+                                        ดูสถานะรายงาน
                                     </button>
 
                                 </div>
@@ -406,18 +417,6 @@
                                         ลบรายการ
                                     </button>
 
-                                    <template v-else-if="trip.status === 'completed'">
-                                        <button v-if="!getRouteForTrip(trip)?.hasReport"
-                                            @click.stop="openDriverReportModal(getRouteForTrip(trip) || { id: trip.routeId, origin: trip.origin, destination: trip.destination, status: 'completed' })"
-                                            class="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-md hover:bg-red-700">
-                                            รายงานปัญหา
-                                        </button>
-                                        <button v-else
-                                            @click.stop="openDriverReportStatusModal(getRouteForTrip(trip))"
-                                            class="px-4 py-2 text-sm font-semibold text-blue-600 border border-blue-200 rounded-md hover:bg-blue-50">
-                                            ดูสถานะรายงาน
-                                        </button>
-                                    </template>
                                 </div>
                             </div>
                         </div>
@@ -486,16 +485,27 @@
                 <!-- Passenger Selection (when PASSENGER_ISSUE) -->
                 <div v-if="driverReportCategories.includes('PASSENGER_ISSUE')" class="mb-4">
                     <label class="block mb-2 text-sm font-semibold text-gray-700">ระบุผู้โดยสารที่เกี่ยวข้อง</label>
-                    <select v-model="driverReportPassengerId"
-                        class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
-                        <option value="">-- เลือกผู้โดยสาร --</option>
-                        <option v-if="!reportedRoute?.passengers?.length" value="" disabled>ไม่พบผู้โดยสารในทริปนี้</option>
-                        <option v-for="p in (reportedRoute?.passengers || [])" :key="p.id" :value="p.userId" :disabled="!p.userId">
-                            {{ p.name }} ({{ p.seats }} ที่นั่ง)
-                        </option>
-                    </select>
+                    <div v-if="reportedRoute?.passengers?.length" class="max-h-44 overflow-y-auto border border-gray-200 rounded-lg p-2 space-y-2">
+                        <label v-for="p in (reportedRoute?.passengers || [])" :key="p.id"
+                            class="flex items-center gap-2 px-2 py-1 rounded-md"
+                            :class="p.userId ? 'hover:bg-gray-50 cursor-pointer' : 'opacity-60 cursor-not-allowed'">
+                            <input
+                                type="checkbox"
+                                :value="p.userId"
+                                v-model="driverReportPassengerIds"
+                                :disabled="!p.userId"
+                                class="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
+                            />
+                            <span class="text-sm text-gray-700">
+                                {{ p.name }} ({{ p.seats }} ที่นั่ง)
+                            </span>
+                        </label>
+                    </div>
                     <p v-if="!reportedRoute?.passengers?.length" class="mt-2 text-xs text-red-500">
                         ไม่พบข้อมูลผู้โดยสารของทริปนี้
+                    </p>
+                    <p v-else class="mt-2 text-xs text-gray-500">
+                        เลือกได้มากกว่า 1 คน (เลือกแล้ว {{ driverReportPassengerIds.length }} คน)
                     </p>
                 </div>
 
@@ -751,7 +761,7 @@ const driverReportText = ref('')
 const driverReportImages = ref([])
 const driverReportVideos = ref([])
 const driverReportAudios = ref([])
-const driverReportPassengerId = ref('')
+const driverReportPassengerIds = ref([])
 const driverReportAttachedLink = ref('')
 const showDriverReportLinkInput = ref(false)
 const driverReportLinkError = ref('')
@@ -1004,11 +1014,6 @@ async function fetchMyRoutes() {
     }
 }
 
-function getRouteForTrip(trip) {
-    if (!trip?.routeId) return null
-    return myRoutes.value.find(r => r.id === trip.routeId) || null
-}
-
 const getTripCount = (status) => {
     if (status === 'all') return allTrips.value.length
     if (status === 'myRoutes') return myRoutes.value.length
@@ -1030,7 +1035,7 @@ function openDriverReportModal(route) {
     reportedRoute.value = route
     driverReportCategories.value = []
     driverReportText.value = ''
-    driverReportPassengerId.value = ''
+    driverReportPassengerIds.value = []
     driverReportAttachedLink.value = ''
     showDriverReportLinkInput.value = false
     driverReportLinkError.value = ''
@@ -1052,7 +1057,7 @@ function toggleDriverReportCategory(value) {
     }
 
     if (!driverReportCategories.value.includes('PASSENGER_ISSUE')) {
-        driverReportPassengerId.value = ''
+        driverReportPassengerIds.value = []
     }
 }
 
@@ -1163,7 +1168,8 @@ async function submitDriverReport() {
         toast.error('หัวข้อปัญหาไม่ถูกต้อง', 'กรุณาเลือกหัวข้อที่ระบบรองรับ')
         return
     }
-    if (driverReportCategories.value.includes('PASSENGER_ISSUE') && !driverReportPassengerId.value) {
+    const selectedPassengerIds = Array.from(new Set((driverReportPassengerIds.value || []).filter(Boolean)))
+    if (driverReportCategories.value.includes('PASSENGER_ISSUE') && !selectedPassengerIds.length) {
         toast.error('กรุณาระบุผู้โดยสาร', 'เลือกผู้โดยสารที่เกี่ยวข้องก่อนส่งรายงาน')
         return
     }
@@ -1183,35 +1189,48 @@ async function submitDriverReport() {
     driverReportLinkError.value = ''
 
     try {
-        const fd = new FormData()
-        fd.append('type', 'DRIVER')
         const primaryCategory = driverReportCategories.value[0]
         const selectedCategoryLabels = driverReportCategoryOptions
             .filter(opt => driverReportCategories.value.includes(opt.value))
             .map(opt => opt.label)
-        fd.append('category', primaryCategory)
+        const selectedPassengerNames = (reportedRoute.value?.passengers || [])
+            .filter(p => selectedPassengerIds.includes(p.userId))
+            .map(p => p.name)
 
         const detailText = driverReportText.value.trim()
         const categorySummary = `หัวข้อที่เลือก: ${selectedCategoryLabels.join(', ')}`
+        const passengerSummary = selectedPassengerNames.length
+            ? `ผู้โดยสารที่เกี่ยวข้อง: ${selectedPassengerNames.join(', ')}`
+            : ''
         const finalDescription = driverReportAttachedLink.value
-            ? `${categorySummary}\n${detailText}\n\nลิงก์: ${driverReportAttachedLink.value}`
-            : `${categorySummary}\n${detailText}`
-        fd.append('description', finalDescription)
-        fd.append('routeId', reportedRoute.value.id)
-        if (driverReportPassengerId.value) {
-            fd.append('targetUserId', driverReportPassengerId.value)
-        }
-        driverReportImages.value.forEach((it) => {
-            if (it.file) fd.append('images', it.file)
-        })
-        driverReportVideos.value.forEach((it) => {
-            if (it.file) fd.append('videos', it.file)
-        })
-        driverReportAudios.value.forEach((it) => {
-            if (it.file) fd.append('audios', it.file)
-        })
+            ? `${categorySummary}${passengerSummary ? `\n${passengerSummary}` : ''}\n${detailText}\n\nลิงก์: ${driverReportAttachedLink.value}`
+            : `${categorySummary}${passengerSummary ? `\n${passengerSummary}` : ''}\n${detailText}`
 
-        await $api('/reports', { method: 'POST', body: fd })
+        const targets = driverReportCategories.value.includes('PASSENGER_ISSUE')
+            ? selectedPassengerIds
+            : [null]
+
+        await Promise.all(targets.map(async (targetUserId) => {
+            const fd = new FormData()
+            fd.append('type', 'DRIVER')
+            fd.append('category', primaryCategory)
+            fd.append('description', finalDescription)
+            fd.append('routeId', reportedRoute.value.id)
+            if (targetUserId) {
+                fd.append('targetUserId', targetUserId)
+            }
+            driverReportImages.value.forEach((it) => {
+                if (it.file) fd.append('images', it.file)
+            })
+            driverReportVideos.value.forEach((it) => {
+                if (it.file) fd.append('videos', it.file)
+            })
+            driverReportAudios.value.forEach((it) => {
+                if (it.file) fd.append('audios', it.file)
+            })
+
+            await $api('/reports', { method: 'POST', body: fd })
+        }))
         toast.success('ขอบคุณที่แจ้งรายงาน', 'ทีมงานจะตรวจสอบในเร็วๆ นี้')
 
         // update route in place
