@@ -47,6 +47,15 @@ Parts of this changelog were drafted with the assistance of an AI language model
 	- `GET /api/reports/admin` for admin report management list.
 	- `PATCH /api/reports/admin/:id` for updating report status and admin notes.
 
+#### Test
+- UAT Testing
+	- Added Test Case for Driver report incidents about trip and system.
+ 	- Added Test Case for Admin Update reported incidents status following new user interface.
+- API Testing
+	- Added Test Case for POST /api/reports.
+	- Added Test Case for PATCH /api/reports/{id}.
+    - Added Test Case for GET /api/admin/reports.
+	- Created Bruno collection for API testing.
 ---
 
 ### Changed
