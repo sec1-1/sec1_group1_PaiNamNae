@@ -8,6 +8,72 @@
 
 เนื้อหาทั้งหมดที่ AI ช่วยสร้างขึ้น ได้รับการตรวจสอบ ยืนยันความถูกต้อง และแก้ไขโดยผู้เขียนโปรเจกต์ เพื่อให้แน่ใจว่าถูกต้องและครบถ้วน
 
+
+### Branch Responsibility
+ณัฐธเนศ กำเนิดกาลึม รหัส : 663380011-8 Github username : natthaneto
+    - sprint 1
+        - Documentation
+    - sprint 2
+        - test/uat-report-success-nk
+    - sprint 3
+        - sprint3/natthanet/test-uat
+        - sprint3/veerapat-and-natthanet/merge-uat-test
+ดวงฤทัย อัปกาญจน์ รหัส : 663380014-2 Github username : Ginny421
+    - sprint 1
+        - feat/review
+    - sprint 2
+        - sprint2/notification
+    - sprint 3
+        - Sprint3/Duangruethai/usermanual
+วีรภัทร วิเศษสมบัติ รหัส : 663380025-7 Github username : V33rapat
+    - sprint 1
+        - test/uat-automation
+    - sprint 2
+        - test/uat-report-fail-vrp
+        - pr-test-success-only
+    - sprint 3
+        - sprint3/veerapat/test-uat
+        - sprint3/veerapat-and-natthanet/merge-uat-test
+
+การติมา คำภีร์ รหัส : 663380199-4 Github username : KarntimaK
+    - sprint 1
+        - feat/reviewfront
+        - merge-blacklist-and-review
+    - sprint 2
+        - ไม่มี เพราะแก้ไขใน Main
+    - sprint 3
+        - sprint3/karntima/passenger-report-update
+
+นายธิติวุฒิ ศรีอมรรัตน์ รหัส : 663380213-6 Github username : Thitiwut245
+    - sprint 1
+        - feat/reviewfront
+        - feat/report-blacklistfront
+        - merge-blacklist-and-review
+    - sprint 2
+        - usermanual
+        - Sprint2/UserManual
+        - Sprint2/AdminPage 
+    - sprint 3
+        - sprint3/thitiwut/admin-update-user-incident
+
+นายพศวีร์ ผองแก้ว รหัส : 663380219-4 Github username : sonpasavee975
+    - sprint 1
+        - feat/report-blacklist
+    - sprint 2
+        - sprint2/report-endpoints-API
+    - sprint 3
+        - sprint3/driver-report-system
+
+นายศรัณยพงศ์ สานุศิษย์ รหัส : 663380237-2 Github username : saranyapong-sanusit
+    - sprint 1
+        - test/api-automation
+    - sprint 2
+        - test/api-report
+        - test/api-test-report
+    - sprint 3
+        - sprint3/saranyapong/api-test
+
+
 # Pai Nam Nae - A Safe Ride Sharing App
 
 <!-- A safe ride-sharing application with a **Nuxt.js** frontend and **Express.js** backend, powered by **Prisma** ORM and **PostgreSQL**. -->
@@ -274,6 +340,4 @@ For questions or feedback, reach out to:
 **Email:**
 - [jonathandoillon2002@gmail.com](mailto:jonathandoillon2002@gmail.com)
 - [seth.s@kkumail.com](mailto:seth.s@kkumail.com)
-=======
-# sec1_group1_PaiNamNae
->>>>>>> 4d872b6080dc6f3daa2ec5a1914df20ac3acc005
+
