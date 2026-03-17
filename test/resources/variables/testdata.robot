@@ -10,11 +10,15 @@ ${PDF_PATH}                 ${EXECDIR}${/}img${/}Thisispdffile.pdf
 ${INVALID_VIDEO}            ${EXECDIR}${/}img${/}5275550-uhd_4096_2160_25fps.mp4
 ${SOUND_PATH}               ${EXECDIR}${/}test/resources/testdata/PeopleTalking.mp3
 
-${REVIEW_TEXT}              ขับเร็วทันใจ คนขับสุภาพ รถสะอาด ตรงเวลา
-${REPORT_TEXT}              ขับรถแย่มาก ฝ่าไปแดง ขับเร็ว ขับส่ายไปส่ายมา
-
 ${DRIVER_REPORT_TEXT}               ผู้โดยสารพูดจาไม่สุภาพ เสียมารยาท
 ${DRIVER_REPORT_SYSTEM_TEXT}        เว็บช้ามาก และมี Error ในตอนที่กำลังสร้าง Trip 
+${SYSTEM_REPORT_PNG}        ${EXECDIR}${/}img${/}error404.png
+${SYSTEM_REPORT_MOV}        ${EXECDIR}${/}img${/}error404.mov
+${SYSTEM_REPORT_PDF}        ${EXECDIR}${/}img${/}Thisispdffile.pdf
+
+${REVIEW_TEXT}              ขับเร็วทันใจ คนขับสุภาพ รถสะอาด ตรงเวลา
+${REPORT_TEXT}              ขับรถแย่มาก ฝ่าไปแดง ขับเร็ว ขับส่ายไปส่ายมา
+${SYSTEM_REPORT_TEXT}       เข้าไปหน้าการแจ้งเตือนแล้วเกิด error 404 ช่วยแก้ให้หน่อย
 
 ${TEST_URL}                 https://www.youtube.com/watch?v=e6cYYEQpwa0
 

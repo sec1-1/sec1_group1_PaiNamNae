@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.4.1 (Python 3.14.2 on darwin)" generated="2026-03-16T21:50:35.417035" rpa="false" schemaversion="5">
+<suite id="s1" name="UAT-ReportSuccess-01" source="/Users/fandy/KKU 3T2/softend/PaiNamNae/sec1_group1_PaiNamNae/test/sprint2/uat/UAT-ReportSuccess-01.robot">
+<test id="s1-t1" name="UAT-001 : Login and Go to Report (Super Slow)" line="7">
+<kw name="Set Selenium Speed" owner="SeleniumLibrary">
+<arg>0.2 seconds</arg>
+<doc>Sets the delay that is waited after each Selenium command.</doc>
+<status status="PASS" start="2026-03-16T21:50:35.583293" elapsed="0.000264"/>
+</kw>
+<kw name="Open Browser To Website">
+<msg time="2026-03-16T21:50:35.583791" level="FAIL">User keyword cannot be empty.</msg>
+<status status="FAIL" start="2026-03-16T21:50:35.583752" elapsed="0.000084">User keyword cannot be empty.</status>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>เดินทางร่วมกัน</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.583959" elapsed="0.000025"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>xpath=//a[@href='/login']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.584079" elapsed="0.000019"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//input[@placeholder='กรอกชื่อผู้ใช้หรืออีเมล']</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.584176" elapsed="0.000017"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>xpath=//input[@placeholder='กรอกชื่อผู้ใช้หรืออีเมล']</arg>
+<arg>${PASSENGER_USER_SUCCESS}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.584272" elapsed="0.000016"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>xpath=//input[@type='password']</arg>
+<arg>${PASSENGER_PASS_SUCCESS}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.584361" elapsed="0.000018"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<arg>xpath=//button[@type='submit']</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.584449" elapsed="0.000015"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//span[contains(., '${PASSENGER_SURNAME_SUCCESS}')]</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.584530" elapsed="0.000015"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\n[SUCCESS] Login Completed as ${PASSENGER_USER_SUCCESS}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.584640" elapsed="0.000019"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//a[@href='/myTrip']</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.584726" elapsed="0.000016"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>xpath=//a[@href='/myTrip']</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.584809" elapsed="0.000016"/>
+</kw>
+<kw name="Wait Until Location Contains" owner="SeleniumLibrary">
+<arg>/myTrip</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the current URL contains ``expected``.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.584892" elapsed="0.000015"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//button[contains(., 'ทั้งหมด')]</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.584983" elapsed="0.000014"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>xpath=//button[contains(., 'ทั้งหมด')]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.585064" elapsed="0.000016"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=(//button[contains(@class, 'bg-red-600') and contains(., 'รายงาน')])[1]</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.585144" elapsed="0.000015"/>
+</kw>
+<kw name="Scroll Element Into View" owner="SeleniumLibrary">
+<arg>xpath=(//button[contains(@class, 'bg-red-600') and contains(., 'รายงาน')])[1]</arg>
+<doc>Scrolls the element identified by ``locator`` into view.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.585225" elapsed="0.000015"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<arg>document.evaluate("(//button[contains(@class, 'bg-red-600') and contains(., 'รายงาน')])[1]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click();</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.585324" elapsed="0.000014"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>หัวข้อปัญหา</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.585412" elapsed="0.000015"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//select</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.585494" elapsed="0.000014"/>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<arg>document.querySelector('select').value = 'SAFETY_ISSUE'; document.querySelector('select').dispatchEvent(new Event('change'));</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.585572" elapsed="0.000015"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>xpath=//textarea</arg>
+<arg>${REPORT_TEXT_SUCCESS}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.585650" elapsed="0.000014"/>
+</kw>
+<doc>ทดสอบการส่งรายงานสำเร็จ โดยใช้ข้อมูลของคุณณัฐธเนศ (bambam)</doc>
+<status status="FAIL" start="2026-03-16T21:50:35.581659" elapsed="0.004141">User keyword cannot be empty.</status>
+</test>
+<test id="s1-t2" name="&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD" line="58">
+<kw name="Choose File" owner="SeleniumLibrary">
+<msg time="2026-03-16T21:50:35.586635" level="FAIL">Variable '${IMAGE01_PATH}' not found.</msg>
+<arg>xpath=//input[@type='file']</arg>
+<arg>${IMAGE01_PATH}</arg>
+<doc>Inputs the ``file_path`` into the file input field ``locator``.</doc>
+<status status="FAIL" start="2026-03-16T21:50:35.586161" elapsed="0.000508">Variable '${IMAGE01_PATH}' not found.</status>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.586765" elapsed="0.000020"/>
+</kw>
+<kw name="Choose File" owner="SeleniumLibrary">
+<arg>xpath=//input[@type='file']</arg>
+<arg>${IMAGE02_PATH}</arg>
+<doc>Inputs the ``file_path`` into the file input field ``locator``.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.586881" elapsed="0.000043"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.587047" elapsed="0.000023"/>
+</kw>
+<kw name="Choose File" owner="SeleniumLibrary">
+<arg>xpath=//input[@type='file']</arg>
+<arg>${VIDEO01_PATH}</arg>
+<doc>Inputs the ``file_path`` into the file input field ``locator``.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.587159" elapsed="0.000033"/>
+</kw>
+<status status="FAIL" start="2026-03-16T21:50:35.585966" elapsed="0.001359">Variable '${IMAGE01_PATH}' not found.</status>
+</test>
+<test id="s1-t3" name="=======" line="64">
+<kw name="Choose File" owner="SeleniumLibrary">
+<msg time="2026-03-16T21:50:35.588540" level="FAIL">Variable '${REPORT_IMAGE_SUCCESS_PATH}' not found.</msg>
+<arg>xpath=//input[@type='file']</arg>
+<arg>${REPORT_IMAGE_SUCCESS_PATH}</arg>
+<doc>Inputs the ``file_path`` into the file input field ``locator``.</doc>
+<status status="FAIL" start="2026-03-16T21:50:35.587981" elapsed="0.000599">Variable '${REPORT_IMAGE_SUCCESS_PATH}' not found.</status>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.588732" elapsed="0.000032"/>
+</kw>
+<kw name="Choose File" owner="SeleniumLibrary">
+<arg>xpath=//input[@type='file']</arg>
+<arg>${REPORT_IMAGE_SUCCESS_PATH}</arg>
+<doc>Inputs the ``file_path`` into the file input field ``locator``.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.588869" elapsed="0.000020"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.588972" elapsed="0.000017"/>
+</kw>
+<kw name="Choose File" owner="SeleniumLibrary">
+<arg>xpath=//input[@type='file']</arg>
+<arg>${REPORT_VIDEO_SUCCESS_PATH}</arg>
+<doc>Inputs the ``file_path`` into the file input field ``locator``.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:35.589062" elapsed="0.000015"/>
+</kw>
+<status status="FAIL" start="2026-03-16T21:50:35.587478" elapsed="0.001715">Variable '${REPORT_IMAGE_SUCCESS_PATH}' not found.</status>
+</test>
+<test id="s1-t4" name="&gt;&gt;&gt;&gt;&gt;&gt;&gt; test/uat-report-success-nk" line="70">
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-03-16T21:50:40.590781" level="INFO">Slept 5 seconds.</msg>
+<arg>5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-03-16T21:50:35.589543" elapsed="5.001538"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<msg time="2026-03-16T21:50:40.593622" level="INFO">Cannot capture screenshot because no browser is open.</msg>
+<msg time="2026-03-16T21:50:40.593825" level="FAIL">No browser is open.</msg>
+<arg>xpath=//button[contains(., 'ส่งรายงานความปลอดภัย')]</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="FAIL" start="2026-03-16T21:50:40.591539" elapsed="0.010207">No browser is open.</status>
+</kw>
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<arg>document.evaluate("//button[contains(., 'ส่งรายงานความปลอดภัย')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click();</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:40.602177" elapsed="0.000057"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\n[SUCCESS] Report Sent! Holding screen for 20 seconds...</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:40.602429" elapsed="0.000039"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>20s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-03-16T21:50:40.602710" elapsed="0.000065"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2026-03-16T21:50:40.603285" elapsed="0.000201"/>
+</kw>
+<status status="FAIL" start="2026-03-16T21:50:35.589339" elapsed="5.014278">No browser is open.</status>
+</test>
+<status status="FAIL" start="2026-03-16T21:50:35.418411" elapsed="5.185947"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="4" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="UAT-ReportSuccess-01" id="s1" pass="0" fail="4" skip="0">UAT-ReportSuccess-01</stat>
+</suite>
+</statistics>
+<errors>
+<msg time="2026-03-16T21:50:35.581107" level="ERROR">Error in file '/Users/fandy/KKU 3T2/softend/PaiNamNae/sec1_group1_PaiNamNae/test/sprint2/uat/UAT-ReportSuccess-01.robot' on line 4: Resource file '../../resources/keywords/auth_keywords.robot' does not exist.</msg>
+</errors>
+</robot>
