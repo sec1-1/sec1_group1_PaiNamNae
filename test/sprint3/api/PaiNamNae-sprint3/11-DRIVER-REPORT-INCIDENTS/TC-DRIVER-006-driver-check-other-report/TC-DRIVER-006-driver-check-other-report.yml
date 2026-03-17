@@ -1,0 +1,37 @@
+info:
+  name: TC-DRIVER-006-driver-check-other-report
+  type: http
+  seq: 6
+
+http:
+  method: GET
+  url: "{{base_url}}reports/me"
+  auth:
+    type: bearer
+    token: "{{driver_01_token}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        const body = res.getBody();
+        const report = typeof body === "string" ? JSON.parse(body) : body;
+
+        const report_driver01_id = bru.getEnvVar("report_driver01_id");
+        const report_driver02_id = bru.getEnvVar("report_driver02_id");
+
+        test("ต้องมี report ของตัวเอง", function () {
+          const ids = report.data.map(r => r.id);
+          expect(ids).to.include(report_driver01_id);
+        });
+
+        test("ต้องไม่เห็น report ของ user อื่น", function () {
+          const ids = report.data.map(r => r.id);
+          expect(ids).to.not.include(report_driver02_id);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,7 @@
+info:
+  name: TC-DRIVER-006-driver-check-other-report
+  type: folder
+  seq: 6
+
+request:
+  auth: inherit

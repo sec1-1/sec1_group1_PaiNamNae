@@ -1,0 +1,29 @@
+info:
+  name: TC-ADMIN-UPDATE-INCI-007-driver-token-on-admin
+  type: http
+  seq: 7
+
+http:
+  method: GET
+  url: "{{base_url}}reports/admin"
+  auth:
+    type: bearer
+    token: "{{admin_token}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Status code ต้องเป็น 200", () => {
+          expect(res.getStatus()).to.equal(200);
+        });
+
+        test("Response ต้องเป็น array", () => {
+          expect(res.getBody().data).to.be.an('array');
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

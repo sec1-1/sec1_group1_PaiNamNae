@@ -1,0 +1,31 @@
+info:
+  name: TC-ADMIN-UPDATE-INCI-004-admin-update-report-status-fake-id
+  type: http
+  seq: 4
+
+http:
+  method: PATCH
+  url: "{{base_url}}reports/admin/001"
+  body:
+    type: json
+    data: |-
+      {
+        "status": "APPROVED"
+      }
+  auth:
+    type: bearer
+    token: "{{admin_token}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Status code ต้องเป็น 404", () => {
+          expect(res.getStatus()).to.equal(404);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

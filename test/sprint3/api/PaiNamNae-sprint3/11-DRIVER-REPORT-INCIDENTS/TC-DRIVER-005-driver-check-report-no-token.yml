@@ -1,0 +1,22 @@
+info:
+  name: TC-DRIVER-005-driver-check-report-no-token
+  type: http
+  seq: 5
+
+http:
+  method: GET
+  url: "{{base_url}}reports/me"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Status code ต้องเป็น 401", () => {
+          expect(res.getStatus()).to.equal(401);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

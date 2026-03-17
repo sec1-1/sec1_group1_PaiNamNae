@@ -1,0 +1,32 @@
+info:
+  name: TC-DRIVER-007-driver-report-no-description-field
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: "{{base_url}}reports"
+  body:
+    type: multipart-form
+    data:
+      - name: type
+        type: text
+        value: DRIVER
+      - name: category
+        type: text
+        value: OTHER
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("ต้องเป็น 400 เมื่อไม่ส่ง field description ", () => {
+          expect(res.getStatus()).to.equal(400);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

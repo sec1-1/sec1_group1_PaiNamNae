@@ -1,0 +1,38 @@
+info:
+  name: TC-ADMIN-UPDATE-INCI-003-admin-update-report-status
+  type: http
+  seq: 3
+
+http:
+  method: PATCH
+  url: "{{base_url}}reports/admin/{{report_id}}"
+  body:
+    type: json
+    data: |-
+      {
+        "status": "APPROVED"
+      }
+  auth:
+    type: bearer
+    token: "{{admin_token}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        const body = res.getBody();
+        const report = typeof body === "string" ? JSON.parse(body) : body;
+
+        test("Status code ต้องเป็น 200", () => {
+          expect(res.getStatus()).to.equal(200);
+        });
+
+        test("Status ต้องถูก update เป็น Approve", () => {
+          expect(report.data.status).to.equal("APPROVED");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

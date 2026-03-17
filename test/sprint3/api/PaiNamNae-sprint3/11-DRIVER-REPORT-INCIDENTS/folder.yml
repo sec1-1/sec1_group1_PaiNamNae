@@ -1,0 +1,9 @@
+info:
+  name: 11-DRIVER-REPORT-INCIDENTS
+  type: folder
+  seq: 3
+
+request:
+  auth:
+    type: bearer
+    token: "{{driver_01_token}}"
