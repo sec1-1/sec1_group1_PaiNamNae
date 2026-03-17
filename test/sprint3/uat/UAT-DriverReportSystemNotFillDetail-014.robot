@@ -4,10 +4,10 @@ Resource          ../../resources/auth_keywords.robot
 
 *** Variables ***     
 # ตำแหน่งต้องอยู่ : sec1_group1_PaiNamNae
-# คำสั่งที่ใช้รัน : robot test/sprint3/uat/UAT-DriverReportSystemUploadInvalidFile-011.robot
+# คำสั่งที่ใช้รัน : robot test/sprint3/uat/UAT-DriverReportSystemNotFillDetail-014.robot
 
 *** Test Cases ***
-UAT-011 : DriverReportSystemUploadInvalidFile (Direct Input Mode)
+UAT-014 : DriverReportSystemNotFillDetail (Direct Input Mode)
     [Documentation]    ทดสอบการส่งรายงานระบบ
     Set Selenium Speed    0.2 seconds
 
@@ -24,23 +24,15 @@ UAT-011 : DriverReportSystemUploadInvalidFile (Direct Input Mode)
     Wait Until Element Is Visible    xpath=//button[text()='ปัญหาแอปพลิเคชัน']    timeout=10s
     Click Button                     xpath=//button[text()='ปัญหาแอปพลิเคชัน']
 
-    # --- Step 06: ใส่รายละเอียด ---
-    System Report Text
+    # --- Step 06: อัพโหลดไฟล์ (2 รูป + 1 วิดีโอ) ---
+    Upload 2 Image and 1 Video Report
 
-    # --- Step 07: อัพโหลดไฟล์ pdf ---
-    Upload PDF
+    # --- Step 07: กดส่งรายงาน ---
+    Wait Until Element Is Visible    xpath=//button[text()='ส่งรายงานระบบ']    timeout=15s
+    Element Should Be Disabled       xpath=//button[text()='ส่งรายงานระบบ']
 
-    # --- Step 08: กดส่งรายงาน ---
-    Wait Until Element Is Enabled    xpath=//button[text()='ส่งรายงานระบบ']    timeout=30s
-    Click Button                     xpath=//button[text()='ส่งรายงานระบบ']
-    Wait Until Page Contains         ส่งรายงานสำเร็จ    timeout=30s
-
-    # --- Step 09: ตรวจสอบผลลัพธ์ ---
-    Go To Report History Page
-    View Latest Report Details
-
-    # --- จบการทำงาน: ค้างหน้าจอไว้ตรวจสอบรายละเอียด ---
-    Log To Console    \n[SUCCESS] Report sent! Holding screen for 10 seconds...
+    # --- จบการทำงาน ---
+    Log To Console    \n[PASS] Submit button is correctly disabled when no topic is selected.
     Sleep    10s
 
     [Teardown]    Close Browser

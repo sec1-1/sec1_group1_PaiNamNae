@@ -1,74 +1,48 @@
 *** Settings ***
 Library           SeleniumLibrary
-Resource          ../../test/resources/auth_keywords.robot
-
+Resource          ../../resources/auth_keywords.robot
 
 *** Variables ***     
-# --- ข้อมูลรายงาน ---
-${REPORT_DETAIL}         พบปัญหาหน้าจอค้างขณะโหลดข้อมูลทริป และปุ่มกดยกเลิกไม่ทำงานในบางครั้ง
-
-# --- Path ไฟล์ (ตรวจสอบให้แน่ใจว่าไฟล์อยู่ที่นี่จริง) ---
-${FILE_PNG}              /Users/fandy/KKU 3T2/softend/PaiNamNae/sec1_group1_PaiNamNae/image/error404.png
-${FILE_MOV}              /Users/fandy/KKU 3T2/softend/PaiNamNae/sec1_group1_PaiNamNae/image/error404.mov
+# ตำแหน่งต้องอยู่ : sec1_group1_PaiNamNae
+# คำสั่งที่ใช้รัน : robot test/sprint3/uat/UAT-DriverReportSystem-009.robot
 
 *** Test Cases ***
 UAT-009 : DriverReportSystem (Direct Input Mode)
-    [Documentation]    ทดสอบการส่งรายงานระบบโดยตรง
+    [Documentation]    ทดสอบการส่งรายงานระบบ
     Set Selenium Speed    0.2 seconds
 
     # --- Step 01: เปิดเบราว์เซอร์ ---
     Open Browser To Website
 
     # --- Step 02-03: Login ---
-    Wait Until Element Is Visible    xpath=//a[@href='/login']    timeout=15s
-    Click Element                    xpath=//a[@href='/login']
-    
-    Wait Until Element Is Visible    xpath=//input[@placeholder='กรอกชื่อผู้ใช้หรืออีเมล']    timeout=15s
-    
-    Clear Element Text    xpath=//input[@placeholder='กรอกชื่อผู้ใช้หรืออีเมล']
-    Press Keys            xpath=//input[@placeholder='กรอกชื่อผู้ใช้หรืออีเมล']    ${DRIVER_USER}
-    
-    Clear Element Text    xpath=//input[@type='password']
-    Press Keys            xpath=//input[@type='password']                         ${DRIVER_PASS}
-    
-    Sleep    1s
-    Click Button          xpath=//button[@type='submit']
+    Driver Login
 
     # --- Step 04: ตรวจสอบการเข้าสู่ระบบและไปหน้ารายงาน ---
-    Wait Until Page Contains    หน้าหลัก    timeout=15s
-    Log To Console    \n[INFO] Login Successful!
-    
-    # ไปหน้า Report โดยตรง
-    Go To    ${URL}report-system
+    Go To Report System
 
     # --- Step 05: เลือกหัวข้อ ---
-    Wait Until Element Is Visible    xpath=//select    timeout=10s
-    # ตรวจสอบว่าคำใน Label ตรงกับใน Dropdown จริงๆ (รวมเว้นวรรค)
-    Select From List By Label        xpath=//select    หน้าเว็บค้าง / กดอะไรไม่ได้
+    Wait Until Element Is Visible    xpath=//button[text()='ปัญหาแอปพลิเคชัน']    timeout=10s
+    Click Button                     xpath=//button[text()='ปัญหาแอปพลิเคชัน']
 
     # --- Step 06: ใส่รายละเอียด ---
-    Input Text    xpath=//textarea    ${REPORT_DETAIL}
+    System Report Text
 
-    # --- Step 07: อัพโหลดไฟล์ (3 รูป + 1 วิดีโอ) ---
-    FOR    ${i}    IN RANGE    3
-        Choose File    xpath=//input[@type='file']    ${FILE_PNG}
-        Sleep    1s
-    END
-    
-    Choose File    xpath=//input[@type='file']    ${FILE_MOV}
-    
-    # รออัปโหลดวิดีโอ (บน Server จริงอาจใช้เวลานาน)
-    Sleep    15s
+    # --- Step 07: อัพโหลดไฟล์ (2 รูป + 1 วิดีโอ) ---
+    Upload 2 Image and 1 Video Report
 
     # --- Step 08: กดส่งรายงาน ---
-    # ใช้ JS Click เพื่อแก้ปัญหาปุ่มโดนบังหรือยังเป็นสีเทา (Disabled)
-    Execute Javascript    document.evaluate("//button[contains(., 'ส่งรายงาน')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click();
+    Wait Until Element Is Enabled    xpath=//button[text()='ส่งรายงานระบบ']    timeout=30s
+    Click Button                     xpath=//button[text()='ส่งรายงานระบบ']
+    Wait Until Page Contains         ส่งรายงานสำเร็จ    timeout=30s
 
     # --- Step 09: ตรวจสอบผลลัพธ์ ---
-    Wait Until Page Contains    ส่งรายงานสำเร็จ    timeout=20s
-    Capture Page Screenshot     filename=direct_report_success.png
+    Go To Report History Page
+    View Latest Report Details
 
-    Sleep    20s
+    # --- จบการทำงาน: ค้างหน้าจอไว้ตรวจสอบรายละเอียด ---
+    Log To Console    \n[SUCCESS] Report sent! Holding screen for 10 seconds...
+    Sleep    10s
+
     [Teardown]    Close Browser
 
 *** Keywords ***

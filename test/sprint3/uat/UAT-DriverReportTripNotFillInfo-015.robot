@@ -4,10 +4,10 @@ Resource          ../../resources/auth_keywords.robot
 
 *** Variables ***     
 # ตำแหน่งต้องอยู่ : sec1_group1_PaiNamNae
-# คำสั่งที่ใช้รัน : robot test/sprint3/uat/UAT-DriverReportSystemNotSelectTopic-013.robot
+# คำสั่งที่ใช้รัน : robot test/sprint3/uat/UAT-DriverReportTripNotFillInfo-015.robot
 
 *** Test Cases ***
-UAT-013 : DriverReportSystemNotSelectTopic (Direct Input Mode)
+UAT-015 : DriverReportTripNotFillInfo (Direct Input Mode)
     [Documentation]    ทดสอบการส่งรายงานระบบ
     Set Selenium Speed    0.2 seconds
 
@@ -20,13 +20,7 @@ UAT-013 : DriverReportSystemNotSelectTopic (Direct Input Mode)
     # --- Step 04: ตรวจสอบการเข้าสู่ระบบและไปหน้ารายงาน ---
     Go To Report System
 
-    # --- Step 05: ใส่รายละเอียด ---
-    System Report Text
-
-    # --- Step 06: อัพโหลดไฟล์ (2 รูป + 1 วิดีโอ) ---
-    Upload 2 Image and 1 Video Report
-
-    # --- Step 07: กดส่งรายงาน ---
+    # --- Step 05: กดส่งรายงาน ---
     Wait Until Element Is Visible    xpath=//button[text()='ส่งรายงานระบบ']    timeout=15s
     Element Should Be Disabled       xpath=//button[text()='ส่งรายงานระบบ']
 

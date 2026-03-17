@@ -1,39 +1,51 @@
 *** Settings ***
 Library           SeleniumLibrary
-# ตรวจสอบว่า Path ถูกต้องตามโครงสร้างโปรเจกต์ของคุณ
-Resource          ../../resources/variables/credentials.robot
+Resource          ../../resources/auth_keywords.robot
+
+*** Variables ***     
+# ตำแหน่งต้องอยู่ : sec1_group1_PaiNamNae
+# คำสั่งที่ใช้รัน : robot test/sprint3/uat/UAT-DriverReportSystemUploadFileToLarge-010.robot
 
 *** Test Cases ***
-UAT-010 : DriverReportSystemUploadFileToLarge
-    [Documentation]    ทดสอบการส่งรายงานสำเร็จ
-
-    # --- ตั้งค่าความเร็ว ---
+UAT-010 : DriverReportSystemUploadFileToLarge (Direct Input Mode)
+    [Documentation]    ทดสอบการส่งรายงานระบบ
     Set Selenium Speed    0.2 seconds
 
-    # --- Step 01: เปิดหน้าเว็บ ---
+    # --- Step 01: เปิดเบราว์เซอร์ ---
     Open Browser To Website
 
-    # --- Step 02: Driver ทำการ Login ---
-    Click Element                   xpath=//a[@href='/login']
-    Wait Until Element Is Visible   xpath=//input[@placeholder='กรอกชื่อผู้ใช้หรืออีเมล']    timeout=15s
-    Input Text      xpath=//input[@placeholder='กรอกชื่อผู้ใช้หรืออีเมล']    ${DRIVER_USER}
-    Input Text      xpath=//input[@type='password']                         ${DRIVER_PASS} 
+    # --- Step 02-03: Login ---
+    Driver Login
 
-    # --- Step 03: กดปุ่ม Login ---
-    Click Button    xpath=//button[@type='submit']
+    # --- Step 04: ตรวจสอบการเข้าสู่ระบบและไปหน้ารายงาน ---
+    Go To Report System
 
-    # --- Step 04: ไปที่การรายงานระบบ ---
     # --- Step 05: เลือกหัวข้อ ---
-    # --- Step 06: ใส่รายละเอียด ---
-    # --- Step 07: อัพโหลดรูปภาพ 4 ภาพ ---
-    # --- Step 08: กดรายงาน ---
-    # --- Step 09: ไปที่หน้าผลการรายงาน ---
+    Wait Until Element Is Visible    xpath=//button[text()='ปัญหาแอปพลิเคชัน']    timeout=10s
+    Click Button                     xpath=//button[text()='ปัญหาแอปพลิเคชัน']
 
-    # อยู่ต่ออีก 20 วินาทีก่อนจบ (Teardown จะทำงานหลังจากนี้)
-    Sleep    20s
+    # --- Step 06: ใส่รายละเอียด ---
+    System Report Text
+
+    # --- Step 07: อัพโหลดรูปภาพขนาดไฟล์เกิน 50 MB ---
+    Upload Invalid Video
+
+    # --- Step 08: กดส่งรายงาน ---
+    Wait Until Element Is Enabled    xpath=//button[text()='ส่งรายงานระบบ']    timeout=30s
+    Click Button                     xpath=//button[text()='ส่งรายงานระบบ']
+    Wait Until Page Contains         ส่งรายงานสำเร็จ    timeout=30s
+
+     # --- Step 09: ตรวจสอบผลลัพธ์ ---
+    Go To Report History Page
+    View Latest Report Details
+
+    # --- จบการทำงาน: ค้างหน้าจอไว้ตรวจสอบรายละเอียด ---
+    Log To Console    \n[SUCCESS] Report sent! Holding screen for 10 seconds...
+    Sleep    10s
+
     [Teardown]    Close Browser
-    
+
 *** Keywords ***
 Open Browser To Website
-    Open Browser               ${URL}    edge
+    Open Browser    ${URL}    edge
     Maximize Browser Window

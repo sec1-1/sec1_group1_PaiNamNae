@@ -4,10 +4,10 @@ Resource          ../../resources/auth_keywords.robot
 
 *** Variables ***     
 # ตำแหน่งต้องอยู่ : sec1_group1_PaiNamNae
-# คำสั่งที่ใช้รัน : robot test/sprint3/uat/UAT-DriverReportSystemUploadInvalidFile-011.robot
+# คำสั่งที่ใช้รัน : robot test/sprint3/uat/UAT-DriverReportSystemUpload-4-File-012.robot
 
 *** Test Cases ***
-UAT-011 : DriverReportSystemUploadInvalidFile (Direct Input Mode)
+UAT-012 : DriverReportSystemUpload 4 File (Direct Input Mode)
     [Documentation]    ทดสอบการส่งรายงานระบบ
     Set Selenium Speed    0.2 seconds
 
@@ -27,8 +27,8 @@ UAT-011 : DriverReportSystemUploadInvalidFile (Direct Input Mode)
     # --- Step 06: ใส่รายละเอียด ---
     System Report Text
 
-    # --- Step 07: อัพโหลดไฟล์ pdf ---
-    Upload PDF
+    # --- Step 07: อัพโหลดรูปภาพ 4 ไฟล์ ---
+    Upload 4 Images
 
     # --- Step 08: กดส่งรายงาน ---
     Wait Until Element Is Enabled    xpath=//button[text()='ส่งรายงานระบบ']    timeout=30s
