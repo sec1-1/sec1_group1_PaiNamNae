@@ -1,0 +1,28 @@
+info:
+  name: TC-ADMIN-UPDATE-INCI-005-no-token-admin-update-report-status
+  type: http
+  seq: 5
+
+http:
+  method: PATCH
+  url: "{{base_url}}reports/admin/001"
+  body:
+    type: json
+    data: |-
+      {
+        "status": "APPROVED"
+      }
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Status code ต้องเป็น 401", () => {
+          expect(res.getStatus()).to.equal(401);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

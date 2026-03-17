@@ -1,0 +1,31 @@
+info:
+  name: TC-ADMIN-UPDATE-INCI-006-admin-update-report-fake-status
+  type: http
+  seq: 6
+
+http:
+  method: PATCH
+  url: "{{base_url}}reports/admin/001"
+  body:
+    type: json
+    data: |-
+      {
+        "status": "abcd1234"
+      }
+  auth:
+    type: bearer
+    token: "{{admin_token}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Status code ต้องเป็น 400", () => {
+          expect(res.getStatus()).to.equal(400);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
