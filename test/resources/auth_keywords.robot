@@ -158,6 +158,12 @@ Upload 4 Images
     Choose File         xpath=//input[@type="file"]    ${IMAGE03_PATH}
     Choose File         xpath=//input[@type="file"]    ${IMAGE04_PATH}
 
+Upload 2 Image 1 Video and 1 Sound
+    Choose File         xpath=//input[@type="file"]    ${IMAGE01_PATH}
+    Choose File         xpath=//input[@type="file"]    ${IMAGE02_PATH}
+    Choose File         xpath=//input[@type="file"]    ${IMAGE03_PATH}
+    Choose File         xpath=//input[@type="file"]    ${SOUND_PATH}
+
 # -----------------------------
 # กลุ่ม: Upload File
 # -----------------------------
