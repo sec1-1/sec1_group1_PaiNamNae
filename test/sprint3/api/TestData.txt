@@ -1,0 +1,133 @@
+Create This Environment Variables First
+Environment Variables [name:value]
+base_url: your backend domain name (example: http://localhost:3000/api/)
+report_id: from driver create report
+
+##################################################
+06 As an admin, I want to keep the users updated on their reported incidents.
+##################################################
+Relevant roles: Admin, Driver
+==================================================
+Test Case ID:   TC-ADMIN-UPDATE-INCI-001
+Description:    Admin สามารถดูรายการ report ทั้งหมดได้
+Token:          admin_token
+Request:        GET {{base_url}}reports/admin
+Expected:       status=200 and response should be an array
+--------------------------------------------------
+Test Case ID:   TC-ADMIN-UPDATE-INCI-002
+Description:    ตรวจสอบว่า report มี field สำคัญ
+Token:          admin_token
+Request:        GET {{base_url}}reports/admin
+Expected:       response data should contain id, status and description
+--------------------------------------------------
+Test Case ID:   TC-ADMIN-UPDATE-INCI-003
+Description:    Admin update status report สำเร็จ
+Token:          admin_token
+Request:        PATCH /api/admin/reports/{{report_id}}
+                body: { 
+                        "status": "APPROVE"
+                      }
+Expected:       status=200 and status should update to "APPROVE"
+--------------------------------------------------
+Test Case ID:   TC-ADMIN-UPDATE-INCI-004
+Description:    Admin update status ด้วย report_id ที่ไม่มีในระบบ
+Token:          admin_token
+Request:        PATCH /api/reports/admin/001
+                body: { 
+                        "status": "APPROVE"
+                      }
+Expected:       status=404
+--------------------------------------------------
+Test Case ID:   TC-ADMIN-UPDATE-INCI-005
+Description:    update status โดยไม่มี admin token
+Token:          no auth
+Request:        PATCH /api/reports/admin/001
+                body: { 
+                        "status": "APPROVE"
+                      }
+Expected:       status=401
+--------------------------------------------------
+Test Case ID:   TC-ADMIN-UPDATE-INCI-006
+Description:    admin update status ด้วย status ที่ไม่มีในระบบ
+Token:          admin_token
+Request:        PATCH /api/reports/admin/001
+                body: { 
+                        "status": "abcd1234"
+                      }
+Expected:       status=400
+--------------------------------------------------
+Test Case ID:   TC-ADMIN-UPDATE-INCI-007
+Description:    update status ด้วย driver token
+Token:          driver_token
+Request:        PATCH /api/reports/admin/001
+                body: { 
+                        "status": "APPROVE"
+                      } 
+Expected:       status=403
+
+##################################################
+11 As a driver, I want to report incidents to the admin and get the update on the filed case.
+##################################################
+Test Case ID:   TC-DRIVER-REPORT-01
+Description:    Driver สร้าง report สำเร็จ
+Token:          driver_token
+Request:        POST /api/reports
+
+                body: { "type": DRIVER,
+                        "category": "OTHER",
+                        "description": "Accident at road" 
+                      }
+Expected:       status=201 and response data should contain id, status and description
+--------------------------------------------------
+Test Case ID:   TC-DRIVER-REPORT-02
+Description:    Driver สร้าง report โดยที่ description ว่าง
+Token:          driver_token
+Request:        POST /api/reports
+                body: { "type": DRIVER,
+                        "category": "OTHER",
+                        "description": "" 
+                      }
+Expected:       status=400
+--------------------------------------------------
+Test Case ID:   TC-DRIVER-REPORT-03
+Description:    Driver ดู report ของตัวเอง
+Token:          driver_token
+Request:        GET /api/reports/me
+Expected:       status=200 and response should be an array of reports
+--------------------------------------------------
+Test Case ID:   TC-DRIVER-REPORT-04
+Description:    Driver ดู status ล่าสุดของ report
+Token:          driver_token
+Request:        GET /api/reports/me
+Expected:       status=200 and status field in response data should be "PENDING"
+--------------------------------------------------
+Test Case ID:   TC-DRIVER-REPORT-05
+Description:    Driver ดู report ของตัวเองโดยไม่แนบ token ไปด้วย
+Token:          no auth
+Request:        GET /api/reports/me
+Expected:       status=401
+--------------------------------------------------
+Test Case ID:   TC-DRIVER-REPORT-06
+Description:    Driver ดู report ของคนอื่น
+Token:          driver01_token
+Request:        GET /api/reports/me
+Expected:       user_id ที่ได้จาก  response data ต้องตรงกับ user_id เจ้าของบัญชี
+--------------------------------------------------
+Test Case ID:   TC-DRIVER-REPORT-07
+Description:    Driver ไม่ส่ง field description
+Token:          driver_token
+Request:        "POST /api/reports
+                body: { "type": DRIVER,
+                        "category": "OTHER"
+                      }
+Expected:       status=400
+--------------------------------------------------
+Test Case ID:   TC-DRIVER-REPORT-08
+Description:    Driver ส่ง description เกิน limit (501 ตัวอักษร)
+Token:          driver_token
+Request:        POST /api/reports
+                body: { "type": DRIVER,
+                        "category": "OTHER",
+                        "description": "กกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกกก" 
+                      }
+Expected:       status=400
