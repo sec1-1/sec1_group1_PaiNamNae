@@ -1,0 +1,30 @@
+info:
+  name: TC-DRIVER-004-driver-check-status-own-report
+  type: http
+  seq: 4
+
+http:
+  method: GET
+  url: "{{base_url}}reports/me"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        const body = res.getBody();
+        const report = typeof body === "string" ? JSON.parse(body) : body;
+
+        test("Status code ต้องเป็น 200", () => {
+          expect(res.getStatus()).to.equal(200);
+        });
+
+        test("ต้องเห็น Status เป็น PENDING", () => {
+          expect(report.data[0].status).to.equal("PENDING");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
