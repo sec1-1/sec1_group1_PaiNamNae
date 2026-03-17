@@ -120,7 +120,7 @@ View My Route
     Click Element                   css:.dropdown-trigger > a
     Click Element                   xpath=//div[contains(@class,"dropdown-menu")]//a[@href="/myRoute"]
     Sleep                           2s
-    Click Element                   xpath=//button[starts-with(normalize-space(), "จบทริปแล้ว")]
+    Click Element                   xpath=//button[starts-with(normalize-space(), "เส้นทางของฉัน")]
 
 View Passenger Info
     Wait Until Element Is Visible    xpath=//h4[normalize-space()="Takumi Fujiwara"]    10s

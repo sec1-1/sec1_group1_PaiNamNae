@@ -8,10 +8,11 @@ UAT-001 Driver Report Trip Success
     Open Browser To Website
     Driver Login
     View My Route
-    Click Element                   xpath=(//button[normalize-space()="รายงานปัญหา"])[1]
-    Click Element                   xpath=//button[contains(text(),"พฤติกรรมผู้โดยสาร")]
-    Select From List By Label       xpath=//select[option[contains(text(),"passenger 01")]]                         passenger 01 (1 ที่นั่ง)                                   
-    Input Text                      xpath=//textarea[@placeholder="โปรดระบุปัญหาที่คุณพบเพื่อให้ทีมงานสามารถตรวจสอบได้..."]    ${DRIVER_REPORT_TEXT}
+    Click Element                    xpath=(//button[normalize-space()="รายงานปัญหา"])[1]
+    Click Element                    xpath=//button[contains(text(),"พฤติกรรมผู้โดยสาร")]
+    Wait Until Element Is Visible    xpath=//input[@type="checkbox"]    10s
+    Click Element                    (//input[@type="checkbox"])[1]                                 
+    Input Text                       xpath=//textarea[@placeholder="โปรดระบุปัญหาที่คุณพบเพื่อให้ทีมงานสามารถตรวจสอบได้..."]    ${DRIVER_REPORT_TEXT}
     Upload 2 Image 1 Video and 1 Sound
     Scroll Element Into View        xpath=//button[normalize-space()="ส่งรายงาน"]
     Upload link
@@ -34,7 +35,8 @@ UAT-002 Driver Report Trip Upload File Too Large
     Scroll Element Into View        xpath=//button[normalize-space()="รายงานปัญหา"]
     Click Element                   xpath=(//button[normalize-space()="รายงานปัญหา"])[1]
     Click Element                   xpath=//button[contains(text(),"พฤติกรรมผู้โดยสาร")]
-    Select From List By Label       xpath=//select[option[contains(text(),"passenger 01")]]                         passenger 01 (1 ที่นั่ง)                                          
+    Wait Until Element Is Visible    xpath=//input[@type="checkbox"]    10s
+    Click Element                    (//input[@type="checkbox"])[1]                                         
     Input Text                      xpath=//textarea[@placeholder="โปรดระบุปัญหาที่คุณพบเพื่อให้ทีมงานสามารถตรวจสอบได้..."]    ${DRIVER_REPORT_TEXT}
     Choose File                     xpath=//input[@type="file"]    ${INVALID_VIDEO}
 
@@ -50,7 +52,8 @@ UAT-003 Driver Report Trip Upload Invilid File
     Scroll Element Into View        xpath=//button[normalize-space()="รายงานปัญหา"]
     Click Element                   xpath=(//button[normalize-space()="รายงานปัญหา"])[1]
     Click Element                   xpath=//button[contains(text(),"พฤติกรรมผู้โดยสาร")]
-    Select From List By Label       xpath=//select[option[contains(text(),"passenger 01")]]                         passenger 01 (1 ที่นั่ง)                                          
+    Wait Until Element Is Visible    xpath=//input[@type="checkbox"]    10s
+    Click Element                    (//input[@type="checkbox"])[1]                                         
     Input Text                      xpath=//textarea[@placeholder="โปรดระบุปัญหาที่คุณพบเพื่อให้ทีมงานสามารถตรวจสอบได้..."]    ${DRIVER_REPORT_TEXT}
     Choose File                     xpath=//input[@type="file"]    ${PDF_PATH}
 
@@ -66,7 +69,8 @@ UAT-004 Driver Report Trip Upload Image 4 File
     Scroll Element Into View        xpath=//button[normalize-space()="รายงานปัญหา"]
     Click Element                   xpath=(//button[normalize-space()="รายงานปัญหา"])[1]
     Click Element                   xpath=//button[contains(text(),"พฤติกรรมผู้โดยสาร")]
-    Select From List By Label       xpath=//select[option[contains(text(),"passenger 01")]]                         passenger 01 (1 ที่นั่ง)                                          
+    Wait Until Element Is Visible    xpath=//input[@type="checkbox"]    10s
+    Click Element                    (//input[@type="checkbox"])[1]                                           
     Input Text                      xpath=//textarea[@placeholder="โปรดระบุปัญหาที่คุณพบเพื่อให้ทีมงานสามารถตรวจสอบได้..."]    ${DRIVER_REPORT_TEXT}
     Upload 4 Images
 
@@ -115,7 +119,8 @@ UAT-007 Driver Report Trip Not Fill Detail
     Scroll Element Into View        xpath=//button[normalize-space()="รายงานปัญหา"]
     Click Element                   xpath=(//button[normalize-space()="รายงานปัญหา"])[1]
     Click Element                   xpath=//button[contains(text(),"พฤติกรรมผู้โดยสาร")]
-    Select From List By Label       xpath=//select[option[contains(text(),"passenger 01")]]                         passenger 01 (1 ที่นั่ง)                             
+    Wait Until Element Is Visible    xpath=//input[@type="checkbox"]    10s
+    Click Element                    (//input[@type="checkbox"])[1]                             
     Upload 2 Image 1 Video and 1 Sound
     Scroll Element Into View        xpath=//button[normalize-space()="ส่งรายงาน"]
     Upload link
