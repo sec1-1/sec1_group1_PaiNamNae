@@ -2,8 +2,8 @@
     <div>
         <div class="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="mb-8">
-                <h2 class="text-2xl font-bold text-gray-900">คำขอจองเส้นทางของฉัน</h2>
-                <p class="mt-2 text-gray-600">ดูและจัดการคำขอจองจากผู้โดยสารในเส้นทางที่คุณสร้าง</p>
+                <h2 class="text-2xl font-bold text-gray-900">เธเธณเธเธญเธเธญเธเน€เธชเนเธเธ—เธฒเธเธเธญเธเธเธฑเธ</h2>
+                <p class="mt-2 text-gray-600">เธ”เธนเนเธฅเธฐเธเธฑเธ”เธเธฒเธฃเธเธณเธเธญเธเธญเธเธเธฒเธเธเธนเนเนเธ”เธขเธชเธฒเธฃเนเธเน€เธชเนเธเธ—เธฒเธเธ—เธตเนเธเธธเธ“เธชเธฃเนเธฒเธ</p>
             </div>
 
             <div class="p-6 mb-8 bg-white border border-gray-300 rounded-lg shadow-md">
@@ -20,18 +20,18 @@
                     <div class="bg-white border border-gray-300 rounded-lg shadow-md">
                         <div class="p-6 border-b border-gray-300">
                             <h3 class="text-lg font-semibold text-gray-900">
-                                {{ activeTab === 'myRoutes' ? 'เส้นทางของฉัน' : 'รายการคำขอจอง' }}
+                                {{ activeTab === 'myRoutes' ? 'เน€เธชเนเธเธ—เธฒเธเธเธญเธเธเธฑเธ' : 'เธฃเธฒเธขเธเธฒเธฃเธเธณเธเธญเธเธญเธ' }}
                             </h3>
                         </div>
 
                         <div v-if="isLoading" class="p-12 text-center text-gray-500">
-                            <p>กำลังโหลดข้อมูล...</p>
+                            <p>เธเธณเธฅเธฑเธเนเธซเธฅเธ”เธเนเธญเธกเธนเธฅ...</p>
                         </div>
 
-                        <!-- ===== แท็บ: เส้นทางของฉัน ===== -->
+                        <!-- ===== เนเธ—เนเธ: เน€เธชเนเธเธ—เธฒเธเธเธญเธเธเธฑเธ ===== -->
                         <div v-else-if="activeTab === 'myRoutes'" class="divide-y divide-gray-200">
                             <div v-if="myRoutes.length === 0" class="p-12 text-center text-gray-500">
-                                <p>ยังไม่มีเส้นทางที่คุณสร้าง</p>
+                                <p>เธขเธฑเธเนเธกเนเธกเธตเน€เธชเนเธเธ—เธฒเธเธ—เธตเนเธเธธเธ“เธชเธฃเนเธฒเธ</p>
                             </div>
 
                             <div v-for="route in myRoutes" :key="route.id"
@@ -41,74 +41,86 @@
                                     <div class="flex-1">
                                         <div class="flex items-center justify-between">
                                             <h4 class="text-lg font-semibold text-gray-900">
-                                                {{ route.origin }} → {{ route.destination }}
+                                                {{ route.origin }} โ’ {{ route.destination }}
                                             </h4>
                                             <span class="status-badge" :class="{
                                                 'status-confirmed': route.status === 'available',
                                                 'status-pending': route.status === 'full',
                                             }">
+<<<<<<< Updated upstream
                                                 {{ route.status === 'available' ? 'เปิดรับผู้โดยสาร' : 'เต็ม' }}
+=======
+                                                {{
+                                                    route.status === 'available'
+                                                        ? 'เน€เธเธดเธ”เธฃเธฑเธเธเธนเนเนเธ”เธขเธชเธฒเธฃ'
+                                                        : route.status === 'completed'
+                                                            ? 'เธเธเธ—เธฃเธดเธเนเธฅเนเธง'
+                                                            : route.status === 'in_transit'
+                                                                ? 'เธเธณเธฅเธฑเธเน€เธ”เธดเธเธ—เธฒเธ'
+                                                                : 'เน€เธ•เนเธก'
+                                                }}
+>>>>>>> Stashed changes
                                             </span>
                                         </div>
                                         <p class="mt-1 text-sm text-gray-600">
-                                            วันที่: {{ route.date }}
+                                            เธงเธฑเธเธ—เธตเน: {{ route.date }}
                                             <span class="mx-2 text-gray-300">|</span>
-                                            เวลา: {{ route.time }}
+                                            เน€เธงเธฅเธฒ: {{ route.time }}
                                             <span class="mx-2 text-gray-300">|</span>
-                                            ระยะเวลา: {{ route.durationText }}
+                                            เธฃเธฐเธขเธฐเน€เธงเธฅเธฒ: {{ route.durationText }}
                                             <span class="mx-2 text-gray-300">|</span>
-                                            ระยะทาง: {{ route.distanceText }}
+                                            เธฃเธฐเธขเธฐเธ—เธฒเธ: {{ route.distanceText }}
                                         </p>
                                         <div class="mt-1 text-sm text-gray-600">
-                                            <span class="font-medium">ที่นั่งว่าง:</span>
+                                            <span class="font-medium">เธ—เธตเนเธเธฑเนเธเธงเนเธฒเธ:</span>
                                             <span class="ml-1">{{ route.availableSeats }}</span>
                                             <span class="mx-2 text-gray-300">|</span>
-                                            <span class="font-medium">ราคาต่อที่นั่ง:</span>
-                                            <span class="ml-1">{{ route.pricePerSeat }} บาท</span>
+                                            <span class="font-medium">เธฃเธฒเธเธฒเธ•เนเธญเธ—เธตเนเธเธฑเนเธ:</span>
+                                            <span class="ml-1">{{ route.pricePerSeat }} เธเธฒเธ—</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- รายละเอียดเมื่อเปิด -->
+                                <!-- เธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”เน€เธกเธทเนเธญเน€เธเธดเธ” -->
                                 <div v-if="selectedTripId === route.id"
                                     class="pt-4 mt-4 mb-5 duration-300 border-t border-gray-300 animate-in slide-in-from-top">
                                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                                         <div>
-                                            <h5 class="mb-2 font-medium text-gray-900">รายละเอียดเส้นทาง</h5>
+                                            <h5 class="mb-2 font-medium text-gray-900">เธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”เน€เธชเนเธเธ—เธฒเธ</h5>
                                             <ul class="space-y-1 text-sm text-gray-600">
                                                 <li>
-                                                    • จุดเริ่มต้น:
+                                                    โ€ข เธเธธเธ”เน€เธฃเธดเนเธกเธ•เนเธ:
                                                     <span class="font-medium text-gray-900">{{ route.origin }}</span>
-                                                    <span v-if="route.originAddress"> — {{ route.originAddress }}</span>
+                                                    <span v-if="route.originAddress"> โ€” {{ route.originAddress }}</span>
                                                 </li>
 
                                                 <template v-if="route.stops && route.stops.length">
-                                                    <li class="mt-2 text-gray-700">• จุดแวะระหว่างทาง ({{
-                                                        route.stops.length }} จุด):</li>
-                                                    <li v-for="(stop, idx) in route.stops" :key="idx">  - จุดแวะ {{ idx
+                                                    <li class="mt-2 text-gray-700">โ€ข เธเธธเธ”เนเธงเธฐเธฃเธฐเธซเธงเนเธฒเธเธ—เธฒเธ ({{
+                                                        route.stops.length }} เธเธธเธ”):</li>
+                                                    <li v-for="(stop, idx) in route.stops" :key="idx">โ€โ€- เธเธธเธ”เนเธงเธฐ {{ idx
                                                         + 1 }}: {{ stop }}</li>
                                                 </template>
 
                                                 <li class="mt-1">
-                                                    • จุดปลายทาง:
+                                                    โ€ข เธเธธเธ”เธเธฅเธฒเธขเธ—เธฒเธ:
                                                     <span class="font-medium text-gray-900">{{ route.destination
                                                     }}</span>
-                                                    <span v-if="route.destinationAddress"> — {{ route.destinationAddress
+                                                    <span v-if="route.destinationAddress"> โ€” {{ route.destinationAddress
                                                     }}</span>
                                                 </li>
                                             </ul>
                                         </div>
                                         <div>
-                                            <h5 class="mb-2 font-medium text-gray-900">รายละเอียดรถ</h5>
+                                            <h5 class="mb-2 font-medium text-gray-900">เธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”เธฃเธ–</h5>
                                             <ul class="space-y-1 text-sm text-gray-600">
-                                                <li v-for="detail in route.carDetails" :key="detail">• {{ detail }}</li>
+                                                <li v-for="detail in route.carDetails" :key="detail">โ€ข {{ detail }}</li>
                                             </ul>
                                         </div>
                                     </div>
 
                                     <div class="mt-4 space-y-4">
                                         <div v-if="route.conditions">
-                                            <h5 class="mb-2 font-medium text-gray-900">เงื่อนไขการเดินทาง</h5>
+                                            <h5 class="mb-2 font-medium text-gray-900">เน€เธเธทเนเธญเธเนเธเธเธฒเธฃเน€เธ”เธดเธเธ—เธฒเธ</h5>
                                             <p
                                                 class="p-3 text-sm text-gray-700 border border-gray-300 rounded-md bg-gray-50">
                                                 {{ route.conditions }}
@@ -116,7 +128,7 @@
                                         </div>
 
                                         <div v-if="route.photos && route.photos.length > 0">
-                                            <h5 class="mb-2 font-medium text-gray-900">รูปภาพรถยนต์</h5>
+                                            <h5 class="mb-2 font-medium text-gray-900">เธฃเธนเธเธ เธฒเธเธฃเธ–เธขเธเธ•เน</h5>
                                             <div class="grid grid-cols-3 gap-2 mt-2">
                                                 <div v-for="(photo, index) in route.photos.slice(0, 3)" :key="index">
                                                     <img :src="photo" alt="Vehicle photo"
@@ -125,10 +137,10 @@
                                             </div>
                                         </div>
 
-                                        <!-- ผู้โดยสารของเส้นทางนี้ -->
+                                        <!-- เธเธนเนเนเธ”เธขเธชเธฒเธฃเธเธญเธเน€เธชเนเธเธ—เธฒเธเธเธตเน -->
                                         <div v-if="route.passengers && route.passengers.length">
-                                            <h5 class="mb-2 font-medium text-gray-900">ผู้โดยสาร ({{
-                                                route.passengers.length }} คน)</h5>
+                                            <h5 class="mb-2 font-medium text-gray-900">เธเธนเนเนเธ”เธขเธชเธฒเธฃ ({{
+                                                route.passengers.length }} เธเธ)</h5>
                                             <div class="space-y-3">
                                                 <div v-for="p in route.passengers" :key="p.id"
                                                     class="flex items-center space-x-3">
@@ -148,7 +160,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="text-sm text-gray-600">
-                                                            ที่นั่ง: {{ p.seats }}
+                                                            เธ—เธตเนเธเธฑเนเธ: {{ p.seats }}
                                                             <span v-if="p.email" class="mx-2 text-gray-300">|</span>
                                                             <a v-if="p.email" :href="`mailto:${p.email}`"
                                                                 class="text-blue-600 hover:underline" @click.stop>
@@ -160,26 +172,27 @@
                                             </div>
                                         </div>
 
-                                        <!-- รายงานปัญหาเส้นทาง (คนขับ) -->
+                                        <!-- เธฃเธฒเธขเธเธฒเธเธเธฑเธเธซเธฒเน€เธชเนเธเธ—เธฒเธ (เธเธเธเธฑเธ) -->
                                         <div class="p-4 border border-gray-200 rounded-lg bg-gray-50">
                                             <div class="flex items-start justify-between gap-4">
                                                 <div class="flex-1">
-                                                    <h5 class="text-sm font-semibold text-gray-900">รายงานปัญหาเส้นทาง</h5>
+                                                    <h5 class="text-sm font-semibold text-gray-900">เธฃเธฒเธขเธเธฒเธเธเธฑเธเธซเธฒเน€เธชเนเธเธ—เธฒเธ</h5>
                                                     <p class="mt-1 text-xs text-gray-600">
-                                                        ใช้สำหรับแจ้งเหตุให้แอดมินและติดตามสถานะการตรวจสอบ
+                                                        เนเธเนเธชเธณเธซเธฃเธฑเธเนเธเนเธเน€เธซเธ•เธธเนเธซเนเนเธญเธ”เธกเธดเธเนเธฅเธฐเธ•เธดเธ”เธ•เธฒเธกเธชเธ–เธฒเธเธฐเธเธฒเธฃเธ•เธฃเธงเธเธชเธญเธ
                                                     </p>
                                                     <div class="mt-2 text-xs text-gray-700">
-                                                        <span class="font-medium">สถานะ:</span>
+                                                        <span class="font-medium">เธชเธ–เธฒเธเธฐ:</span>
                                                         <span class="ml-1 status-badge status-pending"
-                                                            v-if="!route.hasReport">ยังไม่เคยรายงาน</span>
+                                                            v-if="!route.hasReport">เธขเธฑเธเนเธกเนเน€เธเธขเธฃเธฒเธขเธเธฒเธ</span>
                                                         <span class="ml-1 status-badge status-confirmed"
                                                             v-else>{{ getReportStatusText(route.reportData?.status || 'PENDING') }}</span>
                                                     </div>
                                                     <div v-if="route.hasReport && route.reportData" class="mt-2 text-xs text-gray-600">
-                                                        <span class="font-medium">ประเภท:</span>
-                                                        <span class="ml-1">{{ getCategoryText(route.reportData.category) }}</span>
+                                                        <span class="font-medium">เธเธฃเธฐเน€เธ เธ—:</span>
+                                                        <span class="ml-1">{{ getCategoryText(route.reportData) }}</span>
                                                     </div>
                                                 </div>
+<<<<<<< Updated upstream
                                                 <div class="shrink-0">
                                                     <button v-if="route.status === 'completed' && !route.hasReport"
                                                         @click.stop="openDriverReportModal(route)"
@@ -194,43 +207,64 @@
                                                     <div v-else class="text-[11px] text-gray-500">
                                                         รายงานได้หลังจบทริป
                                                     </div>
+=======
+                                                <div class="shrink-0 text-[11px] text-gray-500">
+                                                    <span v-if="route.status !== 'completed'">เธฃเธฒเธขเธเธฒเธเนเธ”เนเธซเธฅเธฑเธเธเธเธ—เธฃเธดเธ</span>
+                                                    <span v-else>เนเธเนเธเธธเนเธกเธ”เนเธฒเธเธฅเนเธฒเธเน€เธเธทเนเธญเธฃเธฒเธขเธเธฒเธเธซเธฃเธทเธญเธ•เธดเธ”เธ•เธฒเธกเธชเธ–เธฒเธเธฐ</span>
+>>>>>>> Stashed changes
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- ปุ่มขวาล่าง -->
+                                <!-- เธเธธเนเธกเธเธงเธฒเธฅเนเธฒเธ -->
                                 <div class="flex justify-end" :class="{ 'mt-4': selectedTripId !== route.id }">
                                     <NuxtLink
                                         v-if="route.status !== 'completed'"
                                         :to="`/myRoute/${route.id}/edit`"
                                         class="px-4 py-2 text-sm text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700"
                                         @click.stop>
-                                        แก้ไขเส้นทาง
+                                        เนเธเนเนเธเน€เธชเนเธเธ—เธฒเธ
                                     </NuxtLink>
 
                                     <button
                                         v-if="route.status === 'available'"
                                         @click.stop="startTrip(route)"
                                         class="px-4 py-2 ml-2 text-sm text-white bg-orange-500 rounded-md hover:bg-orange-600">
-                                        เริ่มทริป
+                                        เน€เธฃเธดเนเธกเธ—เธฃเธดเธ
                                     </button>
                                     <button
                                         v-if="route.status === 'in_transit'"
                                         @click.stop="openCompleteModal(route)"
                                         class="px-4 py-2 ml-2 text-sm text-white bg-green-600 rounded-md hover:bg-green-700">
-                                        จบทริป
+                                        เธเธเธ—เธฃเธดเธ
                                     </button>
 
+<<<<<<< Updated upstream
+=======
+                                    <button
+                                        v-if="route.status === 'completed' && !route.hasReport"
+                                        @click.stop="openDriverReportModal(route)"
+                                        class="px-4 py-2 ml-2 text-sm font-semibold text-white bg-red-600 rounded-md hover:bg-red-700">
+                                        เธฃเธฒเธขเธเธฒเธเธเธฑเธเธซเธฒ
+                                    </button>
+                                    <button
+                                        v-else-if="route.status === 'completed' && route.hasReport"
+                                        @click.stop="openDriverReportStatusModal(route)"
+                                        class="px-4 py-2 ml-2 text-sm font-semibold text-blue-600 border border-blue-200 rounded-md hover:bg-blue-50">
+                                        เธ”เธนเธชเธ–เธฒเธเธฐเธฃเธฒเธขเธเธฒเธ
+                                    </button>
+
+>>>>>>> Stashed changes
                                 </div>
                             </div>
                         </div>
 
-                        <!-- ===== แท็บ: คำขอจอง (เดิม) ===== -->
+                        <!-- ===== เนเธ—เนเธ: เธเธณเธเธญเธเธญเธ (เน€เธ”เธดเธก) ===== -->
                         <div v-else class="divide-y divide-gray-200">
                             <div v-if="filteredTrips.length === 0" class="p-12 text-center text-gray-500">
-                                <p>ไม่พบรายการในหมวดหมู่นี้</p>
+                                <p>เนเธกเนเธเธเธฃเธฒเธขเธเธฒเธฃเนเธเธซเธกเธงเธ”เธซเธกเธนเนเธเธตเน</p>
                             </div>
 
                             <div v-for="trip in filteredTrips" :key="trip.id"
@@ -240,36 +274,36 @@
                                     <div class="flex-1">
                                         <div class="flex items-center justify-between">
                                             <h4 class="text-lg font-semibold text-gray-900">
-                                                {{ trip.origin }} → {{ trip.destination }}
+                                                {{ trip.origin }} โ’ {{ trip.destination }}
                                             </h4>
                                             <span v-if="trip.status === 'pending'"
-                                                class="status-badge status-pending">รอดำเนินการ</span>
+                                                class="status-badge status-pending">เธฃเธญเธ”เธณเน€เธเธดเธเธเธฒเธฃ</span>
                                             <span v-else-if="trip.status === 'confirmed'"
-                                                class="status-badge status-confirmed">ยืนยันแล้ว</span>
+                                                class="status-badge status-confirmed">เธขเธทเธเธขเธฑเธเนเธฅเนเธง</span>
                                             <span v-else-if="trip.status === 'rejected'"
-                                                class="status-badge status-rejected">ปฏิเสธ</span>
+                                                class="status-badge status-rejected">เธเธเธดเน€เธชเธ</span>
                                             <span v-else-if="trip.status === 'cancelled'"
-                                                class="status-badge status-cancelled">ยกเลิก</span>
+                                                class="status-badge status-cancelled">เธขเธเน€เธฅเธดเธ</span>
                                                 <span v-else-if="trip.status === 'completed'"
       class="status-badge status-completed">
-      จบทริปแล้ว 
+      เธเธเธ—เธฃเธดเธเนเธฅเนเธง 
 </span>
 
                                         </div>
-                                        <p class="mt-1 text-sm text-gray-600">จุดนัดพบ: {{ trip.pickupPoint }}</p>
+                                        <p class="mt-1 text-sm text-gray-600">เธเธธเธ”เธเธฑเธ”เธเธ: {{ trip.pickupPoint }}</p>
                                         <p class="text-sm text-gray-600">
-                                            วันที่: {{ trip.date }}
+                                            เธงเธฑเธเธ—เธตเน: {{ trip.date }}
                                             <span class="mx-2 text-gray-300">|</span>
-                                            เวลา: {{ trip.time }}
+                                            เน€เธงเธฅเธฒ: {{ trip.time }}
                                             <span class="mx-2 text-gray-300">|</span>
-                                            ระยะเวลา: {{ trip.durationText }}
+                                            เธฃเธฐเธขเธฐเน€เธงเธฅเธฒ: {{ trip.durationText }}
                                             <span class="mx-2 text-gray-300">|</span>
-                                            ระยะทาง: {{ trip.distanceText }}
+                                            เธฃเธฐเธขเธฐเธ—เธฒเธ: {{ trip.distanceText }}
                                         </p>
                                         <div v-if="activeTab === 'cancelled' && trip.status === 'cancelled' && trip.cancelReason"
                                             class="p-2 mt-2 border border-gray-200 rounded-md bg-gray-50">
                                             <span class="text-sm text-gray-700">
-                                                เหตุผลการยกเลิกของผู้โดยสาร:
+                                                เน€เธซเธ•เธธเธเธฅเธเธฒเธฃเธขเธเน€เธฅเธดเธเธเธญเธเธเธนเนเนเธ”เธขเธชเธฒเธฃ:
                                                 <span class="font-medium">{{ reasonLabel(trip.cancelReason) }}</span>
                                             </span>
                                         </div>
@@ -293,14 +327,14 @@
                                                 </svg>
                                                 <span
                                                     class="absolute px-2 py-1 mb-2 text-xs text-white transition-opacity -translate-x-1/2 bg-gray-800 rounded-md opacity-0 pointer-events-none bottom-full left-1/2 w-max group-hover:opacity-100">
-                                                    ผู้โดยสารยืนยันตัวตนแล้ว
+                                                    เธเธนเนเนเธ”เธขเธชเธฒเธฃเธขเธทเธเธขเธฑเธเธ•เธฑเธงเธ•เธเนเธฅเนเธง
                                                 </span>
                                             </div>
                                         </div>
 
                                         <div class="flex">
                                             <p v-if="trip.passenger.email" class="text-xs text-gray-500 mt-0.5">
-                                                อีเมล:
+                                                เธญเธตเน€เธกเธฅ:
                                                 <a :href="`mailto:${trip.passenger.email}`"
                                                     class="text-blue-600 hover:underline" @click.stop>
                                                     {{ trip.passenger.email }}
@@ -308,7 +342,7 @@
                                             </p>
                                             <button v-if="trip.passenger.email"
                                                 class="inline-flex items-center ml-1 text-gray-500 rounded hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                title="คัดลอกอีเมล" aria-label="คัดลอกอีเมล"
+                                                title="เธเธฑเธ”เธฅเธญเธเธญเธตเน€เธกเธฅ" aria-label="เธเธฑเธ”เธฅเธญเธเธญเธตเน€เธกเธฅ"
                                                 @click.stop="copyEmail(trip.passenger.email)">
                                                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none"
                                                     stroke="currentColor">
@@ -322,57 +356,57 @@
                                         </div>
                                     </div>
                                     <div class="text-right">
-                                        <div class="text-lg font-bold text-blue-600">{{ trip.price }} บาท</div>
-                                        <div class="text-sm text-gray-600">จำนวน {{ trip.seats }} ที่นั่ง</div>
+                                        <div class="text-lg font-bold text-blue-600">{{ trip.price }} เธเธฒเธ—</div>
+                                        <div class="text-sm text-gray-600">เธเธณเธเธงเธ {{ trip.seats }} เธ—เธตเนเธเธฑเนเธ</div>
                                     </div>
                                 </div>
 
-                                <!-- รายละเอียดเส้นทาง + จุดแวะ -->
+                                <!-- เธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”เน€เธชเนเธเธ—เธฒเธ + เธเธธเธ”เนเธงเธฐ -->
                                 <div v-if="selectedTripId === trip.id"
                                     class="pt-4 mt-4 mb-5 duration-300 border-t border-gray-300 animate-in slide-in-from-top">
                                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                                         <div>
-                                            <h5 class="mb-2 font-medium text-gray-900">รายละเอียดเส้นทาง</h5>
+                                            <h5 class="mb-2 font-medium text-gray-900">เธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”เน€เธชเนเธเธ—เธฒเธ</h5>
                                             <ul class="space-y-1 text-sm text-gray-600">
                                                 <li>
-                                                    • จุดเริ่มต้น:
+                                                    โ€ข เธเธธเธ”เน€เธฃเธดเนเธกเธ•เนเธ:
                                                     <span class="font-medium text-gray-900">{{ trip.origin }}</span>
-                                                    <span v-if="trip.originAddress"> — {{ trip.originAddress }}</span>
+                                                    <span v-if="trip.originAddress"> โ€” {{ trip.originAddress }}</span>
                                                 </li>
 
                                                 <template v-if="trip.stops && trip.stops.length">
-                                                    <li class="mt-2 text-gray-700">• จุดแวะระหว่างทาง ({{
-                                                        trip.stops.length }} จุด):</li>
-                                                    <li v-for="(stop, idx) in trip.stops" :key="idx">  - จุดแวะ {{ idx +
+                                                    <li class="mt-2 text-gray-700">โ€ข เธเธธเธ”เนเธงเธฐเธฃเธฐเธซเธงเนเธฒเธเธ—เธฒเธ ({{
+                                                        trip.stops.length }} เธเธธเธ”):</li>
+                                                    <li v-for="(stop, idx) in trip.stops" :key="idx">โ€โ€- เธเธธเธ”เนเธงเธฐ {{ idx +
                                                         1 }}: {{ stop }}</li>
                                                 </template>
 
                                                 <li class="mt-1">
-                                                    • จุดปลายทาง:
+                                                    โ€ข เธเธธเธ”เธเธฅเธฒเธขเธ—เธฒเธ:
                                                     <span class="font-medium text-gray-900">{{ trip.destination
                                                     }}</span>
-                                                    <span v-if="trip.destinationAddress"> — {{ trip.destinationAddress
+                                                    <span v-if="trip.destinationAddress"> โ€” {{ trip.destinationAddress
                                                     }}</span>
                                                 </li>
                                             </ul>
                                         </div>
                                         <div>
-                                            <h5 class="mb-2 font-medium text-gray-900">รายละเอียดรถ</h5>
+                                            <h5 class="mb-2 font-medium text-gray-900">เธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”เธฃเธ–</h5>
                                             <ul class="space-y-1 text-sm text-gray-600">
-                                                <li v-for="detail in trip.carDetails" :key="detail">• {{ detail }}</li>
+                                                <li v-for="detail in trip.carDetails" :key="detail">โ€ข {{ detail }}</li>
                                             </ul>
                                         </div>
                                     </div>
                                     <div class="mt-4 space-y-4">
                                         <div v-if="trip.conditions">
-                                            <h5 class="mb-2 font-medium text-gray-900">เงื่อนไขการเดินทาง</h5>
+                                            <h5 class="mb-2 font-medium text-gray-900">เน€เธเธทเนเธญเธเนเธเธเธฒเธฃเน€เธ”เธดเธเธ—เธฒเธ</h5>
                                             <p
                                                 class="p-3 text-sm text-gray-700 border border-gray-300 rounded-md bg-gray-50">
                                                 {{ trip.conditions }}
                                             </p>
                                         </div>
                                         <div v-if="trip.photos && trip.photos.length > 0">
-                                            <h5 class="mb-2 font-medium text-gray-900">รูปภาพรถยนต์</h5>
+                                            <h5 class="mb-2 font-medium text-gray-900">เธฃเธนเธเธ เธฒเธเธฃเธ–เธขเธเธ•เน</h5>
                                             <div class="grid grid-cols-3 gap-2 mt-2">
                                                 <div v-for="(photo, index) in trip.photos.slice(0, 3)" :key="index">
                                                     <img :src="photo" alt="Vehicle photo"
@@ -387,23 +421,23 @@
                                         <template v-if="trip.status === 'pending'">
                                             <button @click.stop="openConfirmModal(trip, 'confirm')"
                                                 class="px-4 py-2 text-sm text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700">
-                                                ยืนยันคำขอ
+                                                เธขเธทเธเธขเธฑเธเธเธณเธเธญ
                                             </button>
                                         <button @click.stop="openConfirmModal(trip, 'reject')"
                                             class="px-4 py-2 text-sm text-red-600 transition duration-200 border border-red-300 rounded-md hover:bg-red-50">
-                                            ปฏิเสธ
+                                            เธเธเธดเน€เธชเธ
                                         </button>
                                     </template>
 
                                     <button v-else-if="trip.status === 'confirmed'"
                                         class="px-4 py-2 text-sm text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700">
-                                        แชทกับผู้โดยสาร
+                                        เนเธเธ—เธเธฑเธเธเธนเนเนเธ”เธขเธชเธฒเธฃ
                                     </button>
 
                                     <button v-else-if="['rejected', 'cancelled'].includes(trip.status)"
                                         @click.stop="openConfirmModal(trip, 'delete')"
                                         class="px-4 py-2 text-sm text-gray-600 transition duration-200 border border-gray-300 rounded-md hover:bg-gray-50">
-                                        ลบรายการ
+                                        เธฅเธเธฃเธฒเธขเธเธฒเธฃ
                                     </button>
 
                                     <template v-else-if="trip.status === 'completed'">
@@ -424,13 +458,13 @@
                     </div>
                 </div>
 
-                <!-- แผนที่ -->
+                <!-- เนเธเธเธ—เธตเน -->
                 <div class="lg:col-span-1">
                     <div class="sticky overflow-hidden bg-white border border-gray-300 rounded-lg shadow-md top-8">
                         <div class="p-3 border-gray-300">
-                            <h3 class="text-lg font-semibold text-gray-900">แผนที่เส้นทาง </h3>
+                            <h3 class="text-lg font-semibold text-gray-900">เนเธเธเธ—เธตเนเน€เธชเนเธเธ—เธฒเธ </h3>
                             <p class="mt-1 text-sm text-gray-600">
-                                {{ selectedLabel ? selectedLabel : 'คลิกที่รายการเพื่อดูเส้นทาง' }}
+                                {{ selectedLabel ? selectedLabel : 'เธเธฅเธดเธเธ—เธตเนเธฃเธฒเธขเธเธฒเธฃเน€เธเธทเนเธญเธ”เธนเน€เธชเนเธเธ—เธฒเธ' }}
                             </p>
                         </div>
                         <div ref="mapContainer" id="map"></div>
@@ -452,7 +486,7 @@
                         <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                         </svg>
-                        รายงานปัญหาเส้นทาง
+                        เธฃเธฒเธขเธเธฒเธเธเธฑเธเธซเธฒเน€เธชเนเธเธ—เธฒเธ
                     </h3>
                     <button @click="closeDriverReportModal" class="text-gray-400 hover:text-gray-600">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -463,6 +497,7 @@
 
                 <!-- Category Selection -->
                 <div class="mb-4">
+<<<<<<< Updated upstream
                     <label class="block mb-2 text-sm font-semibold text-gray-700">เลือกหัวข้อปัญหาที่พบ</label>
                     <select v-model="driverReportCategory"
                         class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
@@ -487,22 +522,82 @@
                             {{ p.name }} ({{ p.seats }} ที่นั่ง)
                         </option>
                     </select>
-                    <p v-if="!reportedRoute?.passengers?.length" class="mt-2 text-xs text-red-500">
-                        ไม่พบข้อมูลผู้โดยสารของทริปนี้
+=======
+                    <label class="block mb-2 text-sm font-semibold text-gray-700">เน€เธฅเธทเธญเธเธซเธฑเธงเธเนเธญเธเธฑเธเธซเธฒเธ—เธตเนเธเธ <span class="text-red-500">*</span></label>
+                    <div class="flex flex-wrap gap-2">
+                        <button
+                            v-for="opt in driverReportCategoryOptions"
+                            :key="opt.value"
+                            type="button"
+                            @click="toggleDriverReportCategory(opt.value)"
+                            class="px-3 py-2 text-sm font-medium transition border rounded-lg"
+                            :class="driverReportCategories.includes(opt.value)
+                                ? 'bg-white text-red-600 border-red-600'
+                                : 'bg-white text-gray-700 border-gray-200 hover:border-red-300 hover:text-red-600'"
+                        >
+                            {{ opt.label }}
+                        </button>
+                    </div>
+                    <p class="mt-2 text-xs text-gray-500">
+                        เน€เธฅเธทเธญเธเนเธ”เนเธกเธฒเธเธเธงเนเธฒ 1 เธซเธฑเธงเธเนเธญ (เน€เธฅเธทเธญเธเนเธฅเนเธง {{ driverReportCategories.length }} เธซเธฑเธงเธเนเธญ)
                     </p>
+                </div>
+
+                <!-- Passenger Selection (when PASSENGER_ISSUE) -->
+                <div v-if="driverReportCategories.includes('PASSENGER_ISSUE')" class="mb-4">
+                    <label class="block mb-2 text-sm font-semibold text-gray-700">เธฃเธฐเธเธธเธเธนเนเนเธ”เธขเธชเธฒเธฃเธ—เธตเนเน€เธเธตเนเธขเธงเธเนเธญเธ</label>
+                    <div v-if="reportedRoute?.passengers?.length" class="max-h-44 overflow-y-auto border border-gray-200 rounded-lg p-2 space-y-2">
+                        <label v-for="p in (reportedRoute?.passengers || [])" :key="p.id"
+                            class="flex items-center gap-2 px-2 py-1 rounded-md"
+                            :class="p.userId ? 'hover:bg-gray-50 cursor-pointer' : 'opacity-60 cursor-not-allowed'">
+                            <input
+                                type="checkbox"
+                                :value="p.userId"
+                                v-model="driverReportPassengerIds"
+                                :disabled="!p.userId"
+                                class="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
+                            />
+                            <span class="text-sm text-gray-700">
+                                {{ p.name }} ({{ p.seats }} เธ—เธตเนเธเธฑเนเธ)
+                            </span>
+                        </label>
+                    </div>
+>>>>>>> Stashed changes
+                    <p v-if="!reportedRoute?.passengers?.length" class="mt-2 text-xs text-red-500">
+                        เนเธกเนเธเธเธเนเธญเธกเธนเธฅเธเธนเนเนเธ”เธขเธชเธฒเธฃเธเธญเธเธ—เธฃเธดเธเธเธตเน
+                    </p>
+<<<<<<< Updated upstream
+=======
+                    <p v-else class="mt-2 text-xs text-gray-500">
+                        เน€เธฅเธทเธญเธเนเธ”เนเธกเธฒเธเธเธงเนเธฒ 1 เธเธ (เน€เธฅเธทเธญเธเนเธฅเนเธง {{ driverReportPassengerIds.length }} เธเธ)
+                    </p>
+>>>>>>> Stashed changes
                 </div>
 
                 <!-- Report Text -->
                 <div class="mb-4">
+<<<<<<< Updated upstream
                     <label class="block mb-2 text-sm font-semibold text-gray-700">รายละเอียดปัญหาที่พบ</label>
                     <textarea v-model="driverReportText" rows="5"
                         placeholder="โปรดระบุปัญหาที่คุณพบเพื่อให้ทีมงานสามารถตรวจสอบได้..."
+=======
+                    <label class="block mb-2 text-sm font-semibold text-gray-700">เธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”เธเธฑเธเธซเธฒเธ—เธตเนเธเธ <span class="text-red-500">*</span></label>
+                    <textarea v-model="driverReportText" rows="5" maxlength="501"
+                        placeholder="เนเธเธฃเธ”เธฃเธฐเธเธธเธเธฑเธเธซเธฒเธ—เธตเนเธเธธเธ“เธเธเน€เธเธทเนเธญเนเธซเนเธ—เธตเธกเธเธฒเธเธชเธฒเธกเธฒเธฃเธ–เธ•เธฃเธงเธเธชเธญเธเนเธ”เน..."
+>>>>>>> Stashed changes
                         class="w-full px-4 py-3 leading-relaxed border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent resize-none transition-all placeholder-gray-400"></textarea>
                 </div>
 
                 <!-- Image Upload -->
                 <div class="mb-6">
+<<<<<<< Updated upstream
                     <label class="block mb-2 text-sm font-semibold text-gray-700">หลักฐานรูปภาพประกอบ (สูงสุด 2 รูป)</label>
+=======
+                    <label class="block mb-2 text-sm font-semibold text-gray-700">
+                        เธซเธฅเธฑเธเธเธฒเธเธฃเธนเธ เธงเธดเธ”เธตเนเธญ เธซเธฃเธทเธญเน€เธชเธตเธขเธ (เธ–เนเธฒเธกเธต)
+                        <span class="font-normal text-gray-400">(เธชเธนเธเธชเธธเธ”เธญเธขเนเธฒเธเธฅเธฐ 3 เนเธเธฅเน, เนเธเธฅเนเธฅเธฐเนเธกเนเน€เธเธดเธ 50MB)</span>
+                    </label>
+>>>>>>> Stashed changes
                     <div class="flex flex-wrap gap-3">
                         <div v-for="(img, idx) in driverReportImages" :key="idx" class="relative w-24 h-24 group">
                             <img :src="img.url" class="object-cover w-full h-full rounded-lg border border-gray-100 shadow-sm" />
@@ -518,27 +613,63 @@
                             <svg class="w-8 h-8 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                             </svg>
+<<<<<<< Updated upstream
                             <span class="text-[10px] font-medium">เพิ่มรูป</span>
                             <input type="file" class="hidden" @change="handleDriverReportFiles" accept="image/*" multiple />
+=======
+                            <span class="text-[10px] font-medium">เน€เธเธดเนเธกเนเธเธฅเน</span>
+                            <input type="file" class="hidden" @change="handleDriverReportFiles" accept="image/*,video/*,audio/*" multiple />
+>>>>>>> Stashed changes
                         </label>
                     </div>
-                    <p class="mt-2 text-xs text-gray-500 italic">ลำดับความสำคัญ: การแจ้งข้อมูลเท็จอาจส่งผลต่อการถูกระงับบัญชีผู้ใช้งาน</p>
+                    <p class="mt-2 text-xs text-gray-500 italic">เธฅเธณเธ”เธฑเธเธเธงเธฒเธกเธชเธณเธเธฑเธ: เธเธฒเธฃเนเธเนเธเธเนเธญเธกเธนเธฅเน€เธ—เนเธเธญเธฒเธเธชเนเธเธเธฅเธ•เนเธญเธเธฒเธฃเธ–เธนเธเธฃเธฐเธเธฑเธเธเธฑเธเธเธตเธเธนเนเนเธเนเธเธฒเธ</p>
                 </div>
+<<<<<<< Updated upstream
 
+=======
+            <div class="mb-4">
+                    <label class="block mb-2 text-sm font-semibold text-gray-700">เธฅเธดเธเธเน (เธ–เนเธฒเธกเธต)</label>
+                    <div class="flex flex-col gap-2 sm:flex-row">
+                        <button
+                            type="button"
+                            class="px-4 py-2 text-sm font-medium text-blue-700 transition border border-blue-200 rounded-lg bg-blue-50 hover:bg-blue-100"
+                            @click="toggleDriverReportLinkInput"
+                        >
+                            {{ showDriverReportLinkInput ? 'เธเนเธญเธเธเนเธญเธเนเธเธเธฅเธดเธเธเน' : 'เนเธเธเธฅเธดเธเธเน' }}
+                        </button>
+                        <input
+                            v-if="showDriverReportLinkInput"
+                            v-model.trim="driverReportAttachedLink"
+                            type="url"
+                            placeholder="https://example.com"
+                            class="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                        />
+                    </div>
+                    <p v-if="driverReportLinkError" class="mt-1 text-xs text-red-600">{{ driverReportLinkError }}</p>
+                </div>
+>>>>>>> Stashed changes
                 <div class="flex gap-3">
                     <button @click="closeDriverReportModal"
                         class="flex-1 px-4 py-3 text-sm font-bold text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
-                        ยกเลิก
+                        เธขเธเน€เธฅเธดเธ
                     </button>
                     <button @click="submitDriverReport"
+<<<<<<< Updated upstream
                         class="flex-[2] px-4 py-3 text-sm font-bold text-white bg-red-600 rounded-lg hover:bg-red-700 shadow-lg shadow-red-200 transition-all active:scale-[0.98]">
                         ส่งรายงาน
+=======
+                        :disabled="!driverReportCategories.length || !driverReportText.trim()"
+                        :class="(!driverReportCategories.length || !driverReportText.trim()) ? 'bg-gray-300 text-gray-400 cursor-not-allowed' : 'bg-red-600 text-white hover:bg-red-700 shadow-lg shadow-red-200 active:scale-[0.98]'"
+                        class="flex-[2] px-4 py-3 text-sm font-bold rounded-lg transition-all">
+                        เธชเนเธเธฃเธฒเธขเธเธฒเธ
+>>>>>>> Stashed changes
                     </button>
                 </div>
             </div>
         </div>
 
         <!-- Driver Report Status Modal -->
+<<<<<<< Updated upstream
         <div v-if="showDriverReportStatusModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
             @click.self="showDriverReportStatusModal = false">
             <div class="w-full max-w-lg p-6 bg-white rounded-xl shadow-2xl animate-in slide-in-from-top duration-300">
@@ -578,6 +709,123 @@
                     <button @click="showDriverReportStatusModal = false"
                         class="w-full px-4 py-3 text-sm font-bold text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
                         ปิด
+=======
+        <div v-if="showDriverReportStatusModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+            @click.self="closeDriverReportStatusModal">
+            <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 overflow-hidden animate-in">
+                <div class="border-b border-gray-200 bg-white p-6 text-black">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-xl font-bold">เธ•เธดเธ”เธ•เธฒเธกเธชเธ–เธฒเธเธฐเธฃเธฒเธขเธเธฒเธ</h2>
+                        <button @click="closeDriverReportStatusModal" class="text-gray-500 hover:text-black transition">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-0 overflow-y-auto max-h-[70vh]">
+                    <div v-if="reportedRouteData" class="p-6 space-y-6">
+                        <ReportStatusCard :status="reportedRouteData.status || 'PENDING'" />
+
+                        <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 shadow-sm">
+                            <div class="flex items-center justify-between mb-4">
+                                <h4 class="font-bold text-blue-900">เธชเธฃเธธเธเธเธฒเธฃเธฃเธฒเธขเธเธฒเธ</h4>
+                                <span
+                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold shadow-sm"
+                                    :class="{
+                                        'bg-yellow-100 text-yellow-800 border border-yellow-200': (reportedRouteData.status || 'PENDING') === 'PENDING',
+                                        'bg-green-100 text-green-800 border border-green-200': ['APPROVED', 'RESOLVED'].includes(reportedRouteData.status),
+                                        'bg-red-100 text-red-800 border border-red-200': reportedRouteData.status === 'REJECTED'
+                                    }"
+                                >
+                                    {{ getReportStatusText(reportedRouteData.status || 'PENDING') }}
+                                </span>
+                            </div>
+
+                            <div class="space-y-3 text-sm text-blue-800">
+                                <div class="flex justify-between border-b border-blue-100 pb-2 gap-2">
+                                    <span class="opacity-75">เน€เธชเนเธเธ—เธฒเธ:</span>
+                                    <span class="font-semibold text-right">{{ reportedRoute?.origin || '-' }} โ’ {{ reportedRoute?.destination || '-' }}</span>
+                                </div>
+                                <div class="flex justify-between border-b border-blue-100 pb-2 gap-2">
+                                    <span class="opacity-75">เธซเธฑเธงเธเนเธญเธเนเธญเธเธฑเธเธซเธฒ:</span>
+                                    <span class="font-semibold text-right">{{ getCategoryText(reportedRouteData) }}</span>
+                                </div>
+                                <div class="flex justify-between border-b border-blue-100 pb-2 gap-2">
+                                    <span class="opacity-75">เธงเธฑเธเธ—เธตเนเนเธเนเธ:</span>
+                                    <span class="font-semibold text-right">{{ reportedRouteData.createdAt ? dayjs(reportedRouteData.createdAt).format('D MMM BBBB HH:mm เธ.') : '-' }}</span>
+                                </div>
+                                <div class="pt-1">
+                                    <span class="opacity-75 block mb-1 font-medium">เธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”เธ—เธตเนเนเธเนเธ:</span>
+                                    <p class="text-gray-700 bg-white/60 p-3 rounded-lg border border-blue-100 italic leading-relaxed">
+                                        "{{ getDriverReportDetailText(reportedRouteData.description) }}"
+                                    </p>
+                                </div>
+                                <div v-if="getDriverReportLink(reportedRouteData.description)" class="pt-1">
+                                    <span class="opacity-75 block mb-1 font-medium">เธฅเธดเธเธเนเธ—เธตเนเนเธเธ:</span>
+                                    <a
+                                        :href="getDriverReportLink(reportedRouteData.description)"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="block break-all text-blue-700 hover:text-blue-800 underline bg-white/60 p-3 rounded-lg border border-blue-100"
+                                    >
+                                        {{ getDriverReportLink(reportedRouteData.description) }}
+                                    </a>
+                                </div>
+                                <div v-if="(reportedRouteData.images?.length || reportedRouteData.videos?.length)" class="pt-2">
+                                    <span class="opacity-75 block mb-2 font-medium">เนเธเธฅเนเธเธฃเธฐเธเธญเธ:</span>
+                                    <div class="flex flex-wrap gap-2">
+                                        <img v-if="reportedRouteData.images"
+                                            v-for="(img, idx) in reportedRouteData.images" :key="`img-${idx}`" :src="img"
+                                            class="w-20 h-20 object-cover rounded-lg border-2 border-white shadow-sm hover:scale-105 transition-transform cursor-pointer"
+                                            @click="window.open(img, '_blank')"
+                                        />
+                                        <video v-if="reportedRouteData.videos"
+                                            v-for="(vid, idx) in reportedRouteData.videos" :key="`vid-${idx}`" :src="vid"
+                                            class="w-20 h-20 object-cover rounded-lg border-2 border-white shadow-sm hover:scale-105 transition-transform cursor-pointer" controls
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+                            <h4 class="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 013 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                                เธเธฒเธฃเธ•เธญเธเธฃเธฑเธเธเธฒเธเธ—เธตเธกเธเธฒเธ
+                            </h4>
+                            <div v-if="(reportedRouteData.status || 'PENDING') !== 'PENDING'" class="p-4 bg-gray-50 rounded-lg border border-gray-100">
+                                <p class="text-sm text-gray-700 leading-relaxed italic">
+                                    "{{ reportedRouteData.adminNotes || 'เนเธ”เนเธฃเธฑเธเธเธฒเธฃเธ•เธฃเธงเธเธชเธญเธเน€เธฃเธตเธขเธเธฃเนเธญเธขเนเธฅเนเธง' }}"
+                                </p>
+                                <div v-if="reportedRouteData.resolvedAt" class="mt-3 pt-3 border-t border-gray-200 flex justify-between items-center text-[10px] text-gray-400">
+                                    <span>เธ•เธฃเธงเธเธชเธญเธเน€เธกเธทเนเธญ: {{ dayjs(reportedRouteData.resolvedAt).format('D MMM BBBB HH:mm') }}</span>
+                                    <span class="text-green-600 font-bold tracking-wider">VERIFIED BY TEAM</span>
+                                </div>
+                            </div>
+                            <div v-else class="flex flex-col items-center py-6 text-center">
+                                <div class="w-12 h-12 bg-yellow-50 rounded-full flex items-center justify-center mb-3">
+                                    <svg class="w-6 h-6 text-yellow-500 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <p class="text-sm text-gray-500">เธฃเธฒเธขเธเธฒเธเธเธญเธเธเธธเธ“เธเธณเธฅเธฑเธเธฃเธญเธเธฒเธฃเธ•เธฃเธงเธเธชเธญเธ<br>เน€เธฃเธฒเธเธฐเน€เธฃเนเธเธ”เธณเน€เธเธดเธเธเธฒเธฃเนเธซเนเน€เธฃเนเธงเธ—เธตเนเธชเธธเธ”</p>
+                            </div>
+                            <div class="mt-4 p-3 bg-blue-50 border border-blue-100 rounded-lg text-xs text-blue-800 text-center">
+                                เธซเธฒเธเธเธฑเธเธซเธฒเธเธตเนเนเธ”เนเธฃเธฑเธเธเธฒเธฃเนเธเนเนเธเนเธฅเนเธง เธซเธฃเธทเธญเธ•เนเธญเธเธเธฒเธฃเนเธซเนเธเนเธญเธกเธนเธฅเน€เธเธดเนเธกเน€เธ•เธดเธก<br>เธชเธฒเธกเธฒเธฃเธ–เธ•เธดเธ”เธ•เนเธญเนเธญเธ”เธกเธดเธเนเธ”เนเธ—เธตเน <strong>admin@example.com</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
+                    <button @click="closeDriverReportStatusModal"
+                        class="w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all shadow-md active:scale-95">
+                        เธเธดเธ”
+>>>>>>> Stashed changes
                     </button>
                 </div>
             </div>
@@ -615,7 +863,31 @@ const reportedRouteData = ref(null)
 const driverReportCategory = ref('')
 const driverReportText = ref('')
 const driverReportImages = ref([])
+<<<<<<< Updated upstream
 const driverReportPassengerId = ref('')
+=======
+const driverReportVideos = ref([])
+const driverReportAudios = ref([])
+const driverReportPassengerIds = ref([])
+const driverReportAttachedLink = ref('')
+const showDriverReportLinkInput = ref(false)
+const driverReportLinkError = ref('')
+
+const DRIVER_REPORT_MAX_IMAGES = 3
+const DRIVER_REPORT_MAX_VIDEOS = 3
+const DRIVER_REPORT_MAX_AUDIOS = 3
+const DRIVER_REPORT_MAX_FILE_SIZE = 50 * 1024 * 1024
+const DRIVER_REPORT_MAX_COMMENT_LENGTH = 501
+
+const driverReportCategoryOptions = [
+    { value: 'VEHICLE_ISSUE', label: 'เธเธฑเธเธซเธฒเน€เธเธตเนเธขเธงเธเธฑเธเธฃเธ–' },
+    { value: 'PASSENGER_ISSUE', label: 'เธเธคเธ•เธดเธเธฃเธฃเธกเธเธนเนเนเธ”เธขเธชเธฒเธฃ' },
+    { value: 'ROAD_ISSUE', label: 'เธเธฒเธฃเน€เธ”เธดเธเธ—เธฒเธ' },
+    { value: 'SAFETY_ISSUE', label: 'เธเธงเธฒเธกเธเธฅเธญเธ”เธ เธฑเธข' },
+    { value: 'PAYMENT_ISSUE', label: 'เธเธฒเธฃเธเธณเธฃเธฐเน€เธเธดเธ' },
+    { value: 'OTHER', label: 'เธญเธทเนเธเน' }
+]
+>>>>>>> Stashed changes
 
 // ---------- Google Maps states ----------
 let gmap = null
@@ -626,17 +898,17 @@ let geocoder = null
 let placesService = null
 const mapReady = ref(false)
 const GMAPS_CB = '__gmapsReady__'
-// NEW: เก็บหมุดจุดแวะ
+// NEW: เน€เธเนเธเธซเธกเธธเธ”เธเธธเธ”เนเธงเธฐ
 let stopMarkers = []
 
 const tabs = [
-    { status: 'pending', label: 'รอดำเนินการ' },
-    { status: 'confirmed', label: 'ยืนยันแล้ว' },
-    { status: 'rejected', label: 'ปฏิเสธ' },
-    { status: 'cancelled', label: 'ยกเลิก' },
-    { status: 'all', label: 'ทั้งหมด' },
-    { status: 'myRoutes', label: 'เส้นทางของฉัน' },
-    { status: 'completed', label: 'จบทริปแล้ว' },
+    { status: 'pending', label: 'เธฃเธญเธ”เธณเน€เธเธดเธเธเธฒเธฃ' },
+    { status: 'confirmed', label: 'เธขเธทเธเธขเธฑเธเนเธฅเนเธง' },
+    { status: 'rejected', label: 'เธเธเธดเน€เธชเธ' },
+    { status: 'cancelled', label: 'เธขเธเน€เธฅเธดเธ' },
+    { status: 'all', label: 'เธ—เธฑเนเธเธซเธกเธ”' },
+    { status: 'myRoutes', label: 'เน€เธชเนเธเธ—เธฒเธเธเธญเธเธเธฑเธ' },
+    { status: 'completed', label: 'เธเธเธ—เธฃเธดเธเนเธฅเนเธง' },
 
 ]
 
@@ -645,21 +917,21 @@ definePageMeta({ middleware: 'auth' })
 // --- Helpers ---
 function cleanAddr(a) {
     return (a || '')
-        .replace(/,?\s*(Thailand|ไทย|ประเทศ)\s*$/i, '')
+        .replace(/,?\s*(Thailand|เนเธ—เธข|เธเธฃเธฐเน€เธ—เธจ)\s*$/i, '')
         .replace(/\s{2,}/g, ' ')
         .trim()
 }
 
 const reasonLabelMap = {
-    CHANGE_OF_PLAN: 'เปลี่ยนแผน/มีธุระกะทันหัน',
-    FOUND_ALTERNATIVE: 'พบวิธีเดินทางอื่นแล้ว',
-    DRIVER_DELAY: 'คนขับล่าช้าหรือเลื่อนเวลา',
-    PRICE_ISSUE: 'ราคาหรือค่าใช้จ่ายไม่เหมาะสม',
-    WRONG_LOCATION: 'เลือกจุดรับ–ส่งผิด',
-    DUPLICATE_OR_WRONG_DATE: 'จองซ้ำหรือจองผิดวัน',
-    SAFETY_CONCERN: 'กังวลด้านความปลอดภัย',
-    WEATHER_OR_FORCE_MAJEURE: 'สภาพอากาศ/เหตุสุดวิสัย',
-    COMMUNICATION_ISSUE: 'สื่อสารไม่สะดวก/ติดต่อไม่ได้',
+    CHANGE_OF_PLAN: 'เน€เธเธฅเธตเนเธขเธเนเธเธ/เธกเธตเธเธธเธฃเธฐเธเธฐเธ—เธฑเธเธซเธฑเธ',
+    FOUND_ALTERNATIVE: 'เธเธเธงเธดเธเธตเน€เธ”เธดเธเธ—เธฒเธเธญเธทเนเธเนเธฅเนเธง',
+    DRIVER_DELAY: 'เธเธเธเธฑเธเธฅเนเธฒเธเนเธฒเธซเธฃเธทเธญเน€เธฅเธทเนเธญเธเน€เธงเธฅเธฒ',
+    PRICE_ISSUE: 'เธฃเธฒเธเธฒเธซเธฃเธทเธญเธเนเธฒเนเธเนเธเนเธฒเธขเนเธกเนเน€เธซเธกเธฒเธฐเธชเธก',
+    WRONG_LOCATION: 'เน€เธฅเธทเธญเธเธเธธเธ”เธฃเธฑเธโ€“เธชเนเธเธเธดเธ”',
+    DUPLICATE_OR_WRONG_DATE: 'เธเธญเธเธเนเธณเธซเธฃเธทเธญเธเธญเธเธเธดเธ”เธงเธฑเธ',
+    SAFETY_CONCERN: 'เธเธฑเธเธงเธฅเธ”เนเธฒเธเธเธงเธฒเธกเธเธฅเธญเธ”เธ เธฑเธข',
+    WEATHER_OR_FORCE_MAJEURE: 'เธชเธ เธฒเธเธญเธฒเธเธฒเธจ/เน€เธซเธ•เธธเธชเธธเธ”เธงเธดเธชเธฑเธข',
+    COMMUNICATION_ISSUE: 'เธชเธทเนเธญเธชเธฒเธฃเนเธกเนเธชเธฐเธ”เธงเธ/เธ•เธดเธ”เธ•เนเธญเนเธกเนเนเธ”เน',
 }
 function reasonLabel(v) { return reasonLabelMap[v] || v }
 
@@ -669,14 +941,14 @@ const filteredTrips = computed(() => {
     return allTrips.value.filter(trip => trip.status === activeTab.value)
 })
 
-// สำหรับหัวข้อบนแผนที่
+// เธชเธณเธซเธฃเธฑเธเธซเธฑเธงเธเนเธญเธเธเนเธเธเธ—เธตเน
 const selectedLabel = computed(() => {
     if (activeTab.value === 'myRoutes') {
         const r = myRoutes.value.find(x => x.id === selectedTripId.value)
-        return r ? `${r.origin} → ${r.destination}` : null
+        return r ? `${r.origin} โ’ ${r.destination}` : null
     }
     const t = allTrips.value.find(x => x.id === selectedTripId.value)
-    return t ? `${t.origin} → ${t.destination}` : null
+    return t ? `${t.origin} โ’ ${t.destination}` : null
 })
 
 // --- Methods ---
@@ -701,14 +973,14 @@ async function fetchMyRoutes() {
                     carDetailsList.push(...r.vehicle.amenities)
                 }
             } else {
-                carDetailsList.push('ไม่มีข้อมูลรถ')
+                carDetailsList.push('เนเธกเนเธกเธตเธเนเธญเธกเธนเธฅเธฃเธ–')
             }
 
             const start = r.startLocation
             const end = r.endLocation
             const coords = [[start.lat, start.lng], [end.lat, end.lng]]
 
-            // stops / stopsCoords จาก waypoints
+            // stops / stopsCoords เธเธฒเธ waypoints
             const wp = r.waypoints || {}
             const baseList = (Array.isArray(wp.used) && wp.used.length
                 ? wp.used
@@ -722,7 +994,7 @@ async function fetchMyRoutes() {
                 const address = cleanAddr(p?.address || '')
                 const fallback = (p?.lat != null && p?.lng != null) ? `(${p.lat.toFixed(6)}, ${p.lng.toFixed(6)})` : ''
                 const title = name || fallback
-                return address ? `${title} — ${address}` : title
+                return address ? `${title} โ€” ${address}` : title
             }).filter(Boolean)
 
             const stopsCoords = orderedList
@@ -732,7 +1004,7 @@ async function fetchMyRoutes() {
                 )
                 .filter(Boolean)
 
-            // แปลงเป็น "คำขอจอง" ต่อ booking
+            // เนเธเธฅเธเน€เธเนเธ "เธเธณเธเธญเธเธญเธ" เธ•เนเธญ booking
             for (const b of (r.bookings || [])) {
                 const bookingStatus = (b.status || '').toLowerCase()
                 const routeStatusLower = (r.status || '').toLowerCase()
@@ -749,11 +1021,11 @@ async function fetchMyRoutes() {
                     destinationHasName: !!end?.name,
                     pickupPoint: b.pickupLocation?.name || '-',
                     date: dayjs(r.departureTime).format('D MMMM BBBB'),
-                    time: dayjs(r.departureTime).format('HH:mm น.'),
+                    time: dayjs(r.departureTime).format('HH:mm เธ.'),
                     price: (r.pricePerSeat || 0) * (b.numberOfSeats || 0),
                     seats: b.numberOfSeats || 0,
                     passenger: {
-                        name: `${b.passenger?.firstName || ''} ${b.passenger?.lastName || ''}`.trim() || 'ผู้โดยสาร',
+                        name: `${b.passenger?.firstName || ''} ${b.passenger?.lastName || ''}`.trim() || 'เธเธนเนเนเธ”เธขเธชเธฒเธฃ',
                         image: b.passenger?.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(b.passenger?.firstName || 'P')}&background=random&size=64`,
                         email: b.passenger?.email || '',
                         isVerified: !!b.passenger?.isVerified,
@@ -770,12 +1042,12 @@ async function fetchMyRoutes() {
                     photos: r.vehicle?.photos || [],
                     originAddress: start?.address ? cleanAddr(start.address) : null,
                     destinationAddress: end?.address ? cleanAddr(end.address) : null,
-                    durationText: (typeof r.duration === 'string' ? formatDuration(r.duration) : r.duration) || (r.durationSeconds ? `${Math.round(r.durationSeconds / 60)} นาที` : '-'),
-                    distanceText: (typeof r.distance === 'string' ? formatDistance(r.distance) : r.distance) || (r.distanceMeters ? `${(r.distanceMeters / 1000).toFixed(1)} กม.` : '-'),
+                    durationText: (typeof r.duration === 'string' ? formatDuration(r.duration) : r.duration) || (r.durationSeconds ? `${Math.round(r.durationSeconds / 60)} เธเธฒเธ—เธต` : '-'),
+                    distanceText: (typeof r.distance === 'string' ? formatDistance(r.distance) : r.distance) || (r.distanceMeters ? `${(r.distanceMeters / 1000).toFixed(1)} เธเธก.` : '-'),
                 })
             }
 
-            // เก็บ “เส้นทางของฉัน”
+            // เน€เธเนเธ โ€เน€เธชเนเธเธ—เธฒเธเธเธญเธเธเธฑเธโ€
             const confirmedBookings = (r.bookings || []).filter(
                 b => (b.status || '').toUpperCase() === 'CONFIRMED'
             )
@@ -787,7 +1059,7 @@ async function fetchMyRoutes() {
                 originAddress: start?.address ? cleanAddr(start.address) : null,
                 destinationAddress: end?.address ? cleanAddr(end.address) : null,
                 date: dayjs(r.departureTime).format('D MMMM BBBB'),
-                time: dayjs(r.departureTime).format('HH:mm น.'),
+                time: dayjs(r.departureTime).format('HH:mm เธ.'),
                 pricePerSeat: r.pricePerSeat || 0,
                 availableSeats: r.availableSeats ?? 0,
                 coords: [[start.lat, start.lng], [end.lat, end.lng]],
@@ -796,7 +1068,7 @@ async function fetchMyRoutes() {
                 stopsCoords,
                 carDetails: (r.vehicle
                     ? [`${r.vehicle.vehicleModel} (${r.vehicle.vehicleType})`, ...(r.vehicle.amenities || [])]
-                    : ['ไม่มีข้อมูลรถ']),
+                    : ['เนเธกเนเธกเธตเธเนเธญเธกเธนเธฅเธฃเธ–']),
                 photos: r.vehicle?.photos || [],
                 conditions: r.conditions || '',
                 passengers: confirmedBookings.map(b => ({
@@ -804,22 +1076,22 @@ async function fetchMyRoutes() {
                     userId: b.passenger?.id || null,
                     seats: b.numberOfSeats || 0,
                     status: 'confirmed',
-                    name: `${b.passenger?.firstName || ''} ${b.passenger?.lastName || ''}`.trim() || 'ผู้โดยสาร',
+                    name: `${b.passenger?.firstName || ''} ${b.passenger?.lastName || ''}`.trim() || 'เธเธนเนเนเธ”เธขเธชเธฒเธฃ',
                     image: b.passenger?.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(b.passenger?.firstName || 'P')}&background=random&size=64`,
                     email: b.passenger?.email || '',
                     isVerified: !!b.passenger?.isVerified,
                     rating: 4.5,
                     reviews: Math.floor(Math.random() * 50) + 5,
                 })),
-                durationText: (typeof r.duration === 'string' ? formatDuration(r.duration) : r.duration) || (r.durationSeconds ? `${Math.round(r.durationSeconds / 60)} นาที` : '-'),
-                distanceText: (typeof r.distance === 'string' ? formatDistance(r.distance) : r.distance) || (r.distanceMeters ? `${(r.distanceMeters / 1000).toFixed(1)} กม.` : '-'),
+                durationText: (typeof r.duration === 'string' ? formatDuration(r.duration) : r.duration) || (r.durationSeconds ? `${Math.round(r.durationSeconds / 60)} เธเธฒเธ—เธต` : '-'),
+                distanceText: (typeof r.distance === 'string' ? formatDistance(r.distance) : r.distance) || (r.distanceMeters ? `${(r.distanceMeters / 1000).toFixed(1)} เธเธก.` : '-'),
             })
         }
 
         allTrips.value = formatted
         myRoutes.value = ownRoutes
 
-        // รอแผนที่พร้อม แล้ว reverse เฉพาะกรณีที่ backend ไม่มี name (เฉพาะ list คำขอจอง)
+        // เธฃเธญเนเธเธเธ—เธตเนเธเธฃเนเธญเธก เนเธฅเนเธง reverse เน€เธเธเธฒเธฐเธเธฃเธ“เธตเธ—เธตเน backend เนเธกเนเธกเธต name (เน€เธเธเธฒเธฐ list เธเธณเธเธญเธเธญเธ)
         await waitMapReady()
         const jobs = allTrips.value.map(async (t, idx) => {
             const [o, d] = await Promise.all([
@@ -841,7 +1113,7 @@ async function fetchMyRoutes() {
         console.error('Failed to fetch routes:', error)
         allTrips.value = []
         myRoutes.value = []
-        toast.error('เกิดข้อผิดพลาด', error?.data?.message || 'ไม่สามารถโหลดข้อมูลได้')
+        toast.error('เน€เธเธดเธ”เธเนเธญเธเธดเธ”เธเธฅเธฒเธ”', error?.data?.message || 'เนเธกเนเธชเธฒเธกเธฒเธฃเธ–เนเธซเธฅเธ”เธเนเธญเธกเธนเธฅเนเธ”เน')
     } finally {
         isLoading.value = false
     }
@@ -859,7 +1131,7 @@ const getTripCount = (status) => {
 }
 
 const toggleTripDetails = (id) => {
-    // หา item ตามแท็บที่เปิดอยู่ เพื่ออัปเดตแผนที่
+    // เธซเธฒ item เธ•เธฒเธกเนเธ—เนเธเธ—เธตเนเน€เธเธดเธ”เธญเธขเธนเน เน€เธเธทเนเธญเธญเธฑเธเน€เธ”เธ•เนเธเธเธ—เธตเน
     const item = activeTab.value === 'myRoutes'
         ? myRoutes.value.find(r => r.id === id)
         : allTrips.value.find(t => t.id === id)
@@ -892,9 +1164,46 @@ function closeDriverReportModal() {
 
 function handleDriverReportFiles(e) {
     const files = Array.from(e.target.files || [])
+<<<<<<< Updated upstream
     const remaining = 2 - driverReportImages.value.length
     files.slice(0, remaining).forEach(f => {
         driverReportImages.value.push({ file: f, url: URL.createObjectURL(f) })
+=======
+    files.forEach((f) => {
+        if (f.size > DRIVER_REPORT_MAX_FILE_SIZE) {
+            toast.error('เธเธเธฒเธ”เนเธเธฅเนเธ•เนเธญเธเนเธกเนเน€เธเธดเธ 50MB')
+            return
+        }
+
+        if (f.type.startsWith('image/')) {
+            if (driverReportImages.value.length >= DRIVER_REPORT_MAX_IMAGES) {
+                toast.error(`เน€เธเธดเนเธกเธฃเธนเธเนเธ”เนเธชเธนเธเธชเธธเธ” ${DRIVER_REPORT_MAX_IMAGES} เธฃเธนเธ`)
+                return
+            }
+            driverReportImages.value.push({ file: f, url: URL.createObjectURL(f) })
+            return
+        }
+
+        if (f.type.startsWith('video/')) {
+            if (driverReportVideos.value.length >= DRIVER_REPORT_MAX_VIDEOS) {
+                toast.error(`เน€เธเธดเนเธกเธงเธดเธ”เธตเนเธญเนเธ”เนเธชเธนเธเธชเธธเธ” ${DRIVER_REPORT_MAX_VIDEOS} เธงเธดเธ”เธตเนเธญ`)
+                return
+            }
+            driverReportVideos.value.push({ file: f, url: URL.createObjectURL(f) })
+            return
+        }
+
+        if (f.type.startsWith('audio/')) {
+            if (driverReportAudios.value.length >= DRIVER_REPORT_MAX_AUDIOS) {
+                toast.error(`เน€เธเธดเนเธกเน€เธชเธตเธขเธเนเธ”เนเธชเธนเธเธชเธธเธ” ${DRIVER_REPORT_MAX_AUDIOS} เนเธเธฅเน`)
+                return
+            }
+            driverReportAudios.value.push({ file: f, url: URL.createObjectURL(f) })
+            return
+        }
+
+        toast.error('เธเธฃเธธเธ“เธฒเน€เธฅเธทเธญเธเนเธเธฅเนเธฃเธนเธ เธงเธดเธ”เธตเนเธญ เธซเธฃเธทเธญเน€เธชเธตเธขเธเน€เธ—เนเธฒเธเธฑเนเธ')
+>>>>>>> Stashed changes
     })
     e.target.value = ''
 }
@@ -907,6 +1216,7 @@ function removeDriverReportImage(idx) {
 
 async function submitDriverReport() {
     if (!reportedRoute.value) return
+<<<<<<< Updated upstream
     if (!driverReportCategory.value) {
         toast.error('กรุณาเลือกหัวข้อปัญหา', 'กรุณาเลือกหัวข้อปัญหาที่พบ')
         return
@@ -920,6 +1230,37 @@ async function submitDriverReport() {
         toast.error('กรุณาระบุผู้โดยสาร', 'เลือกผู้โดยสารที่เกี่ยวข้องก่อนส่งรายงาน')
         return
     }
+=======
+    if (!driverReportCategories.value.length) {
+        toast.error('เธเธฃเธธเธ“เธฒเน€เธฅเธทเธญเธเธซเธฑเธงเธเนเธญเธเธฑเธเธซเธฒ', 'เธเธฃเธธเธ“เธฒเน€เธฅเธทเธญเธเธซเธฑเธงเธเนเธญเธเธฑเธเธซเธฒเธ—เธตเนเธเธ')
+        return
+    }
+    const allowedCats = new Set(driverReportCategoryOptions.map(opt => opt.value))
+    if (driverReportCategories.value.some(cat => !allowedCats.has(cat))) {
+        toast.error('เธซเธฑเธงเธเนเธญเธเธฑเธเธซเธฒเนเธกเนเธ–เธนเธเธ•เนเธญเธ', 'เธเธฃเธธเธ“เธฒเน€เธฅเธทเธญเธเธซเธฑเธงเธเนเธญเธ—เธตเนเธฃเธฐเธเธเธฃเธญเธเธฃเธฑเธ')
+        return
+    }
+    const selectedPassengerIds = Array.from(new Set((driverReportPassengerIds.value || []).filter(Boolean)))
+    if (driverReportCategories.value.includes('PASSENGER_ISSUE') && !selectedPassengerIds.length) {
+        toast.error('เธเธฃเธธเธ“เธฒเธฃเธฐเธเธธเธเธนเนเนเธ”เธขเธชเธฒเธฃ', 'เน€เธฅเธทเธญเธเธเธนเนเนเธ”เธขเธชเธฒเธฃเธ—เธตเนเน€เธเธตเนเธขเธงเธเนเธญเธเธเนเธญเธเธชเนเธเธฃเธฒเธขเธเธฒเธ')
+        return
+    }
+    if (!driverReportText.value.trim()) {
+        toast.error('เธเธฃเธธเธ“เธฒเธเธฃเธญเธเธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”', 'เธเธฃเธธเธ“เธฒเธฃเธฐเธเธธเธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”เธเธฑเธเธซเธฒเธ—เธตเนเธเธเธเนเธญเธเธชเนเธเธฃเธฒเธขเธเธฒเธ')
+        return
+    }
+    if (driverReportText.value.length > DRIVER_REPORT_MAX_COMMENT_LENGTH) {
+        toast.error('เธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”เธขเธฒเธงเน€เธเธดเธเนเธ', `เธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”เธ•เนเธญเธเนเธกเนเน€เธเธดเธ ${DRIVER_REPORT_MAX_COMMENT_LENGTH} เธ•เธฑเธงเธญเธฑเธเธฉเธฃ`)
+        return
+    }
+
+    if (driverReportAttachedLink.value && !isValidUrl(driverReportAttachedLink.value)) {
+        driverReportLinkError.value = 'เธเธฃเธธเธ“เธฒเธเธฃเธญเธเธฅเธดเธเธเนเนเธซเนเธ–เธนเธเธ•เนเธญเธ (เธ•เนเธญเธเธเธถเนเธเธ•เนเธเธ”เนเธงเธข http:// เธซเธฃเธทเธญ https://)'
+        return
+    }
+    driverReportLinkError.value = ''
+
+>>>>>>> Stashed changes
     try {
         const fd = new FormData()
         fd.append('type', 'DRIVER')
@@ -933,8 +1274,46 @@ async function submitDriverReport() {
             if (it.file) fd.append('images', it.file)
         })
 
+<<<<<<< Updated upstream
         await $api('/reports', { method: 'POST', body: fd })
         toast.success('ขอบคุณที่แจ้งรายงาน', 'ทีมงานจะตรวจสอบในเร็วๆ นี้')
+=======
+        const detailText = driverReportText.value.trim()
+        const categorySummary = `เธซเธฑเธงเธเนเธญเธ—เธตเนเน€เธฅเธทเธญเธ: ${selectedCategoryLabels.join(', ')}`
+        const passengerSummary = selectedPassengerNames.length
+            ? `เธเธนเนเนเธ”เธขเธชเธฒเธฃเธ—เธตเนเน€เธเธตเนเธขเธงเธเนเธญเธ: ${selectedPassengerNames.join(', ')}`
+            : ''
+        const finalDescription = driverReportAttachedLink.value
+            ? `${categorySummary}${passengerSummary ? `\n${passengerSummary}` : ''}\n${detailText}\n\nเธฅเธดเธเธเน: ${driverReportAttachedLink.value}`
+            : `${categorySummary}${passengerSummary ? `\n${passengerSummary}` : ''}\n${detailText}`
+
+        const targets = driverReportCategories.value.includes('PASSENGER_ISSUE')
+            ? selectedPassengerIds
+            : [null]
+
+        await Promise.all(targets.map(async (targetUserId) => {
+            const fd = new FormData()
+            fd.append('type', 'DRIVER')
+            fd.append('category', primaryCategory)
+            fd.append('description', finalDescription)
+            fd.append('routeId', reportedRoute.value.id)
+            if (targetUserId) {
+                fd.append('targetUserId', targetUserId)
+            }
+            driverReportImages.value.forEach((it) => {
+                if (it.file) fd.append('images', it.file)
+            })
+            driverReportVideos.value.forEach((it) => {
+                if (it.file) fd.append('videos', it.file)
+            })
+            driverReportAudios.value.forEach((it) => {
+                if (it.file) fd.append('audios', it.file)
+            })
+
+            await $api('/reports', { method: 'POST', body: fd })
+        }))
+        toast.success('เธเธญเธเธเธธเธ“เธ—เธตเนเนเธเนเธเธฃเธฒเธขเธเธฒเธ', 'เธ—เธตเธกเธเธฒเธเธเธฐเธ•เธฃเธงเธเธชเธญเธเนเธเน€เธฃเนเธงเน เธเธตเน')
+>>>>>>> Stashed changes
 
         // update route in place
         const routeInList = myRoutes.value.find(r => r.id === reportedRoute.value.id)
@@ -953,7 +1332,7 @@ async function submitDriverReport() {
         checkReportsForRoutes() // background sync
     } catch (err) {
         console.error('Failed to submit driver report', err)
-        toast.error('ไม่สามารถส่งรายงานได้', err?.data?.message || 'โปรดลองอีกครั้ง')
+        toast.error('เนเธกเนเธชเธฒเธกเธฒเธฃเธ–เธชเนเธเธฃเธฒเธขเธเธฒเธเนเธ”เน', err?.data?.message || 'เนเธเธฃเธ”เธฅเธญเธเธญเธตเธเธเธฃเธฑเนเธ')
     }
 }
 
@@ -978,30 +1357,77 @@ async function checkReportsForRoutes() {
 
 function getReportStatusText(status) {
     const reportStatus = {
-        PENDING: 'รอการตรวจสอบ',
-        APPROVED: 'รับเรื่องแล้ว',
-        REJECTED: 'ไม่พบปัญหา',
-        RESOLVED: 'ดำเนินการแก้ไขแล้ว'
+        PENDING: 'เธฃเธญเธเธฒเธฃเธ•เธฃเธงเธเธชเธญเธ',
+        APPROVED: 'เธฃเธฑเธเน€เธฃเธทเนเธญเธเนเธฅเนเธง',
+        REJECTED: 'เนเธกเนเธเธเธเธฑเธเธซเธฒ',
+        RESOLVED: 'เธ”เธณเน€เธเธดเธเธเธฒเธฃเนเธเนเนเธเนเธฅเนเธง'
     }
-    return reportStatus[status] || 'ไม่ทราบสถานะ'
+    return reportStatus[status] || 'เนเธกเนเธ—เธฃเธฒเธเธชเธ–เธฒเธเธฐ'
 }
 
-function getCategoryText(cat) {
+function extractSelectedCategories(description) {
+    if (!description) return [];
+    const selectedLine = String(description)
+        .split("\n")
+        .map((line) => line.trim())
+        .find((line) => line.startsWith("หมวดหมู่ที่เลือก:") || line.startsWith("หัวข้อที่เลือก:"));
+
+    if (!selectedLine) return [];
+    return selectedLine
+        .split(":")
+        .slice(1)
+        .join(":")
+        .split(",")
+        .map((label) => label.trim())
+        .filter(Boolean);
+}
+
+function getCategoryText(reportOrCategory) {
+    const report = reportOrCategory && typeof reportOrCategory === "object" ? reportOrCategory : null;
+    const category = report ? report.category : reportOrCategory;
+    const fromDesc = report ? extractSelectedCategories(report.description) : [];
+
+    if (fromDesc.length) {
+        return fromDesc.join(", ");
+    }
+
     const cats = {
-        VEHICLE_ISSUE: 'ปัญหาสภาพรถ/ข้อมูลรถไม่ตรง',
-        PASSENGER_ISSUE: 'พฤติกรรมไม่เหมาะสม',
-        ROAD_ISSUE: 'ปัญหาระหว่างเส้นทาง',
-        SAFETY_ISSUE: 'ความปลอดภัย/พฤติกรรม',
-        PAYMENT_ISSUE: 'ปัญหาการชำระเงิน',
-        LATE_ISSUE: 'ความล่าช้า',
-        WRONG_INFO: 'ข้อมูลไม่ตรงตามที่ระบุ',
-        APP_ISSUE: 'ปัญหาการใช้งานแอปพลิเคชัน',
-        NO_SHOW: 'ผู้โดยสารไม่มาพบตามจุดนัดหมาย',
-        OTHER: 'อื่น ๆ'
-    }
-    return cats[cat] || cat || 'ทั่วไป'
+        VEHICLE_ISSUE: "เธเธฑเธเธซเธฒเธชเธ เธฒเธเธฃเธ–/เธเนเธญเธกเธนเธฅเธฃเธ–เนเธกเนเธ•เธฃเธ",
+        PASSENGER_ISSUE: "เธเธคเธ•เธดเธเธฃเธฃเธกเนเธกเนเน€เธซเธกเธฒเธฐเธชเธก",
+        ROAD_ISSUE: "เธเธฑเธเธซเธฒเธฃเธฐเธซเธงเนเธฒเธเน€เธชเนเธเธ—เธฒเธ",
+        SAFETY_ISSUE: "เธเธงเธฒเธกเธเธฅเธญเธ”เธ เธฑเธข/เธเธคเธ•เธดเธเธฃเธฃเธก",
+        PAYMENT_ISSUE: "เธเธฑเธเธซเธฒเธเธฒเธฃเธเธณเธฃเธฐเน€เธเธดเธ",
+        LATE_ISSUE: "เธเธงเธฒเธกเธฅเนเธฒเธเนเธฒ",
+        WRONG_INFO: "เธเนเธญเธกเธนเธฅเนเธกเนเธ•เธฃเธเธ•เธฒเธกเธ—เธตเนเธฃเธฐเธเธธ",
+        APP_ISSUE: "เธเธฑเธเธซเธฒเธเธฒเธฃเนเธเนเธเธฒเธเนเธญเธเธเธฅเธดเน€เธเธเธฑเธ",
+        NO_SHOW: "เธเธนเนเนเธ”เธขเธชเธฒเธฃเนเธกเนเธกเธฒเธเธเธ•เธฒเธกเธเธธเธ”เธเธฑเธ”เธซเธกเธฒเธข",
+        OTHER: "เธญเธทเนเธ เน"
+    };
+    return cats[category] || category || "เธ—เธฑเนเธงเนเธ";
 }
 
+<<<<<<< Updated upstream
+=======
+function getDriverReportLink(description) {
+    if (!description) return ''
+    const linkLine = String(description)
+        .split('\n')
+        .map(line => line.trim())
+        .find(line => line.startsWith('เธฅเธดเธเธเน:'))
+    if (!linkLine) return ''
+    return linkLine.replace('เธฅเธดเธเธเน:', '').trim()
+}
+
+function getDriverReportDetailText(description) {
+    if (!description) return '-'
+    return String(description)
+        .split('\n')
+        .filter(line => !line.trim().startsWith('เธฅเธดเธเธเน:'))
+        .join('\n')
+        .trim() || '-'
+}
+
+>>>>>>> Stashed changes
 // ---------- Google Maps helpers ----------
 function waitMapReady() {
     return new Promise((resolve) => {
@@ -1038,7 +1464,7 @@ async function extractNameParts(geocodeResult) {
         const route = comps.find(c => c.types.includes('route'))?.long_name
         name = (streetNumber && route) ? `${streetNumber} ${route}` : (route || geocodeResult.formatted_address || null)
     }
-    if (name) name = name.replace(/,?\s*(Thailand|ไทย)\s*$/i, '')
+    if (name) name = name.replace(/,?\s*(Thailand|เนเธ—เธข)\s*$/i, '')
     return { name }
 }
 
@@ -1057,7 +1483,7 @@ async function updateMap(trip) {
     await waitMapReady()
     if (!gmap) return
 
-    // cleanup เดิม
+    // cleanup เน€เธ”เธดเธก
     if (activePolyline) { activePolyline.setMap(null); activePolyline = null }
     if (startMarker) { startMarker.setMap(null); startMarker = null }
     if (endMarker) { endMarker.setMap(null); endMarker = null }
@@ -1072,13 +1498,13 @@ async function updateMap(trip) {
     startMarker = new google.maps.Marker({ position: start, map: gmap, label: 'A' })
     endMarker = new google.maps.Marker({ position: end, map: gmap, label: 'B' })
 
-    // หมุดจุดแวะ
+    // เธซเธกเธธเธ”เธเธธเธ”เนเธงเธฐ
     if (Array.isArray(trip.stopsCoords) && trip.stopsCoords.length) {
         stopMarkers = trip.stopsCoords.map((s, idx) => new google.maps.Marker({
             position: { lat: s.lat, lng: s.lng },
             map: gmap,
             icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
-            title: s.name || s.address || `จุดแวะ ${idx + 1}`
+            title: s.name || s.address || `เธเธธเธ”เนเธงเธฐ ${idx + 1}`
         }))
     }
 
@@ -1118,25 +1544,25 @@ const openConfirmModal = (trip, action) => {
     tripToAction.value = trip
     if (action === 'confirm') {
         modalContent.value = {
-            title: 'ยืนยันคำขอจอง',
-            message: `ยืนยันคำขอของผู้โดยสาร "${trip.passenger.name}" ใช่หรือไม่?`,
-            confirmText: 'ยืนยันคำขอ',
+            title: 'เธขเธทเธเธขเธฑเธเธเธณเธเธญเธเธญเธ',
+            message: `เธขเธทเธเธขเธฑเธเธเธณเธเธญเธเธญเธเธเธนเนเนเธ”เธขเธชเธฒเธฃ "${trip.passenger.name}" เนเธเนเธซเธฃเธทเธญเนเธกเน?`,
+            confirmText: 'เธขเธทเธเธขเธฑเธเธเธณเธเธญ',
             action: 'confirm',
             variant: 'primary',
         }
     } else if (action === 'reject') {
         modalContent.value = {
-            title: 'ปฏิเสธคำขอจอง',
-            message: `ต้องการปฏิเสธคำขอของ "${trip.passenger.name}" ใช่หรือไม่?`,
-            confirmText: 'ปฏิเสธ',
+            title: 'เธเธเธดเน€เธชเธเธเธณเธเธญเธเธญเธ',
+            message: `เธ•เนเธญเธเธเธฒเธฃเธเธเธดเน€เธชเธเธเธณเธเธญเธเธญเธ "${trip.passenger.name}" เนเธเนเธซเธฃเธทเธญเนเธกเน?`,
+            confirmText: 'เธเธเธดเน€เธชเธ',
             action: 'reject',
             variant: 'danger',
         }
     } else if (action === 'delete') {
         modalContent.value = {
-            title: 'ยืนยันการลบรายการ',
-            message: `ต้องการลบคำขอนี้ออกจากรายการใช่หรือไม่?`,
-            confirmText: 'ลบรายการ',
+            title: 'เธขเธทเธเธขเธฑเธเธเธฒเธฃเธฅเธเธฃเธฒเธขเธเธฒเธฃ',
+            message: `เธ•เนเธญเธเธเธฒเธฃเธฅเธเธเธณเธเธญเธเธตเนเธญเธญเธเธเธฒเธเธฃเธฒเธขเธเธฒเธฃเนเธเนเธซเธฃเธทเธญเนเธกเน?`,
+            confirmText: 'เธฅเธเธฃเธฒเธขเธเธฒเธฃ',
             action: 'delete',
             variant: 'danger',
         }
@@ -1156,13 +1582,13 @@ const handleConfirmAction = async () => {
     try {
         if (action === 'confirm') {
             await $api(`/bookings/${bookingId}/status`, { method: 'PATCH', body: { status: 'CONFIRMED' } })
-            toast.success('สำเร็จ', 'ยืนยันคำขอแล้ว')
+            toast.success('เธชเธณเน€เธฃเนเธ', 'เธขเธทเธเธขเธฑเธเธเธณเธเธญเนเธฅเนเธง')
         } else if (action === 'reject') {
             await $api(`/bookings/${bookingId}/status`, { method: 'PATCH', body: { status: 'REJECTED' } })
-            toast.success('สำเร็จ', 'ปฏิเสธคำขอแล้ว')
+            toast.success('เธชเธณเน€เธฃเนเธ', 'เธเธเธดเน€เธชเธเธเธณเธเธญเนเธฅเนเธง')
         } else if (action === 'delete') {
             await $api(`/bookings/${bookingId}`, { method: 'DELETE' })
-            toast.success('ลบรายการสำเร็จ', 'ลบคำขอออกจากรายการแล้ว')
+            toast.success('เธฅเธเธฃเธฒเธขเธเธฒเธฃเธชเธณเน€เธฃเนเธ', 'เธฅเธเธเธณเธเธญเธญเธญเธเธเธฒเธเธฃเธฒเธขเธเธฒเธฃเนเธฅเนเธง')
         }
         else if (action === 'complete') {
 
@@ -1170,14 +1596,14 @@ const handleConfirmAction = async () => {
         method: 'PATCH',
         body: { status: 'COMPLETED' }
     })
-    toast.success('สำเร็จ', 'จบทริปเรียบร้อยแล้ว')
+    toast.success('เธชเธณเน€เธฃเนเธ', 'เธเธเธ—เธฃเธดเธเน€เธฃเธตเธขเธเธฃเนเธญเธขเนเธฅเนเธง')
 }
 
         closeConfirmModal()
         await fetchMyRoutes()
     } catch (error) {
         console.error(`Failed to ${action} booking:`, error)
-        toast.error('เกิดข้อผิดพลาด', error?.data?.message || 'ไม่สามารถดำเนินการได้')
+        toast.error('เน€เธเธดเธ”เธเนเธญเธเธดเธ”เธเธฅเธฒเธ”', error?.data?.message || 'เนเธกเนเธชเธฒเธกเธฒเธฃเธ–เธ”เธณเน€เธเธดเธเธเธฒเธฃเนเธ”เน')
         closeConfirmModal()
     }
 }
@@ -1185,18 +1611,18 @@ const handleConfirmAction = async () => {
 const copyEmail = async (email) => {
     try {
         await navigator.clipboard.writeText(email)
-        toast.success('คัดลอกแล้ว', email)
+        toast.success('เธเธฑเธ”เธฅเธญเธเนเธฅเนเธง', email)
     } catch (e) {
-        toast.error('คัดลอกไม่สำเร็จ', 'ลองใหม่อีกครั้ง')
+        toast.error('เธเธฑเธ”เธฅเธญเธเนเธกเนเธชเธณเน€เธฃเนเธ', 'เธฅเธญเธเนเธซเธกเนเธญเธตเธเธเธฃเธฑเนเธ')
     }
 }
 
 const openCompleteModal = (route) => {
     tripToAction.value = route
     modalContent.value = {
-        title: 'จบทริป',
-        message: `ต้องการจบเส้นทาง "${route.origin} → ${route.destination}" ใช่หรือไม่?`,
-        confirmText: 'จบทริป',
+        title: 'เธเธเธ—เธฃเธดเธ',
+        message: `เธ•เนเธญเธเธเธฒเธฃเธเธเน€เธชเนเธเธ—เธฒเธ "${route.origin} โ’ ${route.destination}" เนเธเนเธซเธฃเธทเธญเนเธกเน?`,
+        confirmText: 'เธเธเธ—เธฃเธดเธ',
         action: 'complete',
         variant: 'primary',
     }
@@ -1213,16 +1639,16 @@ function formatDistance(input) {
     for (const seg of parts) {
         const n = parseFloat(seg.replace(/[^\d.]/g, ''))
         if (Number.isNaN(n)) continue
-        if (/กม/.test(seg)) meters += n * 1000
-        else if (/เมตร|ม\./.test(seg)) meters += n
+        if (/เธเธก/.test(seg)) meters += n * 1000
+        else if (/เน€เธกเธ•เธฃ|เธก\./.test(seg)) meters += n
         else meters += n
     }
 
     if (meters >= 1000) {
         const km = Math.round((meters / 1000) * 10) / 10
-        return `${(km % 1 === 0 ? km.toFixed(0) : km)} กม.`
+        return `${(km % 1 === 0 ? km.toFixed(0) : km)} เธเธก.`
     }
-    return `${Math.round(meters)} ม.`
+    return `${Math.round(meters)} เธก.`
 }
 
 function formatDuration(input) {
@@ -1234,18 +1660,18 @@ function formatDuration(input) {
     for (const seg of parts) {
         const n = parseFloat(seg.replace(/[^\d.]/g, ''))
         if (Number.isNaN(n)) continue
-        if (/ชม/.test(seg)) minutes += n * 60
+        if (/เธเธก/.test(seg)) minutes += n * 60
         else minutes += n
     }
 
     const h = Math.floor(minutes / 60)
     const m = Math.round(minutes % 60)
-    return h ? (m ? `${h} ชม. ${m} นาที` : `${h} ชม.`) : `${m} นาที`
+    return h ? (m ? `${h} เธเธก. ${m} เธเธฒเธ—เธต` : `${h} เธเธก.`) : `${m} เธเธฒเธ—เธต`
 }
 
 // --- Lifecycle ---
 useHead({
-    title: 'คำขอจองเส้นทางของฉัน - ไปนำแหน่',
+    title: 'เธเธณเธเธญเธเธญเธเน€เธชเนเธเธ—เธฒเธเธเธญเธเธเธฑเธ - เนเธเธเธณเนเธซเธเน',
     script: process.client && !window.google?.maps ? [{
         key: 'gmaps',
         src: `https://maps.googleapis.com/maps/api/js?key=${useRuntimeConfig().public.googleMapsApiKey}&libraries=places,geometry&callback=${GMAPS_CB}`,
@@ -1309,18 +1735,18 @@ const startTrip = async (route) => {
       method: 'PATCH'
     })
 
-    toast.success("เริ่มทริปแล้ว")
+    toast.success("เน€เธฃเธดเนเธกเธ—เธฃเธดเธเนเธฅเนเธง")
 
     await fetchMyRoutes()
   } catch (err) {
-    toast.error(err?.data?.message || "เริ่มทริปไม่สำเร็จ")
+    toast.error(err?.data?.message || "เน€เธฃเธดเนเธกเธ—เธฃเธดเธเนเธกเนเธชเธณเน€เธฃเนเธ")
   }
 }
 
 </script>
 
 <style scoped>
-/* (สไตล์ทั้งหมดคงเดิม) */
+/* (เธชเนเธ•เธฅเนเธ—เธฑเนเธเธซเธกเธ”เธเธเน€เธ”เธดเธก) */
 .trip-card {
     transition: all 0.3s ease;
     cursor: pointer;
@@ -1417,3 +1843,6 @@ const startTrip = async (route) => {
 }
 
 </style>
+
+
+

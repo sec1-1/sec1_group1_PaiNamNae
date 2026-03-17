@@ -1,4 +1,4 @@
-<template>
+﻿<template>
     <div>
         <AdminHeader />
         <AdminSidebar />
@@ -90,8 +90,14 @@
   >
     <!-- ประเภท / หมวดหมู่ -->
     <td class="px-4 py-3 text-sm text-gray-900">
-      <div class="font-medium">
-        {{ categoryLabel(report.category) }}
+      <div class="flex flex-wrap gap-1.5">
+        <span
+          v-for="(label, idx) in categoryItems(report)"
+          :key="`${report.id}-cat-${idx}`"
+          class="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs font-medium text-slate-700"
+        >
+          {{ label }}
+        </span>
       </div>
 
     </td>
@@ -221,6 +227,7 @@
     ประเภท / หมวดหมู่
   </h4>
 
+<<<<<<< Updated upstream
   <div class="text-sm font-medium text-gray-900">
     {{ typeLabel(viewingReport.type) }} / 
     {{ categoryLabel(viewingReport.category) }}
@@ -231,6 +238,43 @@
                                 <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">ผู้รายงาน</h4>
                                 <div class="text-sm text-gray-900">{{ viewingReport.reporterName || '-' }}</div>
                                 <div class="text-xs text-gray-500">{{ viewingReport.reporterEmail || '-' }}</div>
+=======
+                <div class="flex-1 overflow-y-auto bg-slate-50/80 p-6">
+                    <div class="space-y-6">
+                        <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                            <h4 class="text-lg font-semibold text-slate-900">ข้อมูลรายงาน</h4>
+                            <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                                <div class="rounded-2xl bg-slate-50 p-4">
+                                    <p class="text-xs font-semibold tracking-wide text-slate-500">ประเภทรายงาน</p>
+                                    <p class="mt-2 text-sm font-semibold text-slate-900">{{ reportScopeLabel(viewingReport.reportScope) }}</p>
+                                </div>
+                                <div class="rounded-2xl bg-slate-50 p-4">
+                                    <p class="text-xs font-semibold tracking-wide text-slate-500">สถานะ</p>
+                                    <div class="mt-2">
+                                        <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold" :class="statusBadge(viewingReport.status)">
+                                            {{ statusLabel(viewingReport.status) }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="rounded-2xl bg-slate-50 p-4">
+                                    <p class="text-xs font-semibold tracking-wide text-slate-500">หมวดหมู่</p>
+                                    <p class="mt-2 text-sm font-semibold text-slate-900">{{ categoryItems(viewingReport).join(', ') }}</p>
+                                </div>
+                                <div class="rounded-2xl bg-slate-50 p-4">
+                                    <p class="text-xs font-semibold tracking-wide text-slate-500">วันที่สร้าง</p>
+                                    <p class="mt-2 text-sm font-semibold text-slate-900">{{ formatDate(viewingReport.createdAt) }}</p>
+                                </div>
+                                <div class="rounded-2xl bg-slate-50 p-4">
+                                    <p class="text-xs font-semibold tracking-wide text-slate-500">ผู้รายงาน</p>
+                                    <p class="mt-2 text-sm font-semibold text-slate-900">{{ viewingReport.reporterName || '-' }}</p>
+                                    <p class="mt-1 text-xs text-slate-500 break-all">{{ viewingReport.reporterEmail || '-' }}</p>
+                                </div>
+                                <div v-if="viewingReport.targetUser" class="rounded-2xl bg-slate-50 p-4">
+                                    <p class="text-xs font-semibold tracking-wide text-slate-500">ผู้ถูกรายงาน</p>
+                                    <p class="mt-2 text-sm font-semibold text-slate-900">{{ targetUserName(viewingReport) }}</p>
+                                    <p class="mt-1 text-xs text-slate-500 break-all">{{ targetUserEmail(viewingReport) }}</p>
+                                </div>
+>>>>>>> Stashed changes
                             </div>
 
                             <div v-if="viewingReport.targetUser">
@@ -470,6 +514,25 @@ function typeLabel(type) {
   return map[type] || type || '-'
 }
 
+function extractSelectedCategories(description) {
+  if (!description) return []
+  const selectedLine = String(description)
+    .split('\n')
+    .map(line => line.trim())
+    .find(line =>
+      line.startsWith('หมวดหมู่ที่เลือก:') ||
+      line.startsWith('หัวข้อที่เลือก:')
+    )
+  if (!selectedLine) return []
+  return selectedLine
+    .split(':')
+    .slice(1)
+    .join(':')
+    .split(',')
+    .map(label => label.trim())
+    .filter(Boolean)
+}
+
 function categoryLabel(category) {
   const map = {
     VEHICLE_ISSUE: 'ปัญหายานพาหนะ',
@@ -482,6 +545,45 @@ function categoryLabel(category) {
   }
   return map[category] || category || '-'
 }
+<<<<<<< Updated upstream
+=======
+
+function categoryItems(report) {
+  if (!report) return ['-']
+  const fromDesc = extractSelectedCategories(report.description)
+  if (fromDesc.length) return fromDesc
+  return [categoryLabel(report.category)]
+}
+
+function getReportLink(description) {
+    if (!description) return ''
+    const linkLine = String(description)
+        .split('\n')
+        .map(line => line.trim())
+        .find(line => line.startsWith('ลิงก์:'))
+    if (!linkLine) return ''
+    return linkLine.replace('ลิงก์:', '').trim()
+}
+
+function getReportDetailText(description) {
+    if (!description) return '-'
+    return String(description)
+        .split('\n')
+        .filter(line => !line.trim().startsWith('ลิงก์:'))
+        .join('\n')
+        .trim() || '-'
+}
+
+function targetUserName(report) {
+    if (!report?.targetUser) return 'ไม่ระบุ'
+    return `${report.targetUser.firstName} ${report.targetUser.lastName}`.trim() || 'ไม่ระบุ'
+}
+
+function targetUserEmail(report) {
+    return report?.targetUser?.email || '-'
+}
+
+>>>>>>> Stashed changes
 function filterByStatus(statusKey) {
   filters.status = statusKey
   pagination.page = 1
@@ -809,3 +911,4 @@ onUnmounted(() => { cleanupGlobalScripts() })
 }
 
 </style>
+

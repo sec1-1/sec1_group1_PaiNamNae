@@ -2,8 +2,8 @@
     <div>
         <div class="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="mb-8">
-                <h2 class="text-2xl font-bold text-gray-900">การเดินทางของฉัน</h2>
-                <p class="mt-2 text-gray-600">จัดการและติดตามการเดินทางทั้งหมดของคุณ</p>
+                <h2 class="text-2xl font-bold text-gray-900">เธเธฒเธฃเน€เธ”เธดเธเธ—เธฒเธเธเธญเธเธเธฑเธ</h2>
+                <p class="mt-2 text-gray-600">เธเธฑเธ”เธเธฒเธฃเนเธฅเธฐเธ•เธดเธ”เธ•เธฒเธกเธเธฒเธฃเน€เธ”เธดเธเธ—เธฒเธเธ—เธฑเนเธเธซเธกเธ”เธเธญเธเธเธธเธ“</p>
             </div>
 
             <div class="p-6 mb-8 bg-white border border-gray-300 rounded-lg shadow-md">
@@ -19,16 +19,16 @@
                 <div class="lg:col-span-2">
                     <div class="bg-white border border-gray-300 rounded-lg shadow-md">
                         <div class="p-6 border-b border-gray-300">
-                            <h3 class="text-lg font-semibold text-gray-900">รายการการเดินทาง</h3>
+                            <h3 class="text-lg font-semibold text-gray-900">เธฃเธฒเธขเธเธฒเธฃเธเธฒเธฃเน€เธ”เธดเธเธ—เธฒเธ</h3>
                         </div>
 
                         <div v-if="isLoading" class="p-12 text-center text-gray-500">
-                            <p>กำลังโหลดข้อมูลการเดินทาง...</p>
+                            <p>เธเธณเธฅเธฑเธเนเธซเธฅเธ”เธเนเธญเธกเธนเธฅเธเธฒเธฃเน€เธ”เธดเธเธ—เธฒเธ...</p>
                         </div>
 
                         <div v-else class="divide-y divide-gray-200">
                             <div v-if="filteredTrips.length === 0" class="p-12 text-center text-gray-500">
-                                <p>ไม่พบรายการเดินทางในหมวดหมู่นี้</p>
+                                <p>เนเธกเนเธเธเธฃเธฒเธขเธเธฒเธฃเน€เธ”เธดเธเธ—เธฒเธเนเธเธซเธกเธงเธ”เธซเธกเธนเนเธเธตเน</p>
                             </div>
 
                             <div v-for="trip in filteredTrips" :key="trip.id"
@@ -38,43 +38,43 @@
                                     <div class="flex-1">
                                         <div class="flex items-center justify-between">
                                             <h4 class="text-lg font-semibold text-gray-900">
-                                                {{ trip.origin }} → {{ trip.destination }}
+                                                {{ trip.origin }} โ’ {{ trip.destination }}
                                             </h4>
                                             <span v-if="trip.routeStatus === 'completed'"
     class="status-badge status-completed">
-    จบทริปแล้ว
+    เธเธเธ—เธฃเธดเธเนเธฅเนเธง
 </span>
 
 <span v-else-if="trip.status === 'pending'"
     class="status-badge status-pending">
-    รอดำเนินการ
+    เธฃเธญเธ”เธณเน€เธเธดเธเธเธฒเธฃ
 </span>
 
 <span v-else-if="trip.status === 'confirmed'"
     class="status-badge status-confirmed">
-    ยืนยันแล้ว
+    เธขเธทเธเธขเธฑเธเนเธฅเนเธง
 </span>
 
 <span v-else-if="trip.status === 'rejected'"
     class="status-badge status-rejected">
-    ปฏิเสธ
+    เธเธเธดเน€เธชเธ
 </span>
 
 <span v-else-if="trip.status === 'cancelled'"
     class="status-badge status-cancelled">
-    ยกเลิก
+    เธขเธเน€เธฅเธดเธ
 </span>
 
                                         </div>
-                                        <p class="mt-1 text-sm text-gray-600">จุดนัดพบ: {{ trip.pickupPoint }}</p>
+                                        <p class="mt-1 text-sm text-gray-600">เธเธธเธ”เธเธฑเธ”เธเธ: {{ trip.pickupPoint }}</p>
                                         <p class="text-sm text-gray-600">
-                                            วันที่: {{ trip.date }}
+                                            เธงเธฑเธเธ—เธตเน: {{ trip.date }}
                                             <span class="mx-2 text-gray-300">|</span>
-                                            เวลา: {{ trip.time }}
+                                            เน€เธงเธฅเธฒ: {{ trip.time }}
                                             <span class="mx-2 text-gray-300">|</span>
-                                            ระยะเวลา: {{ trip.durationText }}
+                                            เธฃเธฐเธขเธฐเน€เธงเธฅเธฒ: {{ trip.durationText }}
                                             <span class="mx-2 text-gray-300">|</span>
-                                            ระยะทาง: {{ trip.distanceText }}
+                                            เธฃเธฐเธขเธฐเธ—เธฒเธ: {{ trip.distanceText }}
                                         </p>
                                     </div>
                                 </div>
@@ -93,17 +93,17 @@
                                         <div class="flex items-center">
                                             <div class="flex text-sm text-yellow-400">
                                                 <span>
-                                                    {{ '★'.repeat(Math.round(trip.driver.rating)) }}{{ '☆'.repeat(5 -
+                                                    {{ 'โ…'.repeat(Math.round(trip.driver.rating)) }}{{ 'โ'.repeat(5 -
                                                         Math.round(trip.driver.rating)) }}
                                                 </span>
                                             </div>
                                             <span class="ml-2 text-sm text-gray-600">{{ trip.driver.rating }} ({{
-                                                trip.driver.reviews }} รีวิว)</span>
+                                                trip.driver.reviews }} เธฃเธตเธงเธดเธง)</span>
                                         </div>
                                     </div>
                                     <div class="text-right">
-                                        <div class="text-lg font-bold text-blue-600">{{ trip.price }} บาท</div>
-                                        <div class="text-sm text-gray-600">จำนวน {{ trip.seats }} ที่นั่ง</div>
+                                        <div class="text-lg font-bold text-blue-600">{{ trip.price }} เธเธฒเธ—</div>
+                                        <div class="text-sm text-gray-600">เธเธณเธเธงเธ {{ trip.seats }} เธ—เธตเนเธเธฑเนเธ</div>
                                     </div>
                                 </div>
 
@@ -111,41 +111,41 @@
                                     class="pt-4 mt-4 mb-5 duration-300 border-t border-gray-300 animate-in slide-in-from-top">
                                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                                         <div>
-                                            <h5 class="mb-2 font-medium text-gray-900">รายละเอียดเส้นทาง</h5>
+                                            <h5 class="mb-2 font-medium text-gray-900">เธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”เน€เธชเนเธเธ—เธฒเธ</h5>
                                             <ul class="space-y-1 text-sm text-gray-600">
                                                 <li>
-                                                    • จุดเริ่มต้น:
+                                                    โ€ข เธเธธเธ”เน€เธฃเธดเนเธกเธ•เนเธ:
                                                     <span class="font-medium text-gray-900">{{ trip.origin }}</span>
-                                                    <span v-if="trip.originAddress"> — {{ trip.originAddress }}</span>
+                                                    <span v-if="trip.originAddress"> โ€” {{ trip.originAddress }}</span>
                                                 </li>
 
                                                 <template v-if="trip.stops && trip.stops.length">
-                                                    <li class="mt-2 text-gray-700">• จุดแวะระหว่างทาง ({{
-                                                        trip.stops.length }} จุด):</li>
-                                                    <li v-for="(stop, idx) in trip.stops" :key="idx">  - จุดแวะ {{ idx +
+                                                    <li class="mt-2 text-gray-700">โ€ข เธเธธเธ”เนเธงเธฐเธฃเธฐเธซเธงเนเธฒเธเธ—เธฒเธ ({{
+                                                        trip.stops.length }} เธเธธเธ”):</li>
+                                                    <li v-for="(stop, idx) in trip.stops" :key="idx">โ€โ€- เธเธธเธ”เนเธงเธฐ {{ idx +
                                                         1 }}: {{ stop }}</li>
                                                 </template>
 
                                                 <li class="mt-1">
-                                                    • จุดปลายทาง:
+                                                    โ€ข เธเธธเธ”เธเธฅเธฒเธขเธ—เธฒเธ:
                                                     <span class="font-medium text-gray-900">{{ trip.destination
                                                     }}</span>
-                                                    <span v-if="trip.destinationAddress"> — {{ trip.destinationAddress
+                                                    <span v-if="trip.destinationAddress"> โ€” {{ trip.destinationAddress
                                                     }}</span>
                                                 </li>
                                             </ul>
                                         </div>
                                         <div>
-                                            <h5 class="mb-2 font-medium text-gray-900">รายละเอียดรถ</h5>
+                                            <h5 class="mb-2 font-medium text-gray-900">เธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”เธฃเธ–</h5>
                                             <ul class="space-y-1 text-sm text-gray-600">
-                                                <li v-for="detail in trip.carDetails" :key="detail">• {{ detail }}</li>
+                                                <li v-for="detail in trip.carDetails" :key="detail">โ€ข {{ detail }}</li>
                                             </ul>
                                         </div>
                                     </div>
 
                                     <div class="mt-4 space-y-4">
                                         <div v-if="trip.conditions">
-                                            <h5 class="mb-2 font-medium text-gray-900">เงื่อนไขการเดินทาง</h5>
+                                            <h5 class="mb-2 font-medium text-gray-900">เน€เธเธทเนเธญเธเนเธเธเธฒเธฃเน€เธ”เธดเธเธ—เธฒเธ</h5>
                                             <p
                                                 class="p-3 text-sm text-gray-700 border border-gray-300 rounded-md bg-gray-50">
                                                 {{ trip.conditions }}
@@ -153,7 +153,7 @@
                                         </div>
 
                                         <div v-if="trip.photos && trip.photos.length > 0">
-                                            <h5 class="mb-2 font-medium text-gray-900">รูปภาพรถยนต์</h5>
+                                            <h5 class="mb-2 font-medium text-gray-900">เธฃเธนเธเธ เธฒเธเธฃเธ–เธขเธเธ•เน</h5>
                                             <div class="grid grid-cols-3 gap-2 mt-2">
                                                 <div v-for="(photo, index) in trip.photos.slice(0, 3)" :key="index">
                                                     <img :src="photo" alt="Vehicle photo"
@@ -165,30 +165,36 @@
                                 </div>
 
                                 <div class="flex justify-end space-x-3" :class="{ 'mt-4': selectedTripId !== trip.id }">
-                                    <!-- PENDING: ยกเลิกได้ -->
+                                    <!-- PENDING: เธขเธเน€เธฅเธดเธเนเธ”เน -->
                                     <button 
                                         v-if="trip.status === 'pending' && trip.routeStatus !== 'completed'" 
                                         @click.stop="openCancelModal(trip)"
                                         class="px-4 py-2 text-sm text-red-600 border border-red-300 rounded-md hover:bg-red-50">
-                                        ยกเลิกการจอง
+                                        เธขเธเน€เธฅเธดเธเธเธฒเธฃเธเธญเธ
                                     </button>
 
 
-                                    <!-- CONFIRMED: เพิ่มปุ่มยกเลิก + คงปุ่มแชท -->
+                                    <!-- CONFIRMED: เน€เธเธดเนเธกเธเธธเนเธกเธขเธเน€เธฅเธดเธ + เธเธเธเธธเนเธกเนเธเธ— -->
                                     <template v-else-if="trip.status === 'confirmed' && trip.routeStatus !== 'completed'">
 
                                         <button @click.stop="openCancelModal(trip)"
                                             class="px-4 py-2 text-sm text-red-600 transition duration-200 border border-red-300 rounded-md hover:bg-red-50">
-                                            ยกเลิกการจอง
+                                            เธขเธเน€เธฅเธดเธเธเธฒเธฃเธเธญเธ
                                         </button>
                                         <button
                                             class="px-4 py-2 text-sm text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700">
-                                            แชทกับผู้ขับ
+                                            เนเธเธ—เธเธฑเธเธเธนเนเธเธฑเธ
                                         </button>
                                         <button @click.stop="trip.hasReport ? openProgressForTrip(trip) : openReportModal(trip)"
+<<<<<<< Updated upstream
                                                 class="px-4 py-2 ml-2 text-sm text-white transition duration-200 rounded-md"
                                                 :class="trip.hasReport ? 'bg-orange-500 hover:bg-orange-600' : 'bg-red-600 hover:bg-red-700'">
                                                 {{ trip.hasReport ? 'ติดตามสถานะ' : 'รายงาน' }}
+=======
+                                          class="px-4 py-2 ml-2 text-sm transition duration-200 rounded-md"
+                                          :class="trip.hasReport ? 'bg-white text-blue-600 border border-blue-600 hover:bg-blue-50' : 'text-white bg-red-600 hover:bg-red-700'">
+                                                {{ trip.hasReport ? 'เธ•เธดเธ”เธ•เธฒเธกเธชเธ–เธฒเธเธฐ' : 'เธฃเธฒเธขเธเธฒเธ' }}
+>>>>>>> Stashed changes
                                         </button>
                                     </template>
 
@@ -196,12 +202,18 @@
   <button
     @click.stop="openReviewModal(trip)"
     class="px-4 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700">
-    รีวิวผู้ขับ
+    เธฃเธตเธงเธดเธงเธเธนเนเธเธฑเธ
   </button>
   <button @click.stop="trip.hasReport ? openProgressForTrip(trip) : openReportModal(trip)"
+<<<<<<< Updated upstream
     class="px-4 py-2 ml-2 text-sm text-white transition duration-200 rounded-md"
     :class="trip.hasReport ? 'bg-orange-500 hover:bg-orange-600' : 'bg-red-600 hover:bg-red-700'">
     {{ trip.hasReport ? 'ติดตามสถานะ' : 'รายงาน' }}
+=======
+    class="px-4 py-2 ml-2 text-sm transition duration-200 rounded-md"
+    :class="trip.hasReport ? 'bg-white text-blue-600 border border-blue-600 hover:bg-blue-50' : 'text-white bg-red-600 hover:bg-red-700'">
+    {{ trip.hasReport ? 'เธ•เธดเธ”เธ•เธฒเธกเธชเธ–เธฒเธเธฐ' : 'เธฃเธฒเธขเธเธฒเธ' }}
+>>>>>>> Stashed changes
   </button>
 </template>
 
@@ -211,13 +223,13 @@
                                     
                                     
 
-                                    <!-- REJECTED / CANCELLED: ลบได้ -->
+                                    <!-- REJECTED / CANCELLED: เธฅเธเนเธ”เน -->
                                     <button 
   v-else-if="['rejected', 'cancelled'].includes(trip.status) && trip.routeStatus !== 'completed'"
 
                                         @click.stop="openConfirmModal(trip, 'delete')"
                                         class="px-4 py-2 text-sm text-gray-600 transition duration-200 border border-gray-300 rounded-md hover:bg-gray-50">
-                                        ลบรายการ
+                                        เธฅเธเธฃเธฒเธขเธเธฒเธฃ
                                     </button>
                                 </div>
                             </div>
@@ -228,7 +240,7 @@
                 <div class="lg:col-span-1">
                     <div class="sticky overflow-hidden bg-white border border-gray-300 rounded-lg shadow-md top-8">
                         <div class="p-6 border-b border-gray-300">
-                            <h3 class="text-lg font-semibold text-gray-900">แผนที่เส้นทาง</h3>
+                            <h3 class="text-lg font-semibold text-gray-900">เนเธเธเธ—เธตเนเน€เธชเนเธเธ—เธฒเธ</h3>
                         </div>
                         <div ref="mapContainer" id="map" class="h-96"></div>
                     </div>
@@ -236,17 +248,17 @@
             </div>
         </div>
 
-        <!-- Modal: เลือกเหตุผลการยกเลิก -->
+        <!-- Modal: เน€เธฅเธทเธญเธเน€เธซเธ•เธธเธเธฅเธเธฒเธฃเธขเธเน€เธฅเธดเธ -->
         <div v-if="isCancelModalVisible" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
             @click.self="closeCancelModal">
             <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-xl">
-                <h3 class="text-lg font-semibold text-gray-900">เลือกเหตุผลการยกเลิก</h3>
-                <p class="mt-1 text-sm text-gray-600">โปรดเลือกเหตุผลตามตัวเลือกที่กำหนด</p>
+                <h3 class="text-lg font-semibold text-gray-900">เน€เธฅเธทเธญเธเน€เธซเธ•เธธเธเธฅเธเธฒเธฃเธขเธเน€เธฅเธดเธ</h3>
+                <p class="mt-1 text-sm text-gray-600">เนเธเธฃเธ”เน€เธฅเธทเธญเธเน€เธซเธ•เธธเธเธฅเธ•เธฒเธกเธ•เธฑเธงเน€เธฅเธทเธญเธเธ—เธตเนเธเธณเธซเธเธ”</p>
 
                 <div class="mt-4">
-                    <label class="block mb-1 text-sm text-gray-700">เหตุผล</label>
+                    <label class="block mb-1 text-sm text-gray-700">เน€เธซเธ•เธธเธเธฅ</label>
                     <select v-model="selectedCancelReason" class="w-full px-3 py-2 border border-gray-300 rounded-md">
-                        <option value="" disabled>-- เลือกเหตุผล --</option>
+                        <option value="" disabled>-- เน€เธฅเธทเธญเธเน€เธซเธ•เธธเธเธฅ --</option>
                         <option v-for="r in cancelReasonOptions" :key="r.value" :value="r.value">
                             {{ r.label }}
                         </option>
@@ -259,11 +271,11 @@
                 <div class="flex justify-end gap-2 mt-6">
                     <button @click="closeCancelModal"
                         class="px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
-                        ปิด
+                        เธเธดเธ”
                     </button>
                     <button @click="submitCancel" :disabled="!selectedCancelReason || isSubmittingCancel"
                         class="px-4 py-2 text-sm text-white bg-red-600 rounded-md hover:bg-red-700 disabled:opacity-50">
-                        {{ isSubmittingCancel ? 'กำลังส่ง...' : 'ยืนยันการยกเลิก' }}
+                        {{ isSubmittingCancel ? 'เธเธณเธฅเธฑเธเธชเนเธ...' : 'เธขเธทเธเธขเธฑเธเธเธฒเธฃเธขเธเน€เธฅเธดเธ' }}
                     </button>
                 </div>
             </div>
@@ -281,13 +293,13 @@
 
     <!-- HEADER -->
     <h2 class="mb-6 text-2xl font-semibold text-gray-800">
-      รีวิวผู้ขับ
+      เธฃเธตเธงเธดเธงเธเธนเนเธเธฑเธ
     </h2>
 
-    <!-- ⭐ Rating -->
+    <!-- โญ Rating -->
     <div class="mb-6">
       <label class="block mb-2 text-sm font-medium text-gray-700">
-        ให้คะแนน
+        เนเธซเนเธเธฐเนเธเธ
       </label>
 
       <div class="flex gap-2">
@@ -299,13 +311,13 @@
           class="text-3xl transition hover:scale-110"
         >
           <span :class="star <= rating ? 'text-yellow-400' : 'text-gray-300'">
-            ★
+            โ…
           </span>
         </button>
       </div>
     </div>
 
-    <!-- ✅ Review Categories -->
+    <!-- โ… Review Categories -->
     <div v-if="rating > 0" class="mb-6">
 
       <label
@@ -313,8 +325,8 @@
         :class="rating <= 2 ? 'text-red-500' : 'text-green-600'"
       >
         {{ rating <= 2
-            ? 'อะไรที่ควรปรับปรุง?'
-            : 'อะไรที่ประทับใจ?' }}
+            ? 'เธญเธฐเนเธฃเธ—เธตเนเธเธงเธฃเธเธฃเธฑเธเธเธฃเธธเธ?'
+            : 'เธญเธฐเนเธฃเธ—เธตเนเธเธฃเธฐเธ—เธฑเธเนเธ?' }}
       </label>
 
       <div class="grid grid-cols-2 gap-3 p-4 border rounded-lg bg-gray-50">
@@ -335,21 +347,21 @@
 
       <p v-if="selectedCategories.length === 0"
          class="mt-2 text-xs text-gray-400">
-        ไม่ระบุหมวดหมู่
+        เนเธกเนเธฃเธฐเธเธธเธซเธกเธงเธ”เธซเธกเธนเน
       </p>
     </div>
 
-    <!-- 📝 Comment -->
+    <!-- ๐“ Comment -->
     <div class="mb-6">
       <label class="block mb-2 text-sm font-medium text-gray-700">
-        ความคิดเห็น
+        เธเธงเธฒเธกเธเธดเธ”เน€เธซเนเธ
       </label>
 
       <textarea
         v-model="comment"
         rows="4"
         maxlength="501"
-        placeholder="เขียนรีวิวของคุณ... (สูงสุด 501 ตัวอักษร)"
+        placeholder="เน€เธเธตเธขเธเธฃเธตเธงเธดเธงเธเธญเธเธเธธเธ“... (เธชเธนเธเธชเธธเธ” 501 เธ•เธฑเธงเธญเธฑเธเธฉเธฃ)"
         class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
       ></textarea>
       <div class="text-right text-xs text-gray-500 mt-1">
@@ -357,12 +369,12 @@
       </div>
     </div>
 
-    <!-- � Upload media (images/videos) -->
+    <!-- ๏ฟฝ Upload media (images/videos) -->
     <div class="mb-6">
       <label class="block mb-2 text-sm font-medium text-gray-700">
-        เพิ่มรูปหรือวิดีโอ (ไม่บังคับ)
+        เน€เธเธดเนเธกเธฃเธนเธเธซเธฃเธทเธญเธงเธดเธ”เธตเนเธญ (เนเธกเนเธเธฑเธเธเธฑเธ)
         <span class="text-xs text-gray-400">
-          (สูงสุด 3 รูปและ 3 วิดีโอ, ขนาดแต่ละไฟล์ไม่เกิน 50MB)
+          (เธชเธนเธเธชเธธเธ” 3 เธฃเธนเธเนเธฅเธฐ 3 เธงเธดเธ”เธตเนเธญ, เธเธเธฒเธ”เนเธ•เนเธฅเธฐเนเธเธฅเนเนเธกเนเน€เธเธดเธ 50MB)
         </span>
       </label>
 
@@ -393,7 +405,7 @@
             type="button"
             class="absolute -top-2 -right-2 px-2 text-xs text-white bg-red-500 rounded-full shadow"
           >
-            ✕
+            โ•
           </button>
         </div>
 
@@ -413,7 +425,7 @@
             type="button"
             class="absolute -top-2 -right-2 px-2 text-xs text-white bg-red-500 rounded-full shadow"
           >
-            ✕
+            โ•
           </button>
         </div>
       </div>
@@ -426,7 +438,7 @@
         type="button"
         class="px-5 py-2 text-sm bg-gray-200 rounded-lg hover:bg-gray-300"
       >
-        ยกเลิก
+        เธขเธเน€เธฅเธดเธ
       </button>
 
       <button
@@ -434,7 +446,7 @@
         type="button"
         class="px-5 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700"
       >
-        ส่งรีวิว
+        เธชเนเธเธฃเธตเธงเธดเธง
       </button>
     </div>
      </div>
@@ -472,14 +484,14 @@
       <!-- HEADER -->
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-lg font-semibold">
-          รีวิวของ {{ selectedDriver?.name }}
+          เธฃเธตเธงเธดเธงเธเธญเธ {{ selectedDriver?.name }}
         </h3>
 
         <button
           class="px-3 py-1 text-sm text-white bg-red-500 rounded-lg hover:bg-red-600"
           @click="closeDriverReviewModal"
         >
-          ปิด
+          เธเธดเธ”
         </button>
       </div>
 
@@ -499,12 +511,12 @@
 
           <div class="text-yellow-400 text-lg">
             <span v-for="i in 5" :key="i">
-              {{ i <= Math.round(Number(driverReviewSummaryComputed.average)) ? '★' : '☆' }}
+              {{ i <= Math.round(Number(driverReviewSummaryComputed.average)) ? 'โ…' : 'โ' }}
             </span>
           </div>
 
           <div class="text-sm text-gray-500">
-            {{ driverReviewSummaryComputed.totalReviews }} รีวิว
+            {{ driverReviewSummaryComputed.totalReviews }} เธฃเธตเธงเธดเธง
           </div>
         </div>
 
@@ -519,7 +531,7 @@
                 : 'bg-white hover:bg-gray-50'
             ]"
           >
-            ทั้งหมด
+            เธ—เธฑเนเธเธซเธกเธ”
           </button>
 
           <button
@@ -555,7 +567,7 @@
                 />
                 <div>
                   <div class="text-sm font-semibold">
-                    {{ review.reviewer?.firstName || 'ผู้ใช้' }}
+                    {{ review.reviewer?.firstName || 'เธเธนเนเนเธเน' }}
                   </div>
                   <div class="text-xs text-gray-400">
                     {{ new Date(review.createdAt).toLocaleDateString() }}
@@ -564,13 +576,13 @@
               </div>
 
               <div class="text-yellow-500 font-semibold text-sm">
-                ⭐ {{ review.rating }}
+                โญ {{ review.rating }}
               </div>
             </div>
 
             <!-- COMMENT -->
             <div class="text-sm text-gray-700">
-              {{ review.comment || 'ไม่มีข้อความ' }}
+              {{ review.comment || 'เนเธกเนเธกเธตเธเนเธญเธเธงเธฒเธก' }}
             </div>
 
             <!-- TAGS -->
@@ -607,14 +619,14 @@
         </div>
 
         <div v-else class="text-gray-400 text-sm text-center">
-          ไม่มีรีวิวในหมวดนี้
+          เนเธกเนเธกเธตเธฃเธตเธงเธดเธงเนเธเธซเธกเธงเธ”เธเธตเน
         </div>
 
       </div>
 
       <!-- NO REVIEWS -->
       <div v-else class="text-center text-gray-400 py-8">
-        ยังไม่มีรีวิว
+        เธขเธฑเธเนเธกเนเธกเธตเธฃเธตเธงเธดเธง
       </div>
 
     </div>
@@ -633,25 +645,30 @@
         <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-red-500 via-orange-500 to-red-600"></div>
         <div class="flex items-center justify-between mb-2">
           <h3 class="text-2xl font-bold text-gray-800">
-            รายงานปัญหา
+            เธฃเธฒเธขเธเธฒเธเธเธฑเธเธซเธฒ
           </h3>
           <button @click="closeReportModal" class="p-2 transition-colors rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           </button>
         </div>
-        <p class="text-sm text-gray-500">ความปลอดภัยของคุณคือสิ่งสำคัญ โปรดแจ้งให้เราทราบ</p>
+        <p class="text-sm text-gray-500">เธเธงเธฒเธกเธเธฅเธญเธ”เธ เธฑเธขเธเธญเธเธเธธเธ“เธเธทเธญเธชเธดเนเธเธชเธณเธเธฑเธ เนเธเธฃเธ”เนเธเนเธเนเธซเนเน€เธฃเธฒเธ—เธฃเธฒเธ</p>
       </div>
 
       <div class="p-6 space-y-5">
         <div>
           <label class="block mb-2 text-sm font-semibold text-gray-700">
+<<<<<<< Updated upstream
             หัวข้อปัญหา
+=======
+            เธซเธฑเธงเธเนเธญเธเธฑเธเธซเธฒ (เน€เธฅเธทเธญเธเนเธ”เนเธกเธฒเธเธเธงเนเธฒ 1 เธเนเธญ)
+>>>>>>> Stashed changes
           </label>
           <div class="relative group">
             <select
               v-model="passengerReportCategory"
               class="w-full px-4 py-3 transition-all border-2 border-gray-100 appearance-none rounded-xl focus:border-red-500 focus:ring-0 bg-gray-50/50"
             >
+<<<<<<< Updated upstream
               <option disabled value="">-- เลือกหัวข้อที่เกี่ยวข้อง --</option>
               <option value="SAFETY_ISSUE">🚨 ความปลอดภัย</option>
               <option value="PASSENGER_ISSUE">👤 พฤติกรรมคนขับ</option>
@@ -661,26 +678,36 @@
             <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-400">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
             </div>
+=======
+              {{ option.label }}
+            </button>
+          </div>
+          <div v-if="!passengerReportCategories.length" class="mt-2 text-xs text-gray-500">
+            เนเธเธฃเธ”เน€เธฅเธทเธญเธเธญเธขเนเธฒเธเธเนเธญเธข 1 เธซเธกเธงเธ”เธซเธกเธนเน
+          </div>
+          <div v-else class="mt-2 text-xs text-gray-500">
+            เน€เธฅเธทเธญเธเนเธฅเนเธง {{ passengerReportCategories.length }} เธซเธกเธงเธ”เธซเธกเธนเน
+>>>>>>> Stashed changes
           </div>
         </div>
 
         <div>
           <label class="block mb-2 text-sm font-semibold text-gray-700">
-            รายละเอียดเหตุการณ์
+            เธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”เน€เธซเธ•เธธเธเธฒเธฃเธ“เน
           </label>
           <textarea
             v-model="reportText"
             rows="4"
             maxlength="501"
             class="w-full p-4 transition-all border-2 border-gray-100 rounded-xl focus:border-red-500 focus:ring-0 bg-gray-50/50 placeholder:text-gray-400"
-            placeholder="รบกวนระบุรายละเอียดเพื่อให้เราตรวจสอบได้รวดเร็วขึ้น..."
+            placeholder="เธฃเธเธเธงเธเธฃเธฐเธเธธเธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”เน€เธเธทเนเธญเนเธซเนเน€เธฃเธฒเธ•เธฃเธงเธเธชเธญเธเนเธ”เนเธฃเธงเธ”เน€เธฃเนเธงเธเธถเนเธ..."
           ></textarea>
           <div class="text-right text-xs text-gray-500 mt-1">{{ reportText.length }} / 501</div>
         </div>
 
         <div>
           <label class="block mb-2 text-sm font-semibold text-gray-700">
-            หลักฐานรูปหรือวิดีโอ <span class="font-normal text-gray-400">(สูงสุด 3 รูปและ 3 วิดีโอ, ไฟล์ละไม่เกิน 50MB)</span>
+            เธซเธฅเธฑเธเธเธฒเธเธฃเธนเธเธซเธฃเธทเธญเธงเธดเธ”เธตเนเธญ <span class="font-normal text-gray-400">(เธชเธนเธเธชเธธเธ” 3 เธฃเธนเธเนเธฅเธฐ 3 เธงเธดเธ”เธตเนเธญ, เนเธเธฅเนเธฅเธฐเนเธกเนเน€เธเธดเธ 50MB)</span>
           </label>
           
           <div class="flex flex-wrap gap-4">
@@ -689,7 +716,7 @@
                 <svg class="w-8 h-8 mb-1 text-gray-400 group-hover:text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                 </svg>
-                <span class="text-[10px] text-gray-400 group-hover:text-red-500 uppercase font-bold">เพิ่มไฟล์</span>
+                <span class="text-[10px] text-gray-400 group-hover:text-red-500 uppercase font-bold">เน€เธเธดเนเธกเนเธเธฅเน</span>
               </div>
               <input type="file" class="hidden" multiple @change="handleReportFiles" accept="image/*,video/*" />
             </label>
@@ -707,7 +734,7 @@
                 @click="removeReportImage(i)"
                 class="absolute flex items-center justify-center w-6 h-6 text-white transition-transform bg-red-500 rounded-full shadow-lg -top-2 -right-2 hover:scale-110 active:scale-95"
               >
-                ✕
+                โ•
               </button>
             </div>
             <div
@@ -724,7 +751,7 @@
                 @click="removeReportVideo(i)"
                 class="absolute flex items-center justify-center w-6 h-6 text-white transition-transform bg-red-500 rounded-full shadow-lg -top-2 -right-2 hover:scale-110 active:scale-95"
               >
-                ✕
+                โ•
               </button>
             </div>
           </div>
@@ -736,7 +763,7 @@
           @click="closeReportModal"
           class="flex-1 py-3 font-semibold text-gray-600 transition-all rounded-xl hover:bg-gray-100 active:scale-95"
         >
-          ยกเลิก
+          เธขเธเน€เธฅเธดเธ
         </button>
 
         <button
@@ -744,7 +771,7 @@
           :disabled="!passengerReportCategory || !reportText"
           class="flex-[2] py-3 font-semibold text-white transition-all bg-red-600 rounded-xl hover:bg-red-700 shadow-lg shadow-red-200 active:scale-95 disabled:opacity-50 disabled:grayscale disabled:pointer-events-none"
         >
-          ส่งรายงานความปลอดภัย
+          เธชเนเธเธฃเธฒเธขเธเธฒเธเธเธงเธฒเธกเธเธฅเธญเธ”เธ เธฑเธข
         </button>
       </div>
     </div>
@@ -756,10 +783,17 @@
             @click.self="isProgressModalVisible = false">
             <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 overflow-hidden animate-in">
                 <!-- Header -->
+<<<<<<< Updated upstream
                 <div class="bg-gradient-to-r from-red-500 to-red-600 p-6 text-white">
                     <div class="flex items-center justify-between mb-2">
                         <h2 class="text-xl font-bold">ติดตามสถานะรายงาน</h2>
                         <button @click="isProgressModalVisible = false" class="text-white/80 hover:text-white transition">
+=======
+                <div class="border-b border-gray-200 bg-white p-6 text-black">
+                  <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-xl font-bold">เธ•เธดเธ”เธ•เธฒเธกเธชเธ–เธฒเธเธฐเธฃเธฒเธขเธเธฒเธ</h2>
+                    <button @click="isProgressModalVisible = false" class="text-gray-500 hover:text-black transition">
+>>>>>>> Stashed changes
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
@@ -775,7 +809,7 @@
                         <div v-if="selectedTrip.hasReport" class="space-y-6 animate-in slide-in-from-top duration-300">
                             <!-- Progress Steps -->
                             
-                            <!-- ✅ Report Status Card -->
+                            <!-- โ… Report Status Card -->
                             <ReportStatusCard
                                 v-if="selectedTrip?.reportData"
                                 :status="selectedTrip.reportData.status"
@@ -783,7 +817,7 @@
                             <!-- Summary Block -->
                             <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 shadow-sm">
                                 <div class="flex items-center justify-between mb-4">
-                                    <h4 class="font-bold text-blue-900">สรุปการรายงาน</h4>
+                                    <h4 class="font-bold text-blue-900">เธชเธฃเธธเธเธเธฒเธฃเธฃเธฒเธขเธเธฒเธ</h4>
                                     <span 
                                         class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold shadow-sm"
                                         :class="{
@@ -798,21 +832,35 @@
 
                                 <div class="space-y-3 text-sm text-blue-800">
                                     <div class="flex justify-between border-b border-blue-100 pb-2">
-                                        <span class="opacity-75">หัวข้อข้อปัญหา:</span>
-                                        <span class="font-semibold">{{ getCategoryText(selectedTrip.reportData?.category) }}</span>
+                                        <span class="opacity-75">เธซเธฑเธงเธเนเธญเธเนเธญเธเธฑเธเธซเธฒ:</span>
+                                        <span class="font-semibold">{{ getCategoryText(selectedTrip.reportData) }}</span>
                                     </div>
                                     <div class="flex justify-between border-b border-blue-100 pb-2">
-                                        <span class="opacity-75">วันที่แจ้ง:</span>
-                                        <span class="font-semibold text-right">{{ selectedTrip.reportData?.createdAt ? dayjs(selectedTrip.reportData.createdAt).format('D MMM BBBB HH:mm น.') : '-' }}</span>
+                                        <span class="opacity-75">เธงเธฑเธเธ—เธตเนเนเธเนเธ:</span>
+                                        <span class="font-semibold text-right">{{ selectedTrip.reportData?.createdAt ? dayjs(selectedTrip.reportData.createdAt).format('D MMM BBBB HH:mm เธ.') : '-' }}</span>
                                     </div>
                                     <div class="pt-1">
-                                        <span class="opacity-75 block mb-1 font-medium">รายละเอียดที่แจ้ง:</span>
+                                        <span class="opacity-75 block mb-1 font-medium">เธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”เธ—เธตเนเนเธเนเธ:</span>
                                         <p class="text-gray-700 bg-white/60 p-3 rounded-lg border border-blue-100 italic leading-relaxed">
                                             "{{ selectedTrip.reportData?.description }}"
                                         </p>
                                     </div>
+<<<<<<< Updated upstream
+=======
+                                    <div v-if="getReportLink(selectedTrip.reportData?.description)" class="pt-1">
+                                      <span class="opacity-75 block mb-1 font-medium">เธฅเธดเธเธเนเธ—เธตเนเนเธเธ:</span>
+                                      <a
+                                        :href="getReportLink(selectedTrip.reportData?.description)"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="block break-all text-blue-700 hover:text-blue-800 underline bg-white/60 p-3 rounded-lg border border-blue-100"
+                                      >
+                                        {{ getReportLink(selectedTrip.reportData?.description) }}
+                                      </a>
+                                    </div>
+>>>>>>> Stashed changes
                                     <div v-if="(selectedTrip.reportData?.images?.length || selectedTrip.reportData?.videos?.length)" class="pt-2">
-                                        <span class="opacity-75 block mb-2 font-medium">ไฟล์ประกอบ:</span>
+                                        <span class="opacity-75 block mb-2 font-medium">เนเธเธฅเนเธเธฃเธฐเธเธญเธ:</span>
                                         <div class="flex flex-wrap gap-2">
                                             <img v-if="selectedTrip.reportData?.images" 
                                                 v-for="(img, idx) in selectedTrip.reportData.images" :key="`img-${idx}`" :src="img" 
@@ -834,14 +882,14 @@
                                     <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 013 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                     </svg>
-                                    การตอบรับจากทีมงาน
+                                    เธเธฒเธฃเธ•เธญเธเธฃเธฑเธเธเธฒเธเธ—เธตเธกเธเธฒเธ
                                 </h4>
                                 <div v-if="selectedTrip.reportData?.status !== 'PENDING'" class="p-4 bg-gray-50 rounded-lg border border-gray-100">
                                     <p class="text-sm text-gray-700 leading-relaxed italic">
-                                        "{{ selectedTrip.reportData?.adminNotes || 'ได้รับการตรวจสอบเรียบร้อยแล้ว' }}"
+                                        "{{ selectedTrip.reportData?.adminNotes || 'เนเธ”เนเธฃเธฑเธเธเธฒเธฃเธ•เธฃเธงเธเธชเธญเธเน€เธฃเธตเธขเธเธฃเนเธญเธขเนเธฅเนเธง' }}"
                                     </p>
                                     <div v-if="selectedTrip.reportData?.resolvedAt" class="mt-3 pt-3 border-t border-gray-200 flex justify-between items-center text-[10px] text-gray-400">
-                                        <span>ตรวจสอบเมื่อ: {{ dayjs(selectedTrip.reportData.resolvedAt).format('D MMM BBBB HH:mm') }}</span>
+                                        <span>เธ•เธฃเธงเธเธชเธญเธเน€เธกเธทเนเธญ: {{ dayjs(selectedTrip.reportData.resolvedAt).format('D MMM BBBB HH:mm') }}</span>
                                         <span class="text-green-600 font-bold tracking-wider">VERIFIED BY TEAM</span>
                                     </div>
                                 </div>
@@ -851,10 +899,10 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
                                     </div>
-                                    <p class="text-sm text-gray-500">รายงานของคุณกำลังรอการตรวจสอบ<br>เราจะเร่งดำเนินการให้เร็วที่สุด</p>
+                                    <p class="text-sm text-gray-500">เธฃเธฒเธขเธเธฒเธเธเธญเธเธเธธเธ“เธเธณเธฅเธฑเธเธฃเธญเธเธฒเธฃเธ•เธฃเธงเธเธชเธญเธ<br>เน€เธฃเธฒเธเธฐเน€เธฃเนเธเธ”เธณเน€เธเธดเธเธเธฒเธฃเนเธซเนเน€เธฃเนเธงเธ—เธตเนเธชเธธเธ”</p>
                                 </div>
                                 <div class="mt-4 p-3 bg-blue-50 border border-blue-100 rounded-lg text-xs text-blue-800 text-center">
-                                    หากปัญหานี้ได้รับการแก้ไขแล้ว หรือต้องการให้ข้อมูลเพิ่มเติม<br>สามารถติดต่อแอดมินได้ที่ <strong>admin@example.com</strong>
+                                    เธซเธฒเธเธเธฑเธเธซเธฒเธเธตเนเนเธ”เนเธฃเธฑเธเธเธฒเธฃเนเธเนเนเธเนเธฅเนเธง เธซเธฃเธทเธญเธ•เนเธญเธเธเธฒเธฃเนเธซเนเธเนเธญเธกเธนเธฅเน€เธเธดเนเธกเน€เธ•เธดเธก<br>เธชเธฒเธกเธฒเธฃเธ–เธ•เธดเธ”เธ•เนเธญเนเธญเธ”เธกเธดเธเนเธ”เนเธ—เธตเน <strong>admin@example.com</strong>
                                 </div>
                             </div>
                         </div>
@@ -865,7 +913,7 @@
                 <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
                     <button @click="isProgressModalVisible = false"
                         class="w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all shadow-md active:scale-95">
-                        ปิด
+                        เธเธดเธ”
                     </button>
                 </div>
             </div>
@@ -908,7 +956,18 @@ const selectedTripId = ref(null)
 const isProgressModalVisible = ref(false)
 const isLoading = ref(false)
 const mapContainer = ref(null)
+<<<<<<< Updated upstream
 const passengerReportCategory = ref('')
+=======
+const passengerReportCategories = ref([])
+const passengerReportCategoryOptions = [
+  { value: 'DRIVER_ISSUE', label: 'เธเธคเธ•เธดเธเธฃเธฃเธกเธเธเธเธฑเธ' },
+  { value: 'ROAD_ISSUE', label: 'เธเธฒเธฃเน€เธ”เธดเธเธ—เธฒเธ' },
+  { value: 'VEHICLE_ISSUE', label: 'เธฃเธ–เธขเธเธ•เน' },
+  { value: 'PAYMENT_ISSUE', label: 'เธเนเธฒเนเธ”เธขเธชเธฒเธฃ' },
+  { value: 'OTHER', label: 'เธญเธทเนเธเน' }
+]
+>>>>>>> Stashed changes
 const modalTab = ref('trip')
 let map = null
 let currentPolyline = null
@@ -926,16 +985,16 @@ const selectedTag = ref(null)
 // Review tags and labels
 const REVIEW_TAGS = ['CLEAN', 'POLITE_DRIVER', 'ON_TIME', 'SAFE_DRIVING', 'FRIENDLY_SERVICE', 'DIRTY', 'RUDE_DRIVER', 'LATE', 'UNSAFE_DRIVING', 'UNFRIENDLY_SERVICE']
 const TAG_LABELS = {
-  CLEAN: 'สะอาด',
-  POLITE_DRIVER: 'คนขับมารยาทดี',
-  ON_TIME: 'ตรงเวลา',
-  SAFE_DRIVING: 'ขับปลอดภัย',
-  FRIENDLY_SERVICE: 'บริการเป็นกันเอง',
-  DIRTY: 'รถไม่สะอาด',
-  RUDE_DRIVER: 'คนขับพูดจาไม่สุภาพ',
-  LATE: 'มาสาย',
-  UNSAFE_DRIVING: 'ขับรถอันตราย',
-  UNFRIENDLY_SERVICE: 'บริการไม่เป็นมิตร'
+  CLEAN: 'เธชเธฐเธญเธฒเธ”',
+  POLITE_DRIVER: 'เธเธเธเธฑเธเธกเธฒเธฃเธขเธฒเธ—เธ”เธต',
+  ON_TIME: 'เธ•เธฃเธเน€เธงเธฅเธฒ',
+  SAFE_DRIVING: 'เธเธฑเธเธเธฅเธญเธ”เธ เธฑเธข',
+  FRIENDLY_SERVICE: 'เธเธฃเธดเธเธฒเธฃเน€เธเนเธเธเธฑเธเน€เธญเธ',
+  DIRTY: 'เธฃเธ–เนเธกเนเธชเธฐเธญเธฒเธ”',
+  RUDE_DRIVER: 'เธเธเธเธฑเธเธเธนเธ”เธเธฒเนเธกเนเธชเธธเธ เธฒเธ',
+  LATE: 'เธกเธฒเธชเธฒเธข',
+  UNSAFE_DRIVING: 'เธเธฑเธเธฃเธ–เธญเธฑเธเธ•เธฃเธฒเธข',
+  UNFRIENDLY_SERVICE: 'เธเธฃเธดเธเธฒเธฃเนเธกเนเน€เธเนเธเธกเธดเธ•เธฃ'
 }
 
 let gmap = null // Google Map instance
@@ -950,26 +1009,26 @@ let stopMarkers = []
 const GMAPS_CB = '__gmapsReady__'
 
 const tabs = [
-    { status: 'pending', label: 'รอดำเนินการ' },
-    { status: 'confirmed', label: 'ยืนยันแล้ว' },
-    { status: 'rejected', label: 'ปฏิเสธ' },
-    { status: 'cancelled', label: 'ยกเลิก' },
-    { status: 'completed', label: 'จบทริปแล้ว' },
-    { status: 'all', label: 'ทั้งหมด' }
+    { status: 'pending', label: 'เธฃเธญเธ”เธณเน€เธเธดเธเธเธฒเธฃ' },
+    { status: 'confirmed', label: 'เธขเธทเธเธขเธฑเธเนเธฅเนเธง' },
+    { status: 'rejected', label: 'เธเธเธดเน€เธชเธ' },
+    { status: 'cancelled', label: 'เธขเธเน€เธฅเธดเธ' },
+    { status: 'completed', label: 'เธเธเธ—เธฃเธดเธเนเธฅเนเธง' },
+    { status: 'all', label: 'เธ—เธฑเนเธเธซเธกเธ”' }
 ]
 
 definePageMeta({ middleware: 'auth' })
 
 const cancelReasonOptions = [
-    { value: 'CHANGE_OF_PLAN', label: 'เปลี่ยนแผน/มีธุระกะทันหัน' },
-    { value: 'FOUND_ALTERNATIVE', label: 'พบวิธีเดินทางอื่นแล้ว' },
-    { value: 'DRIVER_DELAY', label: 'คนขับล่าช้าหรือเลื่อนเวลา' },
-    { value: 'PRICE_ISSUE', label: 'ราคาหรือค่าใช้จ่ายไม่เหมาะสม' },
-    { value: 'WRONG_LOCATION', label: 'เลือกจุดรับ–ส่งผิด' },
-    { value: 'DUPLICATE_OR_WRONG_DATE', label: 'จองซ้ำหรือจองผิดวัน' },
-    { value: 'SAFETY_CONCERN', label: 'กังวลด้านความปลอดภัย' },
-    { value: 'WEATHER_OR_FORCE_MAJEURE', label: 'สภาพอากาศ/เหตุสุดวิสัย' },
-    { value: 'COMMUNICATION_ISSUE', label: 'สื่อสารไม่สะดวก/ติดต่อไม่ได้' }
+    { value: 'CHANGE_OF_PLAN', label: 'เน€เธเธฅเธตเนเธขเธเนเธเธ/เธกเธตเธเธธเธฃเธฐเธเธฐเธ—เธฑเธเธซเธฑเธ' },
+    { value: 'FOUND_ALTERNATIVE', label: 'เธเธเธงเธดเธเธตเน€เธ”เธดเธเธ—เธฒเธเธญเธทเนเธเนเธฅเนเธง' },
+    { value: 'DRIVER_DELAY', label: 'เธเธเธเธฑเธเธฅเนเธฒเธเนเธฒเธซเธฃเธทเธญเน€เธฅเธทเนเธญเธเน€เธงเธฅเธฒ' },
+    { value: 'PRICE_ISSUE', label: 'เธฃเธฒเธเธฒเธซเธฃเธทเธญเธเนเธฒเนเธเนเธเนเธฒเธขเนเธกเนเน€เธซเธกเธฒเธฐเธชเธก' },
+    { value: 'WRONG_LOCATION', label: 'เน€เธฅเธทเธญเธเธเธธเธ”เธฃเธฑเธโ€“เธชเนเธเธเธดเธ”' },
+    { value: 'DUPLICATE_OR_WRONG_DATE', label: 'เธเธญเธเธเนเธณเธซเธฃเธทเธญเธเธญเธเธเธดเธ”เธงเธฑเธ' },
+    { value: 'SAFETY_CONCERN', label: 'เธเธฑเธเธงเธฅเธ”เนเธฒเธเธเธงเธฒเธกเธเธฅเธญเธ”เธ เธฑเธข' },
+    { value: 'WEATHER_OR_FORCE_MAJEURE', label: 'เธชเธ เธฒเธเธญเธฒเธเธฒเธจ/เน€เธซเธ•เธธเธชเธธเธ”เธงเธดเธชเธฑเธข' },
+    { value: 'COMMUNICATION_ISSUE', label: 'เธชเธทเนเธญเธชเธฒเธฃเนเธกเนเธชเธฐเธ”เธงเธ/เธ•เธดเธ”เธ•เนเธญเนเธกเนเนเธ”เน' }
 ]
 
 const isCancelModalVisible = ref(false)
@@ -989,7 +1048,7 @@ const filteredTrips = computed(() => {
     if (activeTab.value === 'all') return allTrips.value
 
     return allTrips.value.filter((trip) => {
-        // ถ้า route completed → บังคับให้อยู่ในแท็บ completed เท่านั้น
+        // เธ–เนเธฒ route completed โ’ เธเธฑเธเธเธฑเธเนเธซเนเธญเธขเธนเนเนเธเนเธ—เนเธ completed เน€เธ—เนเธฒเธเธฑเนเธ
         if (trip.routeStatus === 'completed') {
             return activeTab.value === 'completed'
         }
@@ -1034,13 +1093,13 @@ const handleMedia = (e) => {
 
   files.forEach(file => {
     if (file.size > MAX_FILE_SIZE) {
-      toast.error('ขนาดไฟล์ต้องไม่เกิน 50MB')
+      toast.error('เธเธเธฒเธ”เนเธเธฅเนเธ•เนเธญเธเนเธกเนเน€เธเธดเธ 50MB')
       return
     }
 
     if (file.type.startsWith('image/')) {
       if (selectedImages.value.length >= MAX_IMAGES) {
-        toast.error(`เพิ่มรูปได้สูงสุด ${MAX_IMAGES} รูป`)
+        toast.error(`เน€เธเธดเนเธกเธฃเธนเธเนเธ”เนเธชเธนเธเธชเธธเธ” ${MAX_IMAGES} เธฃเธนเธ`)
         return
       }
       selectedImages.value.push(file)
@@ -1051,14 +1110,14 @@ const handleMedia = (e) => {
       reader.readAsDataURL(file)
     } else if (file.type.startsWith('video/')) {
       if (selectedVideos.value.length >= MAX_VIDEOS) {
-        toast.error(`เพิ่มวิดีโอได้สูงสุด ${MAX_VIDEOS} วิดีโอ`)
+        toast.error(`เน€เธเธดเนเธกเธงเธดเธ”เธตเนเธญเนเธ”เนเธชเธนเธเธชเธธเธ” ${MAX_VIDEOS} เธงเธดเธ”เธตเนเธญ`)
         return
       }
       selectedVideos.value.push(file)
       const url = URL.createObjectURL(file)
       videoPreviews.value.push(url)
     } else {
-      toast.error('กรุณาเลือกไฟล์รูปหรือวิดีโอเท่านั้น')
+      toast.error('เธเธฃเธธเธ“เธฒเน€เธฅเธทเธญเธเนเธเธฅเนเธฃเธนเธเธซเธฃเธทเธญเธงเธดเธ”เธตเนเธญเน€เธ—เนเธฒเธเธฑเนเธ')
     }
   })
 
@@ -1108,7 +1167,7 @@ const uploadMedia = async () => {
 
 
 
-// ⭐ เปลี่ยนหมวดตาม rating
+// โญ เน€เธเธฅเธตเนเธขเธเธซเธกเธงเธ”เธ•เธฒเธก rating
 const reviewCategories = computed(() => {
   if (rating.value === 0) return []
   if (rating.value <= 2) return negativeCategories
@@ -1116,25 +1175,25 @@ const reviewCategories = computed(() => {
 })
 
 
-// 🔥 รีเซ็ต tag ทุกครั้งที่ rating เปลี่ยน
+// ๐”ฅ เธฃเธตเน€เธเนเธ• tag เธ—เธธเธเธเธฃเธฑเนเธเธ—เธตเน rating เน€เธเธฅเธตเนเธขเธ
 watch(rating, () => {
   selectedCategories.value = []
 })
 
 const positiveCategories = [
-  { label: 'สะอาด', value: 'CLEAN' },
-  { label: 'คนขับมารยาทดี', value: 'POLITE_DRIVER' },
-  { label: 'ตรงเวลา', value: 'ON_TIME' },
-  { label: 'ขับปลอดภัย', value: 'SAFE_DRIVING' },
-  { label: 'บริการเป็นกันเอง', value: 'FRIENDLY_SERVICE' }
+  { label: 'เธชเธฐเธญเธฒเธ”', value: 'CLEAN' },
+  { label: 'เธเธเธเธฑเธเธกเธฒเธฃเธขเธฒเธ—เธ”เธต', value: 'POLITE_DRIVER' },
+  { label: 'เธ•เธฃเธเน€เธงเธฅเธฒ', value: 'ON_TIME' },
+  { label: 'เธเธฑเธเธเธฅเธญเธ”เธ เธฑเธข', value: 'SAFE_DRIVING' },
+  { label: 'เธเธฃเธดเธเธฒเธฃเน€เธเนเธเธเธฑเธเน€เธญเธ', value: 'FRIENDLY_SERVICE' }
 ]
 
 const negativeCategories = [
-  { label: 'รถไม่สะอาด', value: 'DIRTY' },
-  { label: 'คนขับพูดจาไม่สุภาพ', value: 'RUDE_DRIVER' },
-  { label: 'มาสาย', value: 'LATE' },
-  { label: 'ขับรถอันตราย', value: 'UNSAFE_DRIVING' },
-  { label: 'บริการไม่เป็นมิตร', value: 'UNFRIENDLY_SERVICE' }
+  { label: 'เธฃเธ–เนเธกเนเธชเธฐเธญเธฒเธ”', value: 'DIRTY' },
+  { label: 'เธเธเธเธฑเธเธเธนเธ”เธเธฒเนเธกเนเธชเธธเธ เธฒเธ', value: 'RUDE_DRIVER' },
+  { label: 'เธกเธฒเธชเธฒเธข', value: 'LATE' },
+  { label: 'เธเธฑเธเธฃเธ–เธญเธฑเธเธ•เธฃเธฒเธข', value: 'UNSAFE_DRIVING' },
+  { label: 'เธเธฃเธดเธเธฒเธฃเนเธกเนเน€เธเนเธเธกเธดเธ•เธฃ', value: 'UNFRIENDLY_SERVICE' }
 ]
 
 const images = ref([])
@@ -1153,17 +1212,17 @@ const closeModal = () => {
 
 const submitReview = async () => {
   if (!rating.value) {
-    toast.error("กรุณาให้คะแนนก่อน")
+    toast.error("เธเธฃเธธเธ“เธฒเนเธซเนเธเธฐเนเธเธเธเนเธญเธ")
     return
   }
 
   if (!selectedTripForReview.value?.id) {
-    toast.error("ไม่พบข้อมูลการจอง")
+    toast.error("เนเธกเนเธเธเธเนเธญเธกเธนเธฅเธเธฒเธฃเธเธญเธ")
     return
   }
 
   try {
-    // Upload media ก่อน
+    // Upload media เธเนเธญเธ
     const { images: imageUrls, videos: videoUrls } = await uploadMedia()
 
     await $api('/reviews', {
@@ -1178,7 +1237,7 @@ const submitReview = async () => {
       }
     })
 
-    toast.success("รีวิวสำเร็จ 🎉")
+    toast.success("เธฃเธตเธงเธดเธงเธชเธณเน€เธฃเนเธ ๐")
 
     resetReviewForm()
 
@@ -1186,7 +1245,7 @@ const submitReview = async () => {
 
   } catch (error) {
     const message =
-      error?.data?.message ||   // สำคัญใน Nuxt 3
+      error?.data?.message ||   // เธชเธณเธเธฑเธเนเธ Nuxt 3
       error?.response?.data?.message ||
       error?.message ||
       "Something went wrong"
@@ -1212,7 +1271,7 @@ const selectedTrip = computed(() => {
 
 function cleanAddr(a) {
     return (a || '')
-        .replace(/,?\s*(Thailand|ไทย|ประเทศ)\s*$/i, '')
+        .replace(/,?\s*(Thailand|เนเธ—เธข|เธเธฃเธฐเน€เธ—เธจ)\s*$/i, '')
         .replace(/\s{2,}/g, ' ')
         .trim()
 }
@@ -1223,7 +1282,7 @@ async function fetchMyTrips() {
     try {
         const bookings = await $api('/bookings/me')
 
-        // map ข้อมูลพื้นฐานก่อน (ตั้งชื่อชั่วคราวเป็นพิกัด แล้วไป reverse geocode ภายหลัง)
+        // map เธเนเธญเธกเธนเธฅเธเธทเนเธเธเธฒเธเธเนเธญเธ (เธ•เธฑเนเธเธเธทเนเธญเธเธฑเนเธงเธเธฃเธฒเธงเน€เธเนเธเธเธดเธเธฑเธ” เนเธฅเนเธงเนเธ reverse geocode เธ เธฒเธขเธซเธฅเธฑเธ)
         const formatted = bookings.map((b) => {
             const driverData = {
                 id: b.route.driver.id, 
@@ -1243,7 +1302,7 @@ async function fetchMyTrips() {
                     carDetails.push(...b.route.vehicle.amenities)
                 }
             } else {
-                carDetails.push('ไม่มีข้อมูลรถ')
+                carDetails.push('เนเธกเนเธกเธตเธเนเธญเธกเธนเธฅเธฃเธ–')
             }
 
             const start = b.route.startLocation
@@ -1264,7 +1323,7 @@ async function fetchMyTrips() {
                     const fallback =
                         p?.lat != null && p?.lng != null ? `(${Number(p.lat).toFixed(6)}, ${Number(p.lng).toFixed(6)})` : ''
                     const title = name || fallback
-                    return address ? `${title} — ${address}` : title
+                    return address ? `${title} โ€” ${address}` : title
                 })
                 .filter(Boolean)
 
@@ -1289,7 +1348,7 @@ async function fetchMyTrips() {
                 destinationHasName: !!end?.name,
                 pickupPoint: b.pickupLocation?.name || '-',
                 date: dayjs(b.route.departureTime).format('D MMMM BBBB'),
-                time: dayjs(b.route.departureTime).format('HH:mm น.'),
+                time: dayjs(b.route.departureTime).format('HH:mm เธ.'),
                 price: (b.route.pricePerSeat || 0) * (b.numberOfSeats || 1),
                 seats: b.numberOfSeats || 1,
                 driver: driverData,
@@ -1297,7 +1356,7 @@ async function fetchMyTrips() {
                     [start.lat, start.lng],
                     [end.lat, end.lng]
                 ],
-                polyline: b.route.routePolyline || null, // ใช้เมื่อมี
+                polyline: b.route.routePolyline || null, // เนเธเนเน€เธกเธทเนเธญเธกเธต
                 stops,
                 stopsCoords,
                 carDetails,
@@ -1305,10 +1364,10 @@ async function fetchMyTrips() {
                 photos: b.route.vehicle?.photos || [],
                 durationText:
                     (typeof b.route.duration === 'string' ? formatDuration(b.route.duration) : b.route.duration) ||
-                    (typeof b.route.durationSeconds === 'number' ? `${Math.round(b.route.durationSeconds / 60)} นาที` : '-'),
+                    (typeof b.route.durationSeconds === 'number' ? `${Math.round(b.route.durationSeconds / 60)} เธเธฒเธ—เธต` : '-'),
                 distanceText:
                     (typeof b.route.distance === 'string' ? formatDistance(b.route.distance) : b.route.distance) ||
-                    (typeof b.route.distanceMeters === 'number' ? `${(b.route.distanceMeters / 1000).toFixed(1)} กม.` : '-') ,
+                    (typeof b.route.distanceMeters === 'number' ? `${(b.route.distanceMeters / 1000).toFixed(1)} เธเธก.` : '-') ,
                 hasReport: false ,
                 reportData: null
             }
@@ -1322,7 +1381,7 @@ async function fetchMyTrips() {
             )
         )
 
-        // รอให้แผนที่พร้อมก่อน แล้วค่อย reverse geocode เพื่อได้ "ชื่อสถานที่" สวยๆ
+        // เธฃเธญเนเธซเนเนเธเธเธ—เธตเนเธเธฃเนเธญเธกเธเนเธญเธ เนเธฅเนเธงเธเนเธญเธข reverse geocode เน€เธเธทเนเธญเนเธ”เน "เธเธทเนเธญเธชเธ–เธฒเธเธ—เธตเน" เธชเธงเธขเน
         await waitMapReady()
 
         const jobs = allTrips.value.map(async (t, idx) => {
@@ -1356,7 +1415,7 @@ async function loadDriverReviews(driverId, tripIndex) {
 
         const reviews = res || []
 
-        //คำนวณคะแนนจริง
+        //เธเธณเธเธงเธ“เธเธฐเนเธเธเธเธฃเธดเธ
         const avg =
             reviews.length > 0
                 ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length
@@ -1468,7 +1527,7 @@ async function extractNameParts(geocodeResult) {
     if (sublocality && province) area = `${sublocality}, ${province}`
     else if (province) area = province
 
-    if (name) name = name.replace(/,?\s*(Thailand|ไทย)\s*$/i, '')
+    if (name) name = name.replace(/,?\s*(Thailand|เนเธ—เธข)\s*$/i, '')
     return { name, area }
 }
 
@@ -1513,7 +1572,7 @@ async function updateMap(trip) {
     await waitMapReady()
     if (!gmap) return
 
-    // cleanup ของเดิม
+    // cleanup เธเธญเธเน€เธ”เธดเธก
     if (activePolyline) {
         activePolyline.setMap(null)
         activePolyline = null
@@ -1534,7 +1593,7 @@ async function updateMap(trip) {
     const start = { lat: Number(trip.coords[0][0]), lng: Number(trip.coords[0][1]) }
     const end = { lat: Number(trip.coords[1][0]), lng: Number(trip.coords[1][1]) }
 
-    // หมุด A/B
+    // เธซเธกเธธเธ” A/B
     startMarker = new google.maps.Marker({ position: start, map: gmap, label: 'A' })
     endMarker = new google.maps.Marker({ position: end, map: gmap, label: 'B' })
 
@@ -1545,12 +1604,12 @@ async function updateMap(trip) {
                     position: { lat: s.lat, lng: s.lng },
                     map: gmap,
                     icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
-                    title: s.name || s.address || `จุดแวะ ${idx + 1}`
+                    title: s.name || s.address || `เธเธธเธ”เนเธงเธฐ ${idx + 1}`
                 })
         )
     }
 
-    // เส้นทางจาก polyline ถ้ามี
+    // เน€เธชเนเธเธ—เธฒเธเธเธฒเธ polyline เธ–เนเธฒเธกเธต
     if (trip.polyline && google.maps.geometry?.encoding) {
         const path = google.maps.geometry.encoding.decodePath(trip.polyline)
         activePolyline = new google.maps.Polyline({
@@ -1569,7 +1628,7 @@ async function updateMap(trip) {
 
         gmap.fitBounds(bounds)
     } else {
-        // ไม่มี polyline → fit จากจุด A-B + จุดแวะ
+        // เนเธกเนเธกเธต polyline โ’ fit เธเธฒเธเธเธธเธ” A-B + เธเธธเธ”เนเธงเธฐ
         const bounds = new google.maps.LatLngBounds()
         bounds.extend(start)
         bounds.extend(end)
@@ -1594,19 +1653,19 @@ const modalContent = ref({
 const openConfirmModal = (trip, action) => {
     tripToAction.value = trip
     if (action === 'cancel') {
-        // ตอนนี้ไม่ใช้ทางยืนยันตรง ๆ แล้ว แต่คงโครงไว้เผื่ออนาคต
+        // เธ•เธญเธเธเธตเนเนเธกเนเนเธเนเธ—เธฒเธเธขเธทเธเธขเธฑเธเธ•เธฃเธ เน เนเธฅเนเธง เนเธ•เนเธเธเนเธเธฃเธเนเธงเนเน€เธเธทเนเธญเธญเธเธฒเธเธ•
         modalContent.value = {
-            title: 'ยืนยันการยกเลิกการจอง',
-            message: `คุณต้องการยกเลิกการเดินทางไปที่ "${trip.destination}" ใช่หรือไม่?`,
-            confirmText: 'ใช่, ยกเลิกการจอง',
+            title: 'เธขเธทเธเธขเธฑเธเธเธฒเธฃเธขเธเน€เธฅเธดเธเธเธฒเธฃเธเธญเธ',
+            message: `เธเธธเธ“เธ•เนเธญเธเธเธฒเธฃเธขเธเน€เธฅเธดเธเธเธฒเธฃเน€เธ”เธดเธเธ—เธฒเธเนเธเธ—เธตเน "${trip.destination}" เนเธเนเธซเธฃเธทเธญเนเธกเน?`,
+            confirmText: 'เนเธเน, เธขเธเน€เธฅเธดเธเธเธฒเธฃเธเธญเธ',
             action: 'cancel',
             variant: 'danger'
         }
     } else if (action === 'delete') {
         modalContent.value = {
-            title: 'ยืนยันการลบรายการ',
-            message: `คุณต้องการลบรายการเดินทางไปที่ "${trip.destination}" ออกจากประวัติใช่หรือไม่?`,
-            confirmText: 'ใช่, ลบรายการ',
+            title: 'เธขเธทเธเธขเธฑเธเธเธฒเธฃเธฅเธเธฃเธฒเธขเธเธฒเธฃ',
+            message: `เธเธธเธ“เธ•เนเธญเธเธเธฒเธฃเธฅเธเธฃเธฒเธขเธเธฒเธฃเน€เธ”เธดเธเธ—เธฒเธเนเธเธ—เธตเน "${trip.destination}" เธญเธญเธเธเธฒเธเธเธฃเธฐเธงเธฑเธ•เธดเนเธเนเธซเธฃเธทเธญเนเธกเน?`,
+            confirmText: 'เนเธเน, เธฅเธเธฃเธฒเธขเธเธฒเธฃ',
             action: 'delete',
             variant: 'danger'
         }
@@ -1625,19 +1684,19 @@ const handleConfirmAction = async () => {
     const tripId = tripToAction.value.id
     try {
         if (action === 'cancel') {
-            // ไม่ยิง PATCH ตรง ๆ — ต้องให้ผู้ใช้เลือกเหตุผลก่อน
+            // เนเธกเนเธขเธดเธ PATCH เธ•เธฃเธ เน โ€” เธ•เนเธญเธเนเธซเนเธเธนเนเนเธเนเน€เธฅเธทเธญเธเน€เธซเธ•เธธเธเธฅเธเนเธญเธ
             openCancelModal(tripToAction.value)
             closeConfirmModal()
             return
         } else if (action === 'delete') {
             await $api(`/bookings/${tripId}`, { method: 'DELETE' })
-            toast.success('ลบรายการสำเร็จ', 'รายการได้ถูกลบออกจากประวัติแล้ว')
+            toast.success('เธฅเธเธฃเธฒเธขเธเธฒเธฃเธชเธณเน€เธฃเนเธ', 'เธฃเธฒเธขเธเธฒเธฃเนเธ”เนเธ–เธนเธเธฅเธเธญเธญเธเธเธฒเธเธเธฃเธฐเธงเธฑเธ•เธดเนเธฅเนเธง')
         }
         closeConfirmModal()
         await fetchMyTrips()
     } catch (error) {
         console.error(`Failed to ${action} booking:`, error)
-        toast.error('เกิดข้อผิดพลาด', error.data?.message || 'ไม่สามารถดำเนินการได้')
+        toast.error('เน€เธเธดเธ”เธเนเธญเธเธดเธ”เธเธฅเธฒเธ”', error.data?.message || 'เนเธกเนเธชเธฒเธกเธฒเธฃเธ–เธ”เธณเน€เธเธดเธเธเธฒเธฃเนเธ”เน')
         closeConfirmModal()
     }
 }
@@ -1656,7 +1715,7 @@ function closeCancelModal() {
 
 async function submitCancel() {
     if (!selectedCancelReason.value) {
-        cancelReasonError.value = 'กรุณาเลือกเหตุผล'
+        cancelReasonError.value = 'เธเธฃเธธเธ“เธฒเน€เธฅเธทเธญเธเน€เธซเธ•เธธเธเธฅ'
         return
     }
     if (!tripToCancel.value) return
@@ -1665,14 +1724,14 @@ async function submitCancel() {
     try {
         await $api(`/bookings/${tripToCancel.value.id}/cancel`, {
             method: 'PATCH',
-            body: { reason: selectedCancelReason.value } // ✅ ตรงกับ schema ฝั่ง backend
+            body: { reason: selectedCancelReason.value } // โ… เธ•เธฃเธเธเธฑเธ schema เธเธฑเนเธ backend
         })
-        toast.success('ยกเลิกการจองสำเร็จ', 'ระบบบันทึกเหตุผลแล้ว')
+        toast.success('เธขเธเน€เธฅเธดเธเธเธฒเธฃเธเธญเธเธชเธณเน€เธฃเนเธ', 'เธฃเธฐเธเธเธเธฑเธเธ—เธถเธเน€เธซเธ•เธธเธเธฅเนเธฅเนเธง')
         closeCancelModal()
         await fetchMyTrips()
     } catch (err) {
         console.error('Cancel booking failed:', err)
-        toast.error('เกิดข้อผิดพลาด', err?.data?.message || 'ไม่สามารถยกเลิกได้')
+        toast.error('เน€เธเธดเธ”เธเนเธญเธเธดเธ”เธเธฅเธฒเธ”', err?.data?.message || 'เนเธกเนเธชเธฒเธกเธฒเธฃเธ–เธขเธเน€เธฅเธดเธเนเธ”เน')
     } finally {
         isSubmittingCancel.value = false
     }
@@ -1687,16 +1746,16 @@ function formatDistance(input) {
     for (const seg of parts) {
         const n = parseFloat(seg.replace(/[^\d.]/g, ''))
         if (Number.isNaN(n)) continue
-        if (/กม/.test(seg)) meters += n * 1000
-        else if (/เมตร|ม\./.test(seg)) meters += n
-        else meters += n // สมมติเป็นเมตรถ้าไม่พบหน่วย
+        if (/เธเธก/.test(seg)) meters += n * 1000
+        else if (/เน€เธกเธ•เธฃ|เธก\./.test(seg)) meters += n
+        else meters += n // เธชเธกเธกเธ•เธดเน€เธเนเธเน€เธกเธ•เธฃเธ–เนเธฒเนเธกเนเธเธเธซเธเนเธงเธข
     }
 
     if (meters >= 1000) {
-        const km = Math.round((meters / 1000) * 10) / 10 // ปัดทศนิยม 1 ตำแหน่ง
-        return `${(km % 1 === 0 ? km.toFixed(0) : km)} กม.`
+        const km = Math.round((meters / 1000) * 10) / 10 // เธเธฑเธ”เธ—เธจเธเธดเธขเธก 1 เธ•เธณเนเธซเธเนเธ
+        return `${(km % 1 === 0 ? km.toFixed(0) : km)} เธเธก.`
     }
-    return `${Math.round(meters)} ม.`
+    return `${Math.round(meters)} เธก.`
 }
 
 function formatDuration(input) {
@@ -1708,13 +1767,13 @@ function formatDuration(input) {
     for (const seg of parts) {
         const n = parseFloat(seg.replace(/[^\d.]/g, ''))
         if (Number.isNaN(n)) continue
-        if (/ชม/.test(seg)) minutes += n * 60
-        else minutes += n // นาที
+        if (/เธเธก/.test(seg)) minutes += n * 60
+        else minutes += n // เธเธฒเธ—เธต
     }
 
     const h = Math.floor(minutes / 60)
     const m = Math.round(minutes % 60)
-    return h ? (m ? `${h} ชม. ${m} นาที` : `${h} ชม.`) : `${m} นาที`
+    return h ? (m ? `${h} เธเธก. ${m} เธเธฒเธ—เธต` : `${h} เธเธก.`) : `${m} เธเธฒเธ—เธต`
 }
 
 // --- Status Helper Methods ---
@@ -1731,52 +1790,99 @@ function getStatusDotClass(status) {
 
 function getStatusText(status) {
     const textMap = {
-        pending: 'รอดำเนินการ',
-        confirmed: 'ยืนยันแล้ว',
-        completed: 'เสร็จสิ้น',
-        rejected: 'ปฏิเสธ',
-        cancelled: 'ยกเลิกโดยผู้โดยสาร'
+        pending: 'เธฃเธญเธ”เธณเน€เธเธดเธเธเธฒเธฃ',
+        confirmed: 'เธขเธทเธเธขเธฑเธเนเธฅเนเธง',
+        completed: 'เน€เธชเธฃเนเธเธชเธดเนเธ',
+        rejected: 'เธเธเธดเน€เธชเธ',
+        cancelled: 'เธขเธเน€เธฅเธดเธเนเธ”เธขเธเธนเนเนเธ”เธขเธชเธฒเธฃ'
     }
     return textMap[status] || '-'
 }
 
 function getStatusDescription(status) {
     const descMap = {
-        pending: 'กำลังรอให้คนขับยืนยันการเดินทาง',
-        confirmed: 'คนขับยืนยันแล้ว พร้อมเดินทาง',
-        completed: 'การเดินทางเสร็จสิ้นแล้ว',
-        rejected: 'คนขับปฏิเสธการเดินทาง',
-        cancelled: 'คุณยกเลิกการจอง'
+        pending: 'เธเธณเธฅเธฑเธเธฃเธญเนเธซเนเธเธเธเธฑเธเธขเธทเธเธขเธฑเธเธเธฒเธฃเน€เธ”เธดเธเธ—เธฒเธ',
+        confirmed: 'เธเธเธเธฑเธเธขเธทเธเธขเธฑเธเนเธฅเนเธง เธเธฃเนเธญเธกเน€เธ”เธดเธเธ—เธฒเธ',
+        completed: 'เธเธฒเธฃเน€เธ”เธดเธเธ—เธฒเธเน€เธชเธฃเนเธเธชเธดเนเธเนเธฅเนเธง',
+        rejected: 'เธเธเธเธฑเธเธเธเธดเน€เธชเธเธเธฒเธฃเน€เธ”เธดเธเธ—เธฒเธ',
+        cancelled: 'เธเธธเธ“เธขเธเน€เธฅเธดเธเธเธฒเธฃเธเธญเธ'
     }
     return descMap[status] || '-'
 }
 
 function getReportStatusText(status) {
     const reportStatus = {
-        PENDING: 'รอการตรวจสอบ',
-        APPROVED: 'รับเรื่องแล้ว',
-        REJECTED: 'ไม่พบปัญหา',
-        RESOLVED: 'ดำเนินการแก้ไขแล้ว'
+        PENDING: 'เธฃเธญเธเธฒเธฃเธ•เธฃเธงเธเธชเธญเธ',
+        APPROVED: 'เธฃเธฑเธเน€เธฃเธทเนเธญเธเนเธฅเนเธง',
+        REJECTED: 'เนเธกเนเธเธเธเธฑเธเธซเธฒ',
+        RESOLVED: 'เธ”เธณเน€เธเธดเธเธเธฒเธฃเนเธเนเนเธเนเธฅเนเธง'
     }
-    return reportStatus[status] || 'ไม่ทราบสถานะ'
+    return reportStatus[status] || 'เนเธกเนเธ—เธฃเธฒเธเธชเธ–เธฒเธเธฐ'
 }
 
-function getCategoryText(cat) {
+function extractSelectedCategories(description) {
+    if (!description) return [];
+    const selectedLine = String(description)
+        .split("\n")
+        .map((line) => line.trim())
+        .find((line) => line.startsWith("หมวดหมู่ที่เลือก:") || line.startsWith("หัวข้อที่เลือก:"));
+
+    if (!selectedLine) return [];
+    return selectedLine
+        .split(":")
+        .slice(1)
+        .join(":")
+        .split(",")
+        .map((label) => label.trim())
+        .filter(Boolean);
+}
+
+function getCategoryText(reportOrCategory) {
+    const report = reportOrCategory && typeof reportOrCategory === "object" ? reportOrCategory : null;
+    const category = report ? report.category : reportOrCategory;
+    const fromDesc = report ? extractSelectedCategories(report.description) : [];
+
+    if (fromDesc.length) {
+        return fromDesc.join(", ");
+    }
+
     const cats = {
-        VEHICLE_ISSUE: 'ปัญหาสภาพรถ/ข้อมูลรถไม่ตรง',
-        PASSENGER_ISSUE: 'พฤติกรรมผู้โดยสารร่วมทริปที่ไม่เหมาะสม',
-        ROAD_ISSUE: 'ปัญหาระหว่างเส้นทาง',
-        SAFETY_ISSUE: 'พฤติกรรมการขับขี่ที่ไม่ปลอดภัย',
-        PAYMENT_ISSUE: 'ปัญหาการชำระเงิน',
-        NO_SHOW: 'ไม่มาพบตามจุดนัดหมาย',
-        OTHER: 'อื่น ๆ'
-    }
-    return cats[cat] || cat || 'ทั่วไป'
+        VEHICLE_ISSUE: "เธเธฑเธเธซเธฒเธชเธ เธฒเธเธฃเธ–/เธเนเธญเธกเธนเธฅเธฃเธ–เนเธกเนเธ•เธฃเธ",
+        PASSENGER_ISSUE: "เธเธคเธ•เธดเธเธฃเธฃเธกเธเธนเนเนเธ”เธขเธชเธฒเธฃเธฃเนเธงเธกเธ—เธฃเธดเธเธ—เธตเนเนเธกเนเน€เธซเธกเธฒเธฐเธชเธก",
+        ROAD_ISSUE: "เธเธฑเธเธซเธฒเธฃเธฐเธซเธงเนเธฒเธเน€เธชเนเธเธ—เธฒเธ",
+        SAFETY_ISSUE: "เธเธคเธ•เธดเธเธฃเธฃเธกเธเธฒเธฃเธเธฑเธเธเธตเนเธ—เธตเนเนเธกเนเธเธฅเธญเธ”เธ เธฑเธข",
+        PAYMENT_ISSUE: "เธเธฑเธเธซเธฒเธเธฒเธฃเธเธณเธฃเธฐเน€เธเธดเธ",
+        NO_SHOW: "เนเธกเนเธกเธฒเธเธเธ•เธฒเธกเธเธธเธ”เธเธฑเธ”เธซเธกเธฒเธข",
+        OTHER: "เธญเธทเนเธ เน"
+    };
+    return cats[category] || category || "เธ—เธฑเนเธงเนเธ";
 }
 
+<<<<<<< Updated upstream
+=======
+  function getReportLink(description) {
+    if (!description) return ''
+    const linkLine = String(description)
+      .split('\n')
+      .map(line => line.trim())
+      .find(line => line.startsWith('เธฅเธดเธเธเน:'))
+    if (!linkLine) return ''
+    return linkLine.replace('เธฅเธดเธเธเน:', '').trim()
+  }
+
+  function getReportDetailText(description) {
+    if (!description) return '-'
+    return String(description)
+      .split('\n')
+      .filter(line => !line.trim().startsWith('เธฅเธดเธเธเน:'))
+      .join('\n')
+      .trim() || '-'
+  }
+
+>>>>>>> Stashed changes
 // --- Lifecycle and Watchers ---
 useHead({
-    title: 'การเดินทางของฉัน - ไปนำแหน่',
+    title: 'เธเธฒเธฃเน€เธ”เธดเธเธ—เธฒเธเธเธญเธเธเธฑเธ - เนเธเธเธณเนเธซเธเน',
     link: [{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap' }],
     script:
         process.client && !window.google?.maps
@@ -1792,17 +1898,17 @@ useHead({
 })
 
 onMounted(() => {
-    // ถ้า script โหลดแล้ว
+    // เธ–เนเธฒ script เนเธซเธฅเธ”เนเธฅเนเธง
     if (window.google?.maps) {
         initializeMap()
         fetchMyTrips().then(() => {
-            // ถ้ามีข้อมูลแล้วและยังไม่ได้เลือก ให้โชว์แผนที่ของรายการแรกในแท็บปัจจุบัน
+            // เธ–เนเธฒเธกเธตเธเนเธญเธกเธนเธฅเนเธฅเนเธงเนเธฅเธฐเธขเธฑเธเนเธกเนเนเธ”เนเน€เธฅเธทเธญเธ เนเธซเนเนเธเธงเนเนเธเธเธ—เธตเนเธเธญเธเธฃเธฒเธขเธเธฒเธฃเนเธฃเธเนเธเนเธ—เนเธเธเธฑเธเธเธธเธเธฑเธ
             if (filteredTrips.value.length) updateMap(filteredTrips.value[0])
         })
         return
     }
 
-    // ยังไม่โหลดเสร็จ: ตั้ง callback
+    // เธขเธฑเธเนเธกเนเนเธซเธฅเธ”เน€เธชเธฃเนเธ: เธ•เธฑเนเธ callback
     window[GMAPS_CB] = () => {
         try {
             delete window[GMAPS_CB]
@@ -1882,23 +1988,23 @@ function handleReportFiles(e) {
 
     files.forEach(f => {
         if (f.size > REPORT_MAX_FILE_SIZE) {
-            toast.error('ขนาดไฟล์ต้องไม่เกิน 50MB')
+            toast.error('เธเธเธฒเธ”เนเธเธฅเนเธ•เนเธญเธเนเธกเนเน€เธเธดเธ 50MB')
             return
         }
         if (f.type.startsWith('image/')) {
             if (reportImages.value.length >= REPORT_MAX_IMAGES) {
-                toast.error(`เพิ่มรูปได้สูงสุด ${REPORT_MAX_IMAGES} รูป`)
+                toast.error(`เน€เธเธดเนเธกเธฃเธนเธเนเธ”เนเธชเธนเธเธชเธธเธ” ${REPORT_MAX_IMAGES} เธฃเธนเธ`)
                 return
             }
             reportImages.value.push({ file: f, url: URL.createObjectURL(f) })
         } else if (f.type.startsWith('video/')) {
             if (reportVideos.value.length >= REPORT_MAX_VIDEOS) {
-                toast.error(`เพิ่มวิดีโอได้สูงสุด ${REPORT_MAX_VIDEOS} วิดีโอ`)
+                toast.error(`เน€เธเธดเนเธกเธงเธดเธ”เธตเนเธญเนเธ”เนเธชเธนเธเธชเธธเธ” ${REPORT_MAX_VIDEOS} เธงเธดเธ”เธตเนเธญ`)
                 return
             }
             reportVideos.value.push({ file: f, url: URL.createObjectURL(f) })
         } else {
-            toast.error('กรุณาเลือกไฟล์รูปหรือวิดีโอเท่านั้น')
+            toast.error('เธเธฃเธธเธ“เธฒเน€เธฅเธทเธญเธเนเธเธฅเนเธฃเธนเธเธซเธฃเธทเธญเธงเธดเธ”เธตเนเธญเน€เธ—เนเธฒเธเธฑเนเธ')
         }
     })
     e.target.value = ''
@@ -1919,25 +2025,40 @@ function removeReportVideo(idx) {
 async function submitReport() {
     if (!reportTrip.value) return
 
+<<<<<<< Updated upstream
     if (!passengerReportCategory.value) {
         toast.error('กรุณาเลือกหัวข้อปัญหา', 'กรุณาเลือกหัวข้อปัญหาที่พบ')
+=======
+    if (!passengerReportCategories.value.length) {
+        toast.error('เธเธฃเธธเธ“เธฒเน€เธฅเธทเธญเธเธซเธฑเธงเธเนเธญเธเธฑเธเธซเธฒ', 'เธเธฃเธธเธ“เธฒเน€เธฅเธทเธญเธเธซเธฑเธงเธเนเธญเธเธฑเธเธซเธฒเธ—เธตเนเธเธ')
+>>>>>>> Stashed changes
         return
     }
 
   // Enforce max comment length
   if (reportText.value && reportText.value.length > 501) {
-    toast.error('ข้อความต้องไม่เกิน 501 ตัวอักษร')
+    toast.error('เธเนเธญเธเธงเธฒเธกเธ•เนเธญเธเนเธกเนเน€เธเธดเธ 501 เธ•เธฑเธงเธญเธฑเธเธฉเธฃ')
     return
   }
 
     try {
         const fd = new FormData()
 
+<<<<<<< Updated upstream
+=======
+        const selectedCategoryLabels = passengerReportCategoryOptions
+          .filter(opt => passengerReportCategories.value.includes(opt.value))
+          .map(opt => opt.label)
+
+        const primaryCategory = passengerReportCategories.value[0]
+        const reportDescription = `เธซเธกเธงเธ”เธซเธกเธนเนเธ—เธตเนเน€เธฅเธทเธญเธ: ${selectedCategoryLabels.join(', ')}\n\n${reportText.value || 'เนเธกเนเนเธ”เนเธฃเธฐเธเธธเธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”'}`
+
+>>>>>>> Stashed changes
         fd.append('type', 'PASSENGER')
         fd.append('category', passengerReportCategory.value)
         fd.append('description', reportText.value || 'ไม่ได้ระบุรายละเอียด')
 
-        // ✅ append เฉพาะตอนมีค่าเท่านั้น
+        // โ… append เน€เธเธเธฒเธฐเธ•เธญเธเธกเธตเธเนเธฒเน€เธ—เนเธฒเธเธฑเนเธ
         if (reportTrip.value?.routeId) {
             fd.append('routeId', reportTrip.value.routeId)
         }
@@ -1950,13 +2071,13 @@ async function submitReport() {
             fd.append('targetUserId', reportTrip.value.driver.id)
         }
 
-        // ✅ images
+        // โ… images
         reportImages.value.forEach((it) => {
             if (it?.file) {
                 fd.append('images', it.file)
             }
         })
-        // ✅ videos
+        // โ… videos
         reportVideos.value.forEach((it) => {
             if (it?.file) {
                 fd.append('videos', it.file)
@@ -1968,7 +2089,7 @@ async function submitReport() {
             body: fd
         })
 
-        toast.success('ขอบคุณที่แจ้งรายงาน', 'ทีมงานจะตรวจสอบในเร็วๆ นี้')
+        toast.success('เธเธญเธเธเธธเธ“เธ—เธตเนเนเธเนเธเธฃเธฒเธขเธเธฒเธ', 'เธ—เธตเธกเธเธฒเธเธเธฐเธ•เธฃเธงเธเธชเธญเธเนเธเน€เธฃเนเธงเน เธเธตเน')
 
         // update trip in place
         const tripInList = allTrips.value.find(
@@ -1992,8 +2113,8 @@ async function submitReport() {
     } catch (err) {
         console.error('Failed to submit report', err)
         toast.error(
-            'ไม่สามารถส่งรายงานได้',
-            err?.data?.message || 'โปรดลองอีกครั้ง'
+            'เนเธกเนเธชเธฒเธกเธฒเธฃเธ–เธชเนเธเธฃเธฒเธขเธเธฒเธเนเธ”เน',
+            err?.data?.message || 'เนเธเธฃเธ”เธฅเธญเธเธญเธตเธเธเธฃเธฑเนเธ'
         )
     }
 }
@@ -2109,3 +2230,4 @@ async function checkReportsForTrips() {
     animation-duration: 300ms;
 }
 </style>
+
