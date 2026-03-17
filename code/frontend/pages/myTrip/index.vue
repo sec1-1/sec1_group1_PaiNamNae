@@ -803,7 +803,7 @@
                                 <div class="space-y-3 text-sm text-blue-800">
                                     <div class="flex justify-between border-b border-blue-100 pb-2">
                                         <span class="opacity-75">หัวข้อข้อปัญหา:</span>
-                                        <span class="font-semibold">{{ getCategoryText(selectedTrip.reportData?.category) }}</span>
+                                        <span class="font-semibold">{{ getCategoryText(selectedTrip.reportData) }}</span>
                                     </div>
                                     <div class="flex justify-between border-b border-blue-100 pb-2">
                                         <span class="opacity-75">วันที่แจ้ง:</span>
@@ -1783,7 +1783,32 @@ function getReportStatusText(status) {
     return reportStatus[status] || 'ไม่ทราบสถานะ'
 }
 
-function getCategoryText(cat) {
+function extractSelectedCategories(description) {
+    if (!description) return [];
+    const selectedLine = String(description)
+        .split('\n')
+        .map((line) => line.trim())
+        .find((line) => line.startsWith('หมวดหมู่ที่เลือก:') || line.startsWith('หัวข้อที่เลือก:'));
+
+    if (!selectedLine) return [];
+    return selectedLine
+        .split(':')
+        .slice(1)
+        .join(':')
+        .split(',')
+        .map((label) => label.trim())
+        .filter(Boolean);
+}
+
+function getCategoryText(reportOrCategory) {
+    const report = reportOrCategory && typeof reportOrCategory === 'object' ? reportOrCategory : null;
+    const category = report ? report.category : reportOrCategory;
+    const fromDesc = report ? extractSelectedCategories(report.description) : [];
+
+    if (fromDesc.length) {
+        return fromDesc.join(', ');
+    }
+
     const cats = {
         VEHICLE_ISSUE: 'ปัญหาสภาพรถ/ข้อมูลรถไม่ตรง',
         PASSENGER_ISSUE: 'พฤติกรรมผู้โดยสารร่วมทริปที่ไม่เหมาะสม',
@@ -1793,7 +1818,7 @@ function getCategoryText(cat) {
         NO_SHOW: 'ไม่มาพบตามจุดนัดหมาย',
         OTHER: 'อื่น ๆ'
     }
-    return cats[cat] || cat || 'ทั่วไป'
+    return cats[category] || category || 'ทั่วไป'
 }
 
   function getReportLink(description) {

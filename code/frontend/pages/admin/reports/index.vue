@@ -1,4 +1,4 @@
-<template>
+﻿<template>
     <div>
         <AdminHeader />
         <AdminSidebar />
@@ -125,10 +125,15 @@
   >
     <!-- ประเภท / หมวดหมู่ -->
     <td class="px-4 py-3 text-sm text-gray-900">
-      <div class="font-medium">
-        {{ categoryLabel(report.category) }}
+      <div class="flex flex-wrap gap-1.5">
+        <span
+          v-for="(label, idx) in categoryItems(report)"
+          :key="`${report.id}-cat-${idx}`"
+          class="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs font-medium text-slate-700"
+        >
+          {{ label }}
+        </span>
       </div>
-
     </td>
 
         <!-- ขอบเขตรายงาน -->
@@ -267,7 +272,7 @@
                                 </div>
                                 <div class="rounded-2xl bg-slate-50 p-4">
                                     <p class="text-xs font-semibold tracking-wide text-slate-500">หมวดหมู่</p>
-                                    <p class="mt-2 text-sm font-semibold text-slate-900">{{ categoryLabel(viewingReport.category) }}</p>
+                                    <p class="mt-2 text-sm font-semibold text-slate-900">{{ categoryItems(viewingReport).join(', ') }}</p>
                                 </div>
                                 <div class="rounded-2xl bg-slate-50 p-4">
                                     <p class="text-xs font-semibold tracking-wide text-slate-500">วันที่สร้าง</p>
@@ -553,6 +558,25 @@ function scopeBadge(scope) {
     return 'bg-gray-100 text-gray-700'
 }
 
+function extractSelectedCategories(description) {
+  if (!description) return []
+  const selectedLine = String(description)
+    .split('\n')
+    .map(line => line.trim())
+    .find(line =>
+      line.startsWith('หมวดหมู่ที่เลือก:') ||
+      line.startsWith('หัวข้อที่เลือก:')
+    )
+  if (!selectedLine) return []
+  return selectedLine
+    .split(':')
+    .slice(1)
+    .join(':')
+    .split(',')
+    .map(label => label.trim())
+    .filter(Boolean)
+}
+
 function categoryLabel(category) {
   const map = {
     VEHICLE_ISSUE: 'ปัญหายานพาหนะ',
@@ -564,6 +588,13 @@ function categoryLabel(category) {
     OTHER: 'อื่น ๆ'
   }
   return map[category] || category || '-'
+}
+
+function categoryItems(report) {
+  if (!report) return ['-']
+  const fromDesc = extractSelectedCategories(report.description)
+  if (fromDesc.length) return fromDesc
+  return [categoryLabel(report.category)]
 }
 
 function getReportLink(description) {
